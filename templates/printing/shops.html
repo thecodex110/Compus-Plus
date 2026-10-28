@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Print · COEP Campus Portal{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Print & Photocopy</h1>
+  <a class="btn btn-ghost" href="{% url 'printing:mine' %}">My orders</a>
+</div>
+
+{% if active %}
+  <div class="card card-tint">
+    <b>Active orders</b>
+    <ul class="mini-list">
+      {% for o in active %}
+        <li><a href="{% url 'printing:order' o.pk %}">#{{ o.pk }} · {{ o.shop.name }}</a> <span class="status pstatus-{{ o.status }}">{{ o.get_status_display }}</span></li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}
+
+<h2>1 · Choose a shop</h2>
+{% if shops %}
+  <ul class="list">
+    {% for shop in shops %}
+      <li>
+        {% if shop.accepts_orders %}
+          <a class="row shop-row" href="{% url 'printing:new' shop.pk %}">
+        {% else %}
+          <div class="row shop-row is-closed">
+        {% endif %}
+          <div class="row-main">
+            <div class="row-title">{{ shop.name }}</div>
+            {% if shop.location %}<div class="row-sub muted">📍 {{ shop.location }}</div>{% endif %}
+            <div class="row-sub muted">B/W ₹{{ shop.bw_single }}/page · Colour ₹{{ shop.color_single }}/page</div>
+          </div>
+          <span class="open-badge {% if shop.accepts_orders %}is-open{% endif %}">{% if shop.accepts_orders %}Open{% else %}Closed{% endif %}</span>
+        {% if shop.accepts_orders %}</a>{% else %}</div>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty">No shops have joined yet.</p>
+{% endif %}
+<p class="muted small center">You pay the shop directly with their QR code. The portal never takes your money.</p>
+{% endblock %}

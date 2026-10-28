@@ -1,8 +1,12 @@
 import os
+from io import BytesIO
 
+from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
+from PIL import Image, ImageDraw
 
 from accounts.models import User
+from printing.models import Shop
 from services.models import Location
 
 BUILDINGS = {
@@ -18,6 +22,7 @@ DEMO_USERS = [
     ('bvg@coeptech.ac.in', 'Demo BVG Staff', User.Role.BVG, {'phone': '9876543212'}),
     ('bvg2@coeptech.ac.in', 'Second BVG Staff', User.Role.BVG, {'phone': '9876543213'}),
     ('shop@coeptech.ac.in', 'Demo Photocopy Shop', User.Role.SHOP, {'phone': '9876543214'}),
+    ('shop2@coeptech.ac.in', 'Second Xerox Centre', User.Role.SHOP, {'phone': '9876543215'}),
     ('admin@coeptech.ac.in', 'Demo Admin', User.Role.ADMIN, {'is_staff': True, 'is_superuser': True}),
 ]
 
@@ -40,4 +45,34 @@ class Command(BaseCommand):
                 continue
             User.objects.create_user(email=email, password=password, name=name, role=role, **extra)
             self.stdout.write(f'  {role:8} {email}')
+        self.seed_shops()
         self.stdout.write(self.style.SUCCESS('Demo data ready. Password is DEMO_PASSWORD (see README).'))
+
+    def seed_shops(self):
+        shops = [
+            ('shop@coeptech.ac.in', 'Gate Xerox & Stationery', 'Opposite COEP main gate', True),
+            ('shop2@coeptech.ac.in', 'Library Copy Centre', 'Near Shivajinagar station', False),
+        ]
+        for email, name, location, is_open in shops:
+            owner = User.objects.filter(email=email).first()
+            if owner is None or Shop.objects.filter(owner=owner).exists():
+                continue
+            shop = Shop(owner=owner, name=name, location=location, phone=owner.phone, is_open=is_open)
+            shop.qr_image.save('demo-qr.png', ContentFile(demo_qr_png()), save=False)
+            shop.save()
+            self.stdout.write(f'  shop     {name}')
+
+
+def demo_qr_png():
+    """A fake QR-looking image clearly marked as a demo, so nobody pays it."""
+    img = Image.new('RGB', (330, 380), 'white')
+    d = ImageDraw.Draw(img)
+    for x in range(21):
+        for y in range(21):
+            if (x * 7 + y * 13 + x * y) % 3 == 0 or (x < 7 and y < 7) or (x > 13 and y < 7) or (x < 7 and y > 13):
+                d.rectangle([25 + x * 13, 25 + y * 13, 37 + x * 13, 37 + y * 13], fill='black')
+    d.rectangle([0, 310, 330, 380], fill='#c62828')
+    d.text((60, 330), 'DEMO QR - DO NOT PAY', fill='white')
+    buf = BytesIO()
+    img.save(buf, 'PNG')
+    return buf.getvalue()

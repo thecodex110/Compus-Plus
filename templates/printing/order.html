@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Order #{{ order.pk }} · Print{% endblock %}
+{% block content %}
+<a class="muted" href="{% url 'printing:mine' %}">← My orders</a>
+<div class="card">
+  <div class="detail-head">
+    <h1>Order #{{ order.pk }}</h1>
+    <span class="status pstatus-{{ order.status }}">{{ order.get_status_display }}</span>
+  </div>
+  <div class="muted">{{ order.shop.name }}{% if order.shop.phone %} · <a href="tel:{{ order.shop.phone }}">{{ order.shop.phone }}</a>{% endif %}</div>
+
+  {% if order.status == 'rejected' %}
+    <div class="flash flash-error">Rejected by the shop: {{ order.reject_reason }}</div>
+  {% else %}
+    <ol class="tracker">
+      {% for label, on in steps %}<li class="{% if on %}on{% endif %}"><span></span>{{ label }}</li>{% endfor %}
+    </ol>
+  {% endif %}
+  {% include 'printing/_order_facts.html' %}
+</div>
+
+<h2>Timeline</h2>
+{% include 'printing/_timeline.html' %}
+{% endblock %}

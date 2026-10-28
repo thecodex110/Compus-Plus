@@ -1,0 +1,6 @@
+<ol class="timeline">
+  {% for ev in events %}
+    <li class="done"><b>{{ ev.get_status_display }}</b> <span class="muted">{{ ev.at|date:"j M, g:i A" }}{% if ev.note %} · {{ ev.note }}{% endif %}</span></li>
+  {% endfor %}
+  {% if order.next_status %}<li class="todo"><b>{{ order.next_status.label }}</b> <span class="muted">next</span></li>{% endif %}
+</ol>

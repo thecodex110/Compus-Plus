@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Settings · {{ shop.name }}{% endblock %}
+{% block content %}
+{% include 'printing/_shop_bar.html' %}
+<h1>Shop settings</h1>
+<form method="post" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  <div class="card">
+    <h2>Shop</h2>
+    {% include '_field.html' with field=form.name %}
+    {% include '_field.html' with field=form.location %}
+    {% include '_field.html' with field=form.phone %}
+  </div>
+
+  <div class="card">
+    <h2>Payment QR code</h2>
+    <p class="small muted">Students scan this to pay you directly. The portal never handles money.</p>
+    {% if shop.qr_image %}<img class="qr" src="{{ shop.qr_image.url }}" alt="Current payment QR code">{% endif %}
+    <div class="file-drop">
+      <span id="qr-name">{% if shop.qr_image %}Tap to change the QR image{% else %}📷 Tap to upload your QR image{% endif %}</span>
+      {{ form.qr_image }}
+    </div>
+    {% for e in form.qr_image.errors %}<small class="err">{{ e }}</small>{% endfor %}
+    {% include '_field.html' with field=form.upi_id %}
+  </div>
+
+  <div class="card">
+    <h2>Price list (₹)</h2>
+    <div class="row2">
+      {% include '_field.html' with field=form.bw_single %}
+      {% include '_field.html' with field=form.bw_double %}
+      {% include '_field.html' with field=form.color_single %}
+      {% include '_field.html' with field=form.color_double %}
+      {% include '_field.html' with field=form.a3_multiplier %}
+      {% include '_field.html' with field=form.delivery_charge %}
+      {% include '_field.html' with field=form.staple_price %}
+      {% include '_field.html' with field=form.spiral_price %}
+    </div>
+    {% include '_field.html' with field=form.hard_binding_price %}
+  </div>
+  <button class="btn btn-primary btn-block btn-lg">Save settings</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('id_qr_image').addEventListener('change', function (e) {
+  var f = e.target.files[0];
+  if (f) document.getElementById('qr-name').textContent = '📷 ' + f.name;
+});
+</script>
+{% endblock %}

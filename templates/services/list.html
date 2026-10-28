@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 {% block title %}{{ title }} · COEP Campus Portal{% endblock %}
 {% block content %}
-<h1>{{ title }}</h1>
+<div class="page-head">
+  <h1>{{ title }}</h1>
+  {% if poll == 'mine' %}<a class="btn btn-primary" href="{% url 'services:new' %}">+ New</a>{% endif %}
+</div>
 
 {% if statuses %}
   <div class="filters">

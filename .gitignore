@@ -5,3 +5,4 @@ __pycache__/
 media/
 staticfiles/
 .DS_Store
+private_media/

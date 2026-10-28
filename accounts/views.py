@@ -97,6 +97,8 @@ def home(request):
     user = request.user
     if user.is_bvg:
         return redirect('services:queue')
+    if user.role == User.Role.SHOP:
+        return redirect('printing:shop_dashboard')
     if user.is_admin_role:
         counts = {s.label: ServiceRequest.objects.filter(status=s).count()
                   for s in ServiceRequest.Status}

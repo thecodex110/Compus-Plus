@@ -5,6 +5,7 @@ from django.db import transaction
 from django.db.models import Max
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 
@@ -16,6 +17,10 @@ from .models import Location, ServiceRequest
 
 R = User.Role
 S = ServiceRequest.Status
+
+
+def poll_url(scope):
+    return f"{reverse('services:poll')}?scope={scope}"
 
 
 def location_tree():
@@ -51,7 +56,7 @@ def new_request(request):
 def my_requests(request):
     qs = ServiceRequest.objects.filter(user=request.user).select_related('location', 'assigned_staff')
     return render(request, 'services/list.html', {
-        'title': 'My requests', 'requests': qs.order_by('-created_at'), 'poll': 'mine',
+        'title': 'My requests', 'requests': qs.order_by('-created_at'), 'poll': 'mine', 'poll_url': poll_url('mine'),
     })
 
 
@@ -66,7 +71,7 @@ def detail(request, pk):
         'events': sr.events.select_related('by'),
         'can_advance': user.is_bvg and sr.next_status
                        and (sr.status == S.PENDING or sr.assigned_staff_id == user.pk),
-        'poll': f'one:{sr.pk}',
+        'poll': f'one:{sr.pk}', 'poll_url': poll_url(f'one:{sr.pk}'),
     })
 
 
@@ -74,7 +79,7 @@ def detail(request, pk):
 def queue(request):
     qs = ServiceRequest.objects.filter(status=S.PENDING).select_related('location', 'user')
     return render(request, 'services/list.html', {
-        'title': 'Open queue', 'requests': qs, 'staff_view': True, 'poll': 'queue',
+        'title': 'Open queue', 'requests': qs, 'staff_view': True, 'poll': 'queue', 'poll_url': poll_url('queue'),
         'empty': 'No pending requests right now.',
     })
 
@@ -84,7 +89,7 @@ def my_jobs(request):
     qs = ServiceRequest.objects.filter(assigned_staff=request.user, status__in=[S.ACCEPTED, S.IN_PROGRESS])
     return render(request, 'services/list.html', {
         'title': 'My jobs', 'requests': qs.select_related('location', 'user'), 'staff_view': True,
-        'poll': 'jobs', 'empty': 'You have no active jobs.',
+        'poll': 'jobs', 'poll_url': poll_url('jobs'), 'empty': 'You have no active jobs.',
     })
 
 

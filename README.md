@@ -8,8 +8,8 @@ Django + PostgreSQL web portal for COEP Technological University. Spec: see the 
 |---|--------|-------|
 | 1 | Auth & roles + Service Requests (BVG) | ✅ done |
 | 2 | Lost & Found | ✅ done |
-| 3 | Photocopy ordering | next |
-| 4 | COEP Market | — |
+| 3 | Photocopy ordering | ✅ done |
+| 4 | COEP Market | next |
 | 5 | Blood directory & hospitals | — |
 | 6 | Notifications, admin dashboard, polish | — |
 
@@ -36,7 +36,7 @@ Open http://localhost:8000.
 | Student | student@coeptech.ac.in |
 | Teacher | teacher@coeptech.ac.in |
 | BVG Staff | bvg@coeptech.ac.in, bvg2@coeptech.ac.in |
-| Photocopy Shop | shop@coeptech.ac.in |
+| Photocopy Shop | shop@coeptech.ac.in (open), shop2@coeptech.ac.in (closed) |
 | Admin | admin@coeptech.ac.in (also opens `/django-admin/`) |
 
 ### Sign-up
@@ -58,6 +58,22 @@ Only emails on `ALLOWED_EMAIL_DOMAINS` can sign up, and only as Student or Teach
 - Contact: the uploader's college email always; their phone only if they tick "Show my phone number" on that post.
 - The uploader marks a post **Returned**, which removes it from the feed (it stays in "My posts"). Admins can remove a post.
 - Students, teachers and admins can use it; BVG staff and shops cannot.
+
+## Module 3 — Photocopy ordering
+
+**Student** (`/print/`): pick an open shop → upload a PDF/JPG/PNG (pages are counted automatically) → choose B/W or colour, single/double sided, copies, A4/A3, binding, page range → see the exact price → pay with **that shop's own QR code** in any UPI app → upload the payment screenshot + last 4–6 digits of the transaction ID → choose Main Gate or Library. Track it: Placed → Payment Verified → Printing → Out for Delivery → Delivered.
+
+**Shop** (`/print/shop/`): Open/Closed switch, orders in "To verify / In progress / Done" tabs. For a new order the shop checks the money in its **own** payment app, then Verify → Start printing (download file) → Out for delivery → Delivered, or Reject with a reason. Settings: name, location, QR code, UPI ID, full price list. A shop can't open until it has uploaded a QR.
+
+**Payments**: the portal never takes or moves money; it only stores the screenshot and digits as proof.
+
+**Files**: print files and screenshots live in `private_media/` (never public) and are served only to that order's student and shop. The print file is deleted as soon as the order is delivered or rejected. Run this daily (cron) to delete everything older than `PRINT_FILE_RETENTION_DAYS` (default 7) and unpaid drafts older than a day:
+
+```bash
+.venv/bin/python manage.py purge_print_files
+```
+
+The demo shops use a fake QR marked "DEMO QR – DO NOT PAY".
 
 ## Tests
 

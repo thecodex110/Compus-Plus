@@ -12,6 +12,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('services/', include('services.urls')),
     path('lost-found/', include('lostfound.urls')),
+    path('print/', include('printing.urls')),
     path('django-admin/', admin.site.urls),
 ]
 

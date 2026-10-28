@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'accounts',
     'services',
     'lostfound',
+    'printing',
 ]
 
 MIDDLEWARE = [
@@ -131,6 +132,11 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+# Print files and payment screenshots: never publicly served.
+PRIVATE_MEDIA_ROOT = BASE_DIR / 'private_media'
+PRINT_MAX_UPLOAD_MB = 25
+# Print files are deleted on delivery, or after this many days whatever happens.
+PRINT_FILE_RETENTION_DAYS = int(os.environ.get('PRINT_FILE_RETENTION_DAYS', '7'))
 
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'accounts:login'

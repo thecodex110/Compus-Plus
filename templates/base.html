@@ -35,11 +35,11 @@
     </nav>
   {% endif %}
 
-  {% if poll %}
+  {% if poll_url %}
     <script>
       // Live status: reload when the server-side fingerprint changes.
       (function () {
-        var url = "{% url 'services:poll' %}?scope={{ poll|urlencode }}", last = null;
+        var url = "{{ poll_url|escapejs }}", last = null;
         function tick() {
           fetch(url, {credentials: 'same-origin'}).then(function (r) { return r.json(); }).then(function (d) {
             if (last !== null && d.v !== last) location.reload();

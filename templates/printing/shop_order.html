@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Order #{{ order.pk }} · {{ order.shop.name }}{% endblock %}
+{% block content %}
+<a class="muted" href="{% url 'printing:shop_dashboard' %}">← Orders</a>
+<div class="card">
+  <div class="detail-head">
+    <h1>Order #{{ order.pk }}</h1>
+    <span class="status pstatus-{{ order.status }}">{{ order.get_status_display }}</span>
+  </div>
+  <div>{{ order.student.name }} · {{ order.student.department }}{% if order.student.year %} · Year {{ order.student.year }}{% endif %}
+    {% if order.student.phone %}· <a href="tel:{{ order.student.phone }}">{{ order.student.phone }}</a>{% endif %}</div>
+  {% if order.status == 'rejected' %}<div class="flash flash-error">Rejected: {{ order.reject_reason }}</div>{% endif %}
+  {% include 'printing/_order_facts.html' %}
+</div>
+
+{% if order.status == 'placed' %}
+  <div class="card verify">
+    <h2>Step 1 · Verify the payment</h2>
+    <p class="small">Open <b>your</b> payment app and check you received <b>₹{{ order.price|floatformat:0 }}</b> with a transaction ID ending in <b class="mono">{{ order.txn_last_digits }}</b>. Don't trust the screenshot alone.</p>
+    {% if order.payment_screenshot %}
+      <a href="{% url 'printing:download' order.pk 'screenshot' %}" target="_blank" rel="noopener">
+        <img class="shot" src="{% url 'printing:download' order.pk 'screenshot' %}" alt="Payment screenshot for order {{ order.pk }}">
+      </a>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% if order.next_status %}
+  <form method="post" action="{% url 'printing:shop_advance' order.pk %}">
+    {% csrf_token %}
+    <button class="btn btn-primary btn-block btn-lg">
+      {% if order.status == 'placed' %}✓ Payment received — verify
+      {% elif order.status == 'verified' %}Start printing
+      {% elif order.status == 'printing' %}Out for delivery → {{ order.get_delivery_point_display }}
+      {% else %}Mark delivered{% endif %}
+    </button>
+  </form>
+  {% if order.status == 'out' %}<small class="hint center">The print file is deleted once the order is delivered.</small>{% endif %}
+  {% if order.file and order.status in 'verified printing' %}
+    <a class="btn btn-ghost btn-block" href="{% url 'printing:download' order.pk 'file' %}?dl=1">⬇ Download file to print</a>
+  {% endif %}
+{% endif %}
+
+{% if order.status == 'placed' %}
+  <form method="post" action="{% url 'printing:shop_reject' order.pk %}" class="card reject">
+    {% csrf_token %}
+    <b>Payment not received?</b>
+    <div class="reject-row">
+      {{ reject_form.reason }}
+      <button class="btn btn-danger">Reject</button>
+    </div>
+  </form>
+{% endif %}
+
+<h2>Timeline</h2>
+{% include 'printing/_timeline.html' %}
+{% endblock %}

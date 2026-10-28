@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Print at {{ shop.name }}{% endblock %}
+{% block content %}
+<a class="muted" href="{% url 'printing:shops' %}">← Shops</a>
+<h1>Print at {{ shop.name }}</h1>
+<ol class="steps"><li class="on">Document & options</li><li>Price & pay</li><li>Delivery</li></ol>
+
+<form method="post" enctype="multipart/form-data" novalidate class="card">
+  {% csrf_token %}
+  <div class="field">
+    <span class="label">2 · Upload your document</span>
+    <div class="file-drop">
+      <span id="file-name">{% if order.file_name %}📄 {{ order.file_name }} · {{ order.page_count }} page{{ order.page_count|pluralize }} <small class="muted">(tap to replace)</small>{% else %}📄 Tap to choose a PDF or image{% endif %}</span>
+      {{ form.upload }}
+    </div>
+    <small class="hint">PDF, JPG or PNG, up to 25 MB. Convert Word/PPT to PDF first.</small>
+    {% for e in form.upload.errors %}<small class="err">{{ e }}</small>{% endfor %}
+  </div>
+
+  <h2 class="step">3 · Options</h2>
+  {% include 'printing/_radios.html' with field=form.color %}
+  {% include 'printing/_radios.html' with field=form.sides %}
+  {% include 'printing/_radios.html' with field=form.paper_size %}
+  {% include 'printing/_radios.html' with field=form.binding %}
+  <div class="row2">
+    {% include '_field.html' with field=form.copies %}
+    {% include '_field.html' with field=form.page_range %}
+  </div>
+  {% include '_field.html' with field=form.note %}
+
+  <details class="prices">
+    <summary>{{ shop.name }} price list</summary>
+    <table>
+      <tr><td>B/W single / double side</td><td>₹{{ shop.bw_single }} / ₹{{ shop.bw_double }} per page</td></tr>
+      <tr><td>Colour single / double side</td><td>₹{{ shop.color_single }} / ₹{{ shop.color_double }} per page</td></tr>
+      <tr><td>A3</td><td>× {{ shop.a3_multiplier }}</td></tr>
+      <tr><td>Staple / Spiral / Hard binding</td><td>₹{{ shop.staple_price }} / ₹{{ shop.spiral_price }} / ₹{{ shop.hard_binding_price }} per copy</td></tr>
+      <tr><td>Delivery</td><td>₹{{ shop.delivery_charge }}</td></tr>
+    </table>
+  </details>
+
+  <button class="btn btn-primary btn-block btn-lg">See price →</button>
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.getElementById('id_upload').addEventListener('change', function (e) {
+  var f = e.target.files[0];
+  if (f) document.getElementById('file-name').textContent = '📄 ' + f.name;
+});
+</script>
+{% endblock %}

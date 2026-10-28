@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Orders · {{ shop.name }}{% endblock %}
+{% block content %}
+{% include 'printing/_shop_bar.html' %}
+
+<div class="tabs">
+  {% for key, label, count in tabs %}
+    <a class="tab {% if tab == key %}active{% endif %}" href="?tab={{ key }}">{{ label }}{% if count %} <span class="count">{{ count }}</span>{% endif %}</a>
+  {% endfor %}
+</div>
+
+{% if orders %}
+  <ul class="list">
+    {% for o in orders %}
+      <li>
+        <a class="row" href="{% url 'printing:shop_order' o.pk %}">
+          <div class="row-main">
+            <div class="row-title">#{{ o.pk }} · {{ o.student.name }}</div>
+            <div class="row-sub">{{ o.pages_to_print }} pg × {{ o.copies }} · {{ o.get_color_display }} · {{ o.get_sides_display }}{% if o.binding != 'none' %} · {{ o.get_binding_display }}{% endif %}</div>
+            <div class="row-sub muted">₹{{ o.price|floatformat:0 }} · txn …{{ o.txn_last_digits }} · → <b>{{ o.get_delivery_point_display }}</b> · {{ o.placed_at|timesince }} ago</div>
+          </div>
+          <span class="status pstatus-{{ o.status }}">{{ o.get_status_display }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty">{% if tab == 'new' %}No new orders.{% elif tab == 'active' %}Nothing in progress.{% else %}No finished orders yet.{% endif %}</p>
+{% endif %}
+{% endblock %}
