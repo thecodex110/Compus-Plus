@@ -1,0 +1,20 @@
+<article class="post">
+  <header class="post-head">
+    <span class="avatar">{{ post.user.name|slice:":1"|upper }}</span>
+    <div>
+      <div class="post-user">{{ post.user.name }}</div>
+      <div class="muted small">{{ post.user.get_role_display }}{% if post.user.department %} · {{ post.user.department }}{% endif %} · {{ post.created_at|timesince }} ago</div>
+    </div>
+    <span class="tag tag-{{ post.type }}">{{ post.get_type_display }}</span>
+  </header>
+  {% if post.photo %}
+    <a href="{% url 'lostfound:detail' post.pk %}" class="post-media">
+      <img src="{{ post.photo.url }}" alt="{{ post.title }}" loading="lazy">
+    </a>
+  {% endif %}
+  <div class="post-body">
+    <a href="{% url 'lostfound:detail' post.pk %}" class="post-title">{{ post.title }}</a>
+    <div class="muted small">📍 {{ post.place }} · {{ post.date|date:"j M Y" }}</div>
+    {% if post.description %}<p class="post-desc">{{ post.description|truncatechars:140 }}</p>{% endif %}
+  </div>
+</article>

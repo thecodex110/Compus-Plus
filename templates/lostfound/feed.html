@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Lost & Found · COEP Campus Portal{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Lost & Found</h1>
+  <a class="btn btn-primary" href="{% url 'lostfound:new' %}">+ Post</a>
+</div>
+
+<form method="get" class="search">
+  {% if kind %}<input type="hidden" name="type" value="{{ kind }}">{% endif %}
+  <input type="search" name="q" value="{{ q }}" placeholder="Search item or place" aria-label="Search">
+</form>
+
+<div class="filters">
+  <a class="chip {% if not kind %}active{% endif %}" href="?{% if q %}q={{ q|urlencode }}{% endif %}">All</a>
+  {% for value, label in types %}
+    <a class="chip {% if kind == value %}active{% endif %}" href="?type={{ value }}{% if q %}&q={{ q|urlencode }}{% endif %}">{{ label }}</a>
+  {% endfor %}
+  <a class="chip chip-right" href="{% url 'lostfound:mine' %}">My posts</a>
+</div>
+
+{% if page.object_list %}
+  <div class="feed">
+    {% for post in page.object_list %}{% include 'lostfound/_card.html' %}{% endfor %}
+  </div>
+  {% if page.has_other_pages %}
+    <nav class="pager">
+      {% if page.has_previous %}<a class="btn btn-ghost" href="?page={{ page.previous_page_number }}{% if kind %}&type={{ kind }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">← Newer</a>{% endif %}
+      {% if page.has_next %}<a class="btn btn-ghost" href="?page={{ page.next_page_number }}{% if kind %}&type={{ kind }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">Older →</a>{% endif %}
+    </nav>
+  {% endif %}
+{% else %}
+  <p class="empty">{% if q or kind %}Nothing matches.{% else %}No posts yet. Lost something or found something? Post it.{% endif %}</p>
+{% endif %}
+{% endblock %}

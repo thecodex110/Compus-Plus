@@ -7,8 +7,8 @@ Django + PostgreSQL web portal for COEP Technological University. Spec: see the 
 | # | Module | State |
 |---|--------|-------|
 | 1 | Auth & roles + Service Requests (BVG) | ✅ done |
-| 2 | Lost & Found | next |
-| 3 | Photocopy ordering | — |
+| 2 | Lost & Found | ✅ done |
+| 3 | Photocopy ordering | next |
 | 4 | COEP Market | — |
 | 5 | Blood directory & hospitals | — |
 | 6 | Notifications, admin dashboard, polish | — |
@@ -50,6 +50,14 @@ Only emails on `ALLOWED_EMAIL_DOMAINS` can sign up, and only as Student or Teach
 - **BVG staff**: open queue (high priority first) → Accept → Start work → Mark done. Accepting locks the row so two staff can't take the same job.
 - **History**: every status change is stored in `RequestEvent` and shown as a timeline.
 - **Live status**: pages poll a tiny fingerprint endpoint every 8 s and refresh when something changes (WebSockets/push come in module 6).
+
+## Module 2 — Lost & Found
+
+- Instagram-style feed at `/lost-found/`: photo, title, description, place, date, Lost/Found tag and who posted it. Newest uploads first, then by date; filter by Lost/Found and search by item or place.
+- Photos are resized to 1280 px and re-saved as JPEG, which also strips EXIF (GPS location). Found items need a photo.
+- Contact: the uploader's college email always; their phone only if they tick "Show my phone number" on that post.
+- The uploader marks a post **Returned**, which removes it from the feed (it stays in "My posts"). Admins can remove a post.
+- Students, teachers and admins can use it; BVG staff and shops cannot.
 
 ## Tests
 

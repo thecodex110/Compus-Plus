@@ -13,6 +13,11 @@
 
 <a class="btn btn-block btn-ghost" href="{% url 'services:new' %}">Other request (cleaning, item, …)</a>
 
+<div class="quick-row">
+  <a class="card quick" href="{% url 'lostfound:feed' %}"><b>Lost & Found</b><span class="muted small">See what's lost or found on campus</span></a>
+  <a class="card quick" href="{% url 'lostfound:new' %}"><b>+ Post an item</b><span class="muted small">Lost something? Found something?</span></a>
+</div>
+
 <h2>Recent requests</h2>
 {% if recent %}
   <ul class="list">

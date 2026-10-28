@@ -6,11 +6,11 @@ R = User.Role
 
 # Bottom-nav links per role. Each module adds its entries as it is built.
 NAV = {
-    R.STUDENT: [('Home', 'home'), ('New request', 'services:new'), ('My requests', 'services:mine')],
-    R.TEACHER: [('Home', 'home'), ('New request', 'services:new'), ('My requests', 'services:mine')],
+    R.STUDENT: [('Home', 'home'), ('Request', 'services:new'), ('Lost & Found', 'lostfound:feed'), ('My requests', 'services:mine')],
+    R.TEACHER: [('Home', 'home'), ('Request', 'services:new'), ('Lost & Found', 'lostfound:feed'), ('My requests', 'services:mine')],
     R.BVG: [('Queue', 'services:queue'), ('My jobs', 'services:jobs'), ('History', 'services:history')],
     R.SHOP: [('Home', 'home')],
-    R.ADMIN: [('Home', 'home'), ('All requests', 'services:history')],
+    R.ADMIN: [('Home', 'home'), ('All requests', 'services:history'), ('Lost & Found', 'lostfound:feed')],
 }
 
 
