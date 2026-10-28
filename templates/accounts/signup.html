@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Sign up · COEP Campus Portal{% endblock %}
+{% block content %}
+<section class="auth card">
+  <h1>Create account</h1>
+  <p class="muted">Only verified COEP emails can sign up. We'll email you a code.</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include '_field.html' with field=form.name %}
+    {% include '_field.html' with field=form.email %}
+    {% include '_field.html' with field=form.phone %}
+    <div class="row2">
+      {% include '_field.html' with field=form.role %}
+      {% include '_field.html' with field=form.year %}
+    </div>
+    {% include '_field.html' with field=form.department %}
+    {% include '_field.html' with field=form.password %}
+    {% include '_field.html' with field=form.password2 %}
+    <button class="btn btn-primary btn-block">Send verification code</button>
+  </form>
+  <p class="muted center">Already registered? <a href="{% url 'accounts:login' %}">Log in</a></p>
+</section>
+{% endblock %}

@@ -1,0 +1,6 @@
+<label class="field">
+  <span class="label">{{ field.label }}</span>
+  {{ field }}
+  {% if field.help_text %}<small class="hint">{{ field.help_text }}</small>{% endif %}
+  {% for e in field.errors %}<small class="err">{{ e }}</small>{% endfor %}
+</label>

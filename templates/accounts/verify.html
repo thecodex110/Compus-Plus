@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Verify email · COEP Campus Portal{% endblock %}
+{% block content %}
+<section class="auth card">
+  <h1>Check your email</h1>
+  <p class="muted">We sent a 6-digit code to <strong>{{ email }}</strong>.</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include '_field.html' with field=form.code %}
+    <button class="btn btn-primary btn-block">Verify and create account</button>
+  </form>
+  <form method="post" action="{% url 'accounts:resend' %}" class="center">
+    {% csrf_token %}<button class="link">Resend code</button>
+  </form>
+  <p class="muted center"><a href="{% url 'accounts:signup' %}">Use a different email</a></p>
+</section>
+{% endblock %}

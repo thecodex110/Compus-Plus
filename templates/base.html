@@ -1,0 +1,56 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#16325c">
+  <title>{% block title %}COEP Campus Portal{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'app.css' %}">
+</head>
+<body class="{% if nav_items %}has-nav{% endif %}">
+  <header class="topbar">
+    <a class="brand" href="{% url 'home' %}"><span class="logo">C</span> COEP Campus</a>
+    {% if user.is_authenticated %}
+      <div class="who">
+        <span class="role-chip">{{ user.get_role_display }}</span>
+        <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="link">Log out</button></form>
+      </div>
+    {% endif %}
+  </header>
+
+  <main class="page">
+    {% if messages %}
+      <div class="flash-stack">
+        {% for m in messages %}<div class="flash flash-{{ m.tags }}">{{ m }}</div>{% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  {% if nav_items %}
+    <nav class="bottomnav">
+      {% for label, href in nav_items %}
+        <a href="{{ href }}" class="{% if request.path == href %}active{% endif %}">{{ label }}</a>
+      {% endfor %}
+    </nav>
+  {% endif %}
+
+  {% if poll %}
+    <script>
+      // Live status: reload when the server-side fingerprint changes.
+      (function () {
+        var url = "{% url 'services:poll' %}?scope={{ poll|urlencode }}", last = null;
+        function tick() {
+          fetch(url, {credentials: 'same-origin'}).then(function (r) { return r.json(); }).then(function (d) {
+            if (last !== null && d.v !== last) location.reload();
+            last = d.v;
+          }).catch(function () {});
+        }
+        tick();
+        setInterval(function () { if (!document.hidden) tick(); }, 8000);
+      })();
+    </script>
+  {% endif %}
+  {% block scripts %}{% endblock %}
+</body>
+</html>

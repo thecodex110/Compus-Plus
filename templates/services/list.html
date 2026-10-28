@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} · COEP Campus Portal{% endblock %}
+{% block content %}
+<h1>{{ title }}</h1>
+
+{% if statuses %}
+  <div class="filters">
+    <a class="chip {% if not current_status %}active{% endif %}" href="?">All</a>
+    {% for value, label in statuses %}
+      <a class="chip {% if current_status == value %}active{% endif %}" href="?status={{ value }}">{{ label }}</a>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% if requests %}
+  <ul class="list">
+    {% for sr in requests %}
+      {% if staff_view and sr.next_status and poll %}
+        <li class="row-with-action">
+          <ul class="list">{% include 'services/_row.html' %}</ul>
+          <form method="post" action="{% url 'services:advance' sr.pk %}">
+            {% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}">
+            <button class="btn btn-primary btn-block">
+              {% if sr.status == 'pending' %}Accept{% elif sr.status == 'accepted' %}Start work{% else %}Mark done{% endif %}
+            </button>
+          </form>
+        </li>
+      {% else %}
+        {% include 'services/_row.html' %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty">{{ empty|default:"No requests yet." }}</p>
+{% endif %}
+{% endblock %}

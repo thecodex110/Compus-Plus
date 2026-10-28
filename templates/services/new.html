@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}New request · COEP Campus Portal{% endblock %}
+{% block content %}
+<h1>New request</h1>
+<form method="post" novalidate id="req-form">
+  {% csrf_token %}
+
+  <h2 class="step">1 · What do you need?</h2>
+  <div class="cat-grid">
+    {% for radio in form.category %}
+      <label class="cat {% if radio.data.value in high %}cat-high cat-{{ radio.data.value }}{% endif %}">
+        {{ radio.tag }}<span>{{ radio.choice_label }}</span>
+      </label>
+    {% endfor %}
+  </div>
+  {% for e in form.category.errors %}<small class="err">{{ e }}</small>{% endfor %}
+
+  <h2 class="step">2 · Where?</h2>
+  {{ form.location }}
+  <div id="loc-saved" class="loc-saved" {% if not selected_loc %}hidden{% endif %}>
+    <span>📍 <span id="loc-text">{{ selected_loc|default:"" }}</span></span>
+    <button type="button" class="link" id="loc-change">Change</button>
+  </div>
+  <div id="loc-pick" class="loc-pick" {% if selected_loc %}hidden{% endif %}>
+    <select id="sel-building" aria-label="Building"><option value="">Building</option></select>
+    <select id="sel-floor" aria-label="Floor" disabled><option value="">Floor</option></select>
+    <select id="sel-room" aria-label="Classroom" disabled><option value="">Classroom</option></select>
+  </div>
+  {% for e in form.location.errors %}<small class="err">{{ e }}</small>{% endfor %}
+
+  <h2 class="step">3 · Note <span class="muted">(optional)</span></h2>
+  {{ form.note }}
+
+  <button class="btn btn-primary btn-block btn-lg" id="send-btn">Send request</button>
+</form>
+{{ tree|json_script:"loc-tree" }}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  var tree = JSON.parse(document.getElementById('loc-tree').textContent);
+  var hidden = document.getElementById('id_location');
+  var b = document.getElementById('sel-building'), f = document.getElementById('sel-floor'), r = document.getElementById('sel-room');
+  var saved = document.getElementById('loc-saved'), pick = document.getElementById('loc-pick');
+
+  function fill(sel, items, placeholder) {
+    sel.innerHTML = '<option value="">' + placeholder + '</option>';
+    items.forEach(function (it) {
+      var o = document.createElement('option');
+      o.value = it[0]; o.textContent = it[1]; sel.appendChild(o);
+    });
+    sel.disabled = items.length === 0;
+    // Only one choice? Pick it so the user taps less.
+    if (items.length === 1) { sel.value = items[0][0]; sel.dispatchEvent(new Event('change')); }
+  }
+
+  fill(b, Object.keys(tree).map(function (k) { return [k, k]; }), 'Building');
+  b.addEventListener('change', function () {
+    hidden.value = '';
+    var floors = b.value ? Object.keys(tree[b.value]) : [];
+    fill(f, floors.map(function (k) { return [k, 'Floor ' + k]; }), 'Floor');
+    fill(r, [], 'Classroom');
+  });
+  f.addEventListener('change', function () {
+    hidden.value = '';
+    fill(r, (b.value && f.value) ? tree[b.value][f.value] : [], 'Classroom');
+  });
+  r.addEventListener('change', function () { hidden.value = r.value; });
+
+  document.getElementById('loc-change').addEventListener('click', function () {
+    hidden.value = ''; saved.hidden = true; pick.hidden = false; b.focus();
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Hi, {{ user.get_short_name }}</h1>
+<div class="card">
+  <p>Your {{ user.get_role_display }} dashboard is coming in a later module.</p>
+</div>
+{% endblock %}
