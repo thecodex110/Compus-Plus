@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}My listings · COEP Market{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>My listings</h1>
+  <a class="btn btn-primary" href="{% url 'market:sell' %}">+ Sell</a>
+</div>
+{% if listings %}
+  <ul class="list">
+    {% for l in listings %}
+      <li>
+        <a class="row" href="{% url 'market:detail' l.pk %}">
+          {% with photo=l.cover %}{% if photo %}<img class="thumb" src="{{ photo.image.url }}" alt="">{% else %}<span class="thumb"></span>{% endif %}{% endwith %}
+          <div class="row-main">
+            <div class="row-title">{{ l.title }}</div>
+            <div class="row-sub muted">{% if l.price %}₹{{ l.price }}{% else %}Free{% endif %} · {{ l.get_category_display }}</div>
+          </div>
+          <span class="status {% if l.status == 'available' %}status-accepted{% else %}status-done{% endif %}">{{ l.get_status_display }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty">You haven't listed anything yet.</p>
+{% endif %}
+{% endblock %}

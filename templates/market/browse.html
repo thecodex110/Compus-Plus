@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}COEP Market{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>COEP Market</h1>
+  {% if user.role == 'student' %}<a class="btn btn-primary" href="{% url 'market:sell' %}">+ Sell</a>{% endif %}
+</div>
+
+<form method="get" class="market-search">
+  <input type="search" name="q" value="{{ q }}" placeholder="Search books, cycles, drafters…" aria-label="Search">
+  {% if category %}<input type="hidden" name="category" value="{{ category }}">{% endif %}
+  <details class="filter-box" {% if filtered %}open{% endif %}>
+    <summary>Filters{% if filtered %} · on{% endif %}</summary>
+    <div class="filter-grid">
+      <label class="field"><span class="label">Condition</span>
+        <select name="condition">
+          <option value="">Any</option>
+          {% for v, l in conditions %}<option value="{{ v }}" {% if condition == v %}selected{% endif %}>{{ l }}</option>{% endfor %}
+        </select>
+      </label>
+      <label class="field"><span class="label">Sort</span>
+        <select name="sort">
+          {% for v, l in sorts %}<option value="{{ v }}" {% if sort == v %}selected{% endif %}>{{ l }}</option>{% endfor %}
+        </select>
+      </label>
+      <label class="field"><span class="label">Min ₹</span><input type="number" name="min" min="0" value="{{ pmin|default_if_none:'' }}" inputmode="numeric"></label>
+      <label class="field"><span class="label">Max ₹</span><input type="number" name="max" min="0" value="{{ pmax|default_if_none:'' }}" inputmode="numeric"></label>
+    </div>
+    <div class="filter-actions">
+      <button class="btn btn-primary">Apply</button>
+      <a class="btn btn-ghost" href="{% url 'market:browse' %}">Clear all</a>
+    </div>
+  </details>
+</form>
+
+<div class="filters">
+  <a class="chip {% if not category %}active{% endif %}" href="?{% if q %}q={{ q|urlencode }}{% endif %}">All</a>
+  {% for v, l in categories %}
+    <a class="chip {% if category == v %}active{% endif %}" href="?category={{ v }}{% if q %}&q={{ q|urlencode }}{% endif %}">{{ l }}</a>
+  {% endfor %}
+</div>
+{% if user.role == 'student' %}<p class="small"><a href="{% url 'market:mine' %}">My listings →</a></p>{% endif %}
+
+{% if page.object_list %}
+  <div class="tiles">
+    {% for listing in page.object_list %}{% include 'market/_tile.html' %}{% endfor %}
+  </div>
+  {% if page.has_other_pages %}
+    <nav class="pager">
+      {% if page.has_previous %}<a class="btn btn-ghost" href="?{{ params }}{% if params %}&{% endif %}page={{ page.previous_page_number }}">← Previous</a>{% else %}<span></span>{% endif %}
+      {% if page.has_next %}<a class="btn btn-ghost" href="?{{ params }}{% if params %}&{% endif %}page={{ page.next_page_number }}">Next →</a>{% endif %}
+    </nav>
+  {% endif %}
+{% else %}
+  <p class="empty">{% if q or category or filtered %}Nothing matches. Try fewer filters.{% else %}Nothing for sale yet. Be the first to sell something!{% endif %}</p>
+{% endif %}
+<p class="muted small center">Pay the seller directly when you meet. The portal never handles money.</p>
+{% endblock %}

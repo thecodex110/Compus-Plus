@@ -17,6 +17,8 @@
   <a class="card quick" href="{% url 'lostfound:feed' %}"><b>Lost & Found</b><span class="muted small">See what's lost or found on campus</span></a>
   {% if user.role == 'student' %}
     <a class="card quick" href="{% url 'printing:shops' %}"><b>Print / Photocopy</b><span class="muted small">Order prints, delivered to Main Gate or Library</span></a>
+    <a class="card quick" href="{% url 'market:browse' %}"><b>COEP Market</b><span class="muted small">Buy and sell within COEP</span></a>
+    <a class="card quick" href="{% url 'market:sell' %}"><b>+ Sell something</b><span class="muted small">Books, drafter, cycle, calculator…</span></a>
   {% else %}
     <a class="card quick" href="{% url 'lostfound:new' %}"><b>+ Post an item</b><span class="muted small">Lost something? Found something?</span></a>
   {% endif %}

@@ -13,6 +13,7 @@ urlpatterns = [
     path('services/', include('services.urls')),
     path('lost-found/', include('lostfound.urls')),
     path('print/', include('printing.urls')),
+    path('market/', include('market.urls')),
     path('django-admin/', admin.site.urls),
 ]
 

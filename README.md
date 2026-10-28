@@ -9,8 +9,8 @@ Django + PostgreSQL web portal for COEP Technological University. Spec: see the 
 | 1 | Auth & roles + Service Requests (BVG) | ✅ done |
 | 2 | Lost & Found | ✅ done |
 | 3 | Photocopy ordering | ✅ done |
-| 4 | COEP Market | next |
-| 5 | Blood directory & hospitals | — |
+| 4 | COEP Market | ✅ done |
+| 5 | Blood directory & hospitals | next |
 | 6 | Notifications, admin dashboard, polish | — |
 
 ## Run locally
@@ -74,6 +74,13 @@ Only emails on `ALLOWED_EMAIL_DOMAINS` can sign up, and only as Student or Teach
 ```
 
 The demo shops use a fake QR marked "DEMO QR – DO NOT PAY".
+
+## Module 4 — COEP Market
+
+- `/market/`: grid of items for sale, 2 per row on phones. Search by title/description, category chips, and filters for condition, min/max price and sort (newest, price low→high, high→low).
+- Selling (students): up to 5 photos (resized, EXIF stripped), title, price in ₹ (0 = free), category, condition, description. Edit to change details or add/remove photos.
+- Buyer contacts the seller by college email; phone, call and WhatsApp only if the seller ticks "Show my phone number". Payment happens directly between buyer and seller; the seller then taps **Mark as sold**, which hides it from the market.
+- Admins can remove a listing. Teachers, BVG staff and shops don't see the market (spec: students buy and sell).
 
 ## Tests
 

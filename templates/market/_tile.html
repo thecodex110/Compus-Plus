@@ -1,0 +1,13 @@
+<a class="tile" href="{% url 'market:detail' listing.pk %}">
+  <div class="tile-img">
+    {% with photo=listing.cover %}
+      {% if photo %}<img src="{{ photo.image.url }}" alt="{{ listing.title }}" loading="lazy">{% endif %}
+    {% endwith %}
+    {% if listing.status == 'sold' %}<span class="sold-flag">Sold</span>{% endif %}
+  </div>
+  <div class="tile-body">
+    <div class="tile-price">{% if listing.price %}₹{{ listing.price }}{% else %}Free{% endif %}</div>
+    <div class="tile-title">{{ listing.title }}</div>
+    <div class="muted small">{{ listing.get_condition_display }} · {{ listing.created_at|date:"j M" }}</div>
+  </div>
+</a>
