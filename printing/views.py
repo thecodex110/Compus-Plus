@@ -10,6 +10,7 @@ from django.views.decorators.http import require_POST
 
 from accounts.decorators import role_required
 from accounts.models import User
+from notify.models import notify
 
 from .forms import OrderOptionsForm, PaymentForm, RejectForm, ShopSettingsForm
 from .models import PrintOrder, Shop
@@ -80,6 +81,9 @@ def pay(request, pk):
             order.placed_at = timezone.now()
             order.save()
             order.log(S.PLACED, request.user)
+            notify(shop.owner, f'New order #{order.pk} — ₹{order.price:.0f}',
+                   f'{request.user.name} · txn …{order.txn_last_digits} · verify the payment',
+                   reverse('printing:shop_order', args=[order.pk]), urgent=True)
             messages.success(request, f'Order #{order.pk} placed. {shop.name} will verify your payment.')
             return redirect('printing:order', pk=order.pk)
     return render(request, 'printing/pay.html', {'form': form, 'order': order, 'shop': shop})
@@ -163,6 +167,10 @@ def shop_advance(request, pk):
         order.status = nxt
         order.save(update_fields=['status', 'updated_at'])
         order.log(nxt, request.user)
+        body = (f'Collect it at the {order.get_delivery_point_display()}.' if nxt == S.OUT
+                else f'{order.shop.name} · {order.file_name}')
+        notify(order.student, f'Print order #{order.pk}: {order.get_status_display()}', body,
+               reverse('printing:order', args=[order.pk]), urgent=nxt == S.OUT)
     if nxt == S.DELIVERED:
         order.delete_print_file()
     messages.success(request, f'Order #{pk}: {order.get_status_display()}.')
@@ -181,6 +189,8 @@ def shop_reject(request, pk):
     order.reject_reason = form.cleaned_data['reason']
     order.save(update_fields=['status', 'reject_reason', 'updated_at'])
     order.log(S.REJECTED, request.user, order.reject_reason)
+    notify(order.student, f'Print order #{order.pk} was rejected', order.reject_reason,
+           reverse('printing:order', args=[order.pk]), urgent=True)
     order.delete_print_file()
     messages.success(request, f'Order #{pk} rejected.')
     return redirect('printing:shop_dashboard')

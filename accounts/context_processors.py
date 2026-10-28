@@ -10,7 +10,7 @@ NAV = {
     R.TEACHER: [('Home', 'home'), ('Requests', 'services:mine'), ('Lost & Found', 'lostfound:feed'), ('Blood', 'health:directory')],
     R.BVG: [('Queue', 'services:queue'), ('My jobs', 'services:jobs'), ('History', 'services:history'), ('Hospitals', 'health:hospitals')],
     R.SHOP: [('Orders', 'printing:shop_dashboard'), ('Settings', 'printing:shop_settings')],
-    R.ADMIN: [('Home', 'home'), ('All requests', 'services:history'), ('Lost & Found', 'lostfound:feed'), ('Market', 'market:browse'), ('Blood', 'health:directory')],
+    R.ADMIN: [('Dashboard', 'panel:dashboard'), ('Users', 'panel:users'), ('Requests', 'services:history'), ('Moderate', 'panel:moderate'), ('Campus', 'panel:locations')],
 }
 
 
@@ -19,4 +19,4 @@ def nav(request):
     if not user or not user.is_authenticated:
         return {}
     items = [(label, reverse(name)) for label, name in NAV.get(user.role, [])]
-    return {'nav_items': items}
+    return {'nav_items': items, 'unread_count': user.notifications.filter(read=False).count()}

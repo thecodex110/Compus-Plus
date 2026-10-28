@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Moderate · Admin{% endblock %}
+{% block content %}
+<h1>Moderate</h1>
+
+<h2>Lost & Found ({{ posts|length }})</h2>
+{% if posts %}
+  <ul class="list">
+    {% for p in posts %}
+      <li class="row">
+        {% if p.photo %}<img class="thumb" src="{{ p.photo.url }}" alt="">{% else %}<span class="thumb"></span>{% endif %}
+        <div class="row-main">
+          <a class="row-title" href="{% url 'lostfound:detail' p.pk %}"><span class="tag tag-{{ p.type }}">{{ p.get_type_display }}</span> {{ p.title }}</a>
+          <div class="row-sub muted">{{ p.user.name }} · {{ p.created_at|date:"j M" }}</div>
+        </div>
+        <form method="post" action="{% url 'panel:remove_item' 'post' p.pk %}" onsubmit="return confirm('Remove this post?')">
+          {% csrf_token %}<button class="btn btn-danger btn-sm">Remove</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}<p class="empty">Nothing open.</p>{% endif %}
+
+<h2>COEP Market ({{ listings|length }})</h2>
+{% if listings %}
+  <ul class="list">
+    {% for l in listings %}
+      <li class="row">
+        {% with photo=l.cover %}{% if photo %}<img class="thumb" src="{{ photo.image.url }}" alt="">{% else %}<span class="thumb"></span>{% endif %}{% endwith %}
+        <div class="row-main">
+          <a class="row-title" href="{% url 'market:detail' l.pk %}">{{ l.title }}</a>
+          <div class="row-sub muted">₹{{ l.price }} · {{ l.seller.name }} · {{ l.created_at|date:"j M" }}</div>
+        </div>
+        <form method="post" action="{% url 'panel:remove_item' 'listing' l.pk %}" onsubmit="return confirm('Remove this listing?')">
+          {% csrf_token %}<button class="btn btn-danger btn-sm">Remove</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}<p class="empty">Nothing for sale.</p>{% endif %}
+{% endblock %}

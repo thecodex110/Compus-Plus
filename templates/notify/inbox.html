@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Notifications · COEP Campus Portal{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Notifications</h1>
+  <button type="button" class="btn btn-ghost" id="enable-alerts" hidden>Turn on alerts</button>
+</div>
+<p class="muted small" id="alerts-hint" hidden>Alerts pop up on this device while the portal is open in a tab.</p>
+{% if items %}
+  <ul class="list">
+    {% for n in items %}
+      <li>
+        <a class="row notif {% if not n.read %}is-unread{% endif %} {% if n.urgent %}is-urgent{% endif %}" href="{% url 'notify:open' n.pk %}">
+          <div class="row-main">
+            <div class="row-title">{% if n.urgent %}<span class="pill pill-high">Urgent</span> {% endif %}{{ n.title }}</div>
+            {% if n.body %}<div class="row-sub">{{ n.body }}</div>{% endif %}
+            <div class="row-sub muted">{{ n.created_at|timesince }} ago</div>
+          </div>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="empty">You're all caught up.</p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  var btn = document.getElementById('enable-alerts'), hint = document.getElementById('alerts-hint');
+  if (!('Notification' in window) || Notification.permission === 'denied') return;
+  hint.hidden = false;
+  if (Notification.permission === 'granted') return;
+  btn.hidden = false;
+  btn.addEventListener('click', function () {
+    Notification.requestPermission().then(function (p) { if (p === 'granted') btn.hidden = true; });
+  });
+})();
+</script>
+{% endblock %}

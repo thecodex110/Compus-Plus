@@ -3,11 +3,13 @@ from datetime import timedelta
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
 from accounts.decorators import role_required
 from accounts.models import User
+from notify.models import notify
 
 from .forms import DonorForm
 from .models import COMPATIBLE_DONORS, BloodGroup, ContactReveal, Donor, Hospital
@@ -57,6 +59,9 @@ def reveal(request, pk):
                                     'For a real emergency call 108 or the hospital blood bank.')
             return redirect(back)
         ContactReveal.objects.create(viewer=request.user, donor=donor)
+        notify(donor.user, f'{request.user.name} viewed your number',
+               f'They searched the blood directory ({request.user.get_role_display()}). '
+               'You can hide yourself any time.', reverse('health:me'))
     return redirect(f'{back}#donor-{donor.pk}')
 
 

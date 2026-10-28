@@ -55,3 +55,19 @@ class OTPForm(forms.Form):
 class LoginForm(forms.Form):
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
+
+
+class ProfileForm(forms.ModelForm):
+    """What a user may change about themselves. Email and role are fixed."""
+
+    phone = forms.RegexField(regex=r'^[6-9]\d{9}$', max_length=10, required=False,
+                             error_messages={'invalid': 'Enter a 10-digit mobile number.'})
+
+    class Meta:
+        model = User
+        fields = ['name', 'phone', 'department', 'year']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.role != User.Role.STUDENT:
+            del self.fields['year']

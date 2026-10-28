@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Buildings & classrooms · Admin{% endblock %}
+{% block content %}
+<h1>Buildings & classrooms</h1>
+<form method="post" novalidate class="card">
+  {% csrf_token %}
+  <h2>Add classrooms</h2>
+  <div class="row2">
+    {% include '_field.html' with field=form.building %}
+    {% include '_field.html' with field=form.floor %}
+  </div>
+  {% include '_field.html' with field=form.classrooms %}
+  <button class="btn btn-primary">Add</button>
+</form>
+
+{% for building, floors in tree.items %}
+  <div class="card">
+    <h2>{{ building }}</h2>
+    {% for floor, rooms in floors.items %}
+      <div class="floor">
+        <div class="label">Floor {{ floor }}</div>
+        <div class="room-chips">
+          {% for loc in rooms %}
+            <form method="post" action="{% url 'panel:delete_location' loc.pk %}" class="room-chip" onsubmit="return confirm('Remove {{ loc.classroom|escapejs }}?')">
+              {% csrf_token %}<span>{{ loc.classroom }}{% if loc.n %} <span class="muted small">({{ loc.n }})</span>{% endif %}</span>
+              <button aria-label="Remove {{ loc.classroom }}" title="Remove">×</button>
+            </form>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% empty %}
+  <p class="empty">No buildings yet. Add the first classrooms above.</p>
+{% endfor %}
+<p class="muted small">The number in brackets is how many service requests came from that room. Rooms with requests can't be removed, so history stays intact.</p>
+{% endblock %}

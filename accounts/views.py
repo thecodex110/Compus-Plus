@@ -1,4 +1,8 @@
 from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.core.cache import cache
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
@@ -7,11 +11,13 @@ from django.views.decorators.http import require_POST
 
 from services.models import ServiceRequest
 
-from .forms import LoginForm, OTPForm, SignupForm
+from .forms import LoginForm, OTPForm, ProfileForm, SignupForm
 from .models import User
 from .otp import send_otp, verify_otp
 
 PENDING_KEY = 'pending_signup'
+LOGIN_MAX_FAILS = 10
+LOGIN_LOCK_SECONDS = 15 * 60
 
 
 def signup(request):
@@ -76,13 +82,23 @@ def login_view(request):
         return redirect('home')
     form = LoginForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        user = authenticate(request, username=form.cleaned_data['email'].lower(),
-                            password=form.cleaned_data['password'])
+        email = form.cleaned_data['email'].lower()
+        key = f"login-fail:{email}:{request.META.get('REMOTE_ADDR', '')}"
+        if cache.get(key, 0) >= LOGIN_MAX_FAILS:
+            form.add_error(None, 'Too many wrong attempts. Wait 15 minutes or reset your password.')
+            return render(request, 'accounts/login.html', {'form': form})
+        user = authenticate(request, username=email, password=form.cleaned_data['password'])
         if user is None:
+            cache.set(key, cache.get(key, 0) + 1, LOGIN_LOCK_SECONDS)
             form.add_error(None, 'Wrong email or password.')
         else:
+            cache.delete(key)
             login(request, user)
-            return redirect(request.GET.get('next') or 'home')
+            nxt = request.GET.get('next', '')
+            if url_has_allowed_host_and_scheme(nxt, allowed_hosts={request.get_host()},
+                                               require_https=request.is_secure()):
+                return redirect(nxt)
+            return redirect('home')
     return render(request, 'accounts/login.html', {'form': form})
 
 
@@ -100,10 +116,26 @@ def home(request):
     if user.role == User.Role.SHOP:
         return redirect('printing:shop_dashboard')
     if user.is_admin_role:
-        counts = {s.label: ServiceRequest.objects.filter(status=s).count()
-                  for s in ServiceRequest.Status}
-        return render(request, 'accounts/home_admin.html', {'counts': counts})
+        return redirect('panel:dashboard')
     if user.is_requester:
         recent = ServiceRequest.objects.filter(user=user).select_related('location')[:5]
         return render(request, 'accounts/home.html', {'recent': recent})
     return render(request, 'accounts/home_other.html')
+
+
+@login_required
+def profile(request):
+    user = request.user
+    details = ProfileForm(request.POST if request.POST.get('form') == 'details' else None, instance=user)
+    password = PasswordChangeForm(user, request.POST if request.POST.get('form') == 'password' else None)
+    if request.method == 'POST':
+        if request.POST.get('form') == 'details' and details.is_valid():
+            details.save()
+            messages.success(request, 'Profile updated.')
+            return redirect('accounts:profile')
+        if request.POST.get('form') == 'password' and password.is_valid():
+            password.save()
+            update_session_auth_hash(request, password.user)
+            messages.success(request, 'Password changed.')
+            return redirect('accounts:profile')
+    return render(request, 'accounts/profile.html', {'details': details, 'password': password})

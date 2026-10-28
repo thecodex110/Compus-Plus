@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Hospitals · Admin{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Hospitals</h1>
+  <a class="btn btn-primary" href="{% url 'panel:hospital_new' %}">+ Add</a>
+</div>
+<ul class="list">
+  {% for h in hospitals %}
+    <li>
+      <a class="row" href="{% url 'panel:hospital_edit' h.pk %}">
+        <div class="row-main">
+          <div class="row-title">{{ h.name }}</div>
+          <div class="row-sub muted">{{ h.distance_km }} km · {{ h.address }}</div>
+          <div class="row-sub {% if not h.phone and not h.emergency_phone %}warn{% else %}muted{% endif %}">
+            {% if h.emergency_phone %}Emergency {{ h.emergency_phone }}{% elif h.phone %}{{ h.phone }}{% else %}No phone number yet{% endif %}
+          </div>
+        </div>
+        <span class="muted">Edit</span>
+      </a>
+    </li>
+  {% empty %}
+    <p class="empty">No hospitals yet.</p>
+  {% endfor %}
+</ul>
+<p class="small center"><a href="{% url 'health:hospitals' %}">See the public page →</a></p>
+{% endblock %}

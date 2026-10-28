@@ -45,5 +45,5 @@
 {% else %}
   <p class="empty">No hospitals added yet.</p>
 {% endif %}
-{% if user.is_admin_role %}<p class="small center"><a href="{% url 'admin:health_hospital_changelist' %}">Manage hospital list →</a></p>{% endif %}
+{% if user.is_admin_role %}<p class="small center"><a href="{% url 'panel:hospitals' %}">Manage hospital list →</a></p>{% endif %}
 {% endblock %}

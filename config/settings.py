@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'printing',
     'market',
     'health',
+    'notify',
+    'panel',
 ]
 
 MIDDLEWARE = [
@@ -166,3 +168,24 @@ DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'COEP Campus Portal <n
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STORAGES = {
+    'default': {'BACKEND': 'django.core.files.storage.FileSystemStorage'},
+    'staticfiles': {'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+                    if not DEBUG else 'django.contrib.staticfiles.storage.StaticFilesStorage'},
+}
+
+# Production hardening: only when DEBUG is off.
+if not DEBUG:
+    # Serve /static/ from the app itself (run collectstatic on deploy).
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+    if SECRET_KEY == 'dev-insecure-change-me':
+        raise RuntimeError('Set SECRET_KEY in the environment for production.')
+    CSRF_TRUSTED_ORIGINS = [o for o in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if o]
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', '1') == '1'
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 60 * 60 * 24 * 30
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'

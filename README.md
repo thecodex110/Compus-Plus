@@ -11,7 +11,7 @@ Django + PostgreSQL web portal for COEP Technological University. Spec: see the 
 | 3 | Photocopy ordering | ✅ done |
 | 4 | COEP Market | ✅ done |
 | 5 | Blood directory & hospitals | ✅ done |
-| 6 | Notifications, admin dashboard, polish | next |
+| 6 | Notifications, admin dashboard, polish | ✅ done |
 
 ## Run locally
 
@@ -89,6 +89,47 @@ The demo shops use a fake QR marked "DEMO QR – DO NOT PAY".
 - **Phone privacy**: numbers are hidden until the searcher taps "Show number". Every lookup is logged, the donor sees who looked them up, and one person can view at most 15 numbers a day.
 - **Hospitals** (`/blood/hospitals/`, every role incl. BVG staff): name, address, distance, phone, emergency phone, 24×7 and blood-bank tags, Directions link, plus 108 / 112 buttons. Admins manage the list in `/django-admin/`.
 - The seeded hospitals are real names with **approximate** distances and **no phone numbers**: add verified numbers in admin before relying on the page.
+
+## Module 6 — Notifications, admin dashboard, polish
+
+**Notifications** — bell in the header with an unread count (checks every 15 s). Who gets what:
+
+| Event | Who is notified |
+|---|---|
+| New service request | every BVG staff member (Medical/Security marked urgent) |
+| Request accepted / started / done | the person who raised it |
+| Print order placed | that shop (urgent: verify payment) |
+| Print order verified / printing / out for delivery / delivered / rejected | the student |
+| Someone views a donor's number | that donor |
+
+On `/notifications/` a user can tap **Turn on alerts** to get browser pop-ups while the portal is open in a tab. (True push to a closed phone needs Web Push/VAPID keys and HTTPS. That's a later add-on.)
+
+**Admin dashboard** (`/admin-panel/`, admins land here after login):
+- Live numbers: open/high-priority requests, active print orders, Lost & Found posts, items for sale, listed donors, open shops, plus requests waiting over 15 minutes.
+- **Users**: search/filter by role; create BVG staff, shop (its shop profile is made automatically) and admin accounts; deactivate/reactivate anyone.
+- **Campus**: add classrooms in bulk (building + floor + comma-separated rooms); remove rooms that have no request history.
+- **Hospitals**: add, edit, remove.
+- **Moderate**: remove Lost & Found posts and market listings.
+- `/django-admin/` stays available for anything advanced.
+
+**Polish**
+- Profile page (`/accounts/profile/`, tap your role chip): edit name/phone/department/year and change password.
+- "Forgot password?" on the login page: reset link by email.
+- Login is locked for 15 minutes after 10 wrong passwords for the same email; the `?next=` redirect after login only allows this site.
+- Friendly 403/404/500 pages. Floors are listed G, 1, 2… everywhere.
+
+## Deploy
+
+The spec suggested Vercel, but Vercel runs serverless functions with no persistent disk, which doesn't fit Django + uploaded files. Use a normal app host such as **Render, Railway, Fly.io** or a small VPS, with managed PostgreSQL.
+
+1. Set environment variables: `DEBUG=0`, a long random `SECRET_KEY`, `ALLOWED_HOSTS=portal.example.com`, `CSRF_TRUSTED_ORIGINS=https://portal.example.com`, the `DB_*` values, `ALLOWED_EMAIL_DOMAINS`, and SMTP settings (`EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend`, `EMAIL_HOST`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`). OTPs and password resets need real email.
+2. Build: `pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate`
+3. Start: `gunicorn config.wsgi --bind 0.0.0.0:$PORT`
+4. Put `media/` and `private_media/` on a persistent disk (or move them to S3-compatible storage). `private_media/` must never be served publicly.
+5. Daily cron: `python manage.py purge_print_files`
+6. Create the first admin: `python manage.py createsuperuser` (then log in, open the dashboard and add staff, shops, classrooms and hospitals). Don't run `seed_demo` in production.
+
+With `DEBUG=0` the app turns on HTTPS redirect, secure cookies, HSTS and serves static files itself (WhiteNoise).
 
 ## Tests
 

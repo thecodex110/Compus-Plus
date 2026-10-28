@@ -15,6 +15,8 @@ urlpatterns = [
     path('print/', include('printing.urls')),
     path('market/', include('market.urls')),
     path('blood/', include('health.urls')),
+    path('notifications/', include('notify.urls')),
+    path('admin-panel/', include('panel.urls')),
     path('django-admin/', admin.site.urls),
 ]
 

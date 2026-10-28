@@ -3,3 +3,5 @@ psycopg[binary]>=3.2
 python-dotenv>=1.0
 Pillow>=10
 pypdf>=5
+whitenoise>=6
+gunicorn>=22

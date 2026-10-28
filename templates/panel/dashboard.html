@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Admin dashboard · COEP Campus Portal{% endblock %}
+{% block content %}
+<h1>Admin dashboard</h1>
+
+<div class="stats">
+  {% for label, n, link in stats %}
+    {% if link %}<a class="stat card" href="{% url link %}">{% else %}<div class="stat card">{% endif %}
+      <div class="stat-n">{{ n }}</div><div class="muted small">{{ label }}</div>
+    {% if link %}</a>{% else %}</div>{% endif %}
+  {% endfor %}
+</div>
+
+{% if stale %}
+  <div class="card verify">
+    <h2>Waiting more than 15 minutes</h2>
+    <ul class="list">{% for sr in stale %}{% include 'services/_row.html' with staff_view=True %}{% endfor %}</ul>
+  </div>
+{% endif %}
+
+<div class="card">
+  <h2>People</h2>
+  <table class="kv">
+    {% for label, n in roles.items %}<tr><td>{{ label }}</td><td>{{ n }}</td></tr>{% endfor %}
+  </table>
+  <div class="contact">
+    <a class="btn btn-primary" href="{% url 'panel:create_user' %}">+ Add staff / shop / admin</a>
+    <a class="btn btn-ghost" href="{% url 'panel:users' %}">All users</a>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Photocopy shops</h2>
+  {% if shops %}
+    <ul class="mini-list">
+      {% for s in shops %}
+        <li><span>{{ s.name }} <span class="muted small">· {{ s.owner.email }}</span></span><span class="open-badge {% if s.is_open %}is-open{% endif %}">{% if s.is_open %}Open{% else %}Closed{% endif %}</span></li>
+      {% endfor %}
+    </ul>
+  {% else %}<p class="muted">No shops yet.</p>{% endif %}
+  <a class="btn btn-ghost" href="{% url 'panel:create_user' %}?role=shop">+ Add a shop</a>
+</div>
+
+<div class="card">
+  <h2>Manage</h2>
+  <div class="manage-grid">
+    <a href="{% url 'panel:locations' %}">🏫 Buildings & classrooms</a>
+    <a href="{% url 'panel:hospitals' %}">🏥 Hospitals</a>
+    <a href="{% url 'panel:moderate' %}">🛡️ Moderate posts</a>
+    <a href="{% url 'services:history' %}">🧹 All service requests</a>
+    <a href="{% url 'admin:index' %}">⚙️ Advanced (Django admin)</a>
+  </div>
+</div>
+{% endblock %}

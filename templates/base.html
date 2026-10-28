@@ -12,7 +12,11 @@
     <a class="brand" href="{% url 'home' %}"><span class="logo">C</span> COEP Campus</a>
     {% if user.is_authenticated %}
       <div class="who">
-        <span class="role-chip">{{ user.get_role_display }}</span>
+        <a class="bell" href="{% url 'notify:inbox' %}" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 22a2.5 2.5 0 0 0 2.45-2h-4.9A2.5 2.5 0 0 0 12 22Zm7-6V11a7 7 0 0 0-5.5-6.84V3.5a1.5 1.5 0 0 0-3 0v.66A7 7 0 0 0 5 11v5l-2 2v1h18v-1l-2-2Z"/></svg>
+          <span class="bell-count" id="bell-count" {% if not unread_count %}hidden{% endif %}>{{ unread_count }}</span>
+        </a>
+        <a class="role-chip" href="{% url 'accounts:profile' %}" title="My profile">{{ user.get_role_display }}</a>
         <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="link">Log out</button></form>
       </div>
     {% endif %}
@@ -48,6 +52,31 @@
         }
         tick();
         setInterval(function () { if (!document.hidden) tick(); }, 8000);
+      })();
+    </script>
+  {% endif %}
+  {% if user.is_authenticated %}
+    <script>
+      // Bell count + a browser alert for new notifications while a tab is open.
+      (function () {
+        var badge = document.getElementById('bell-count'), url = "{% url 'notify:poll' %}", seen = null;
+        try { seen = localStorage.getItem('notif-seen'); } catch (e) {}
+        function tick() {
+          fetch(url, {credentials: 'same-origin'}).then(function (r) { return r.json(); }).then(function (d) {
+            badge.textContent = d.unread > 99 ? '99+' : d.unread;
+            badge.hidden = !d.unread;
+            if (d.latest && String(d.latest.id) !== seen) {
+              if (seen !== null && 'Notification' in window && Notification.permission === 'granted') {
+                var n = new Notification(d.latest.title, {body: d.latest.body, tag: 'coep-' + d.latest.id, requireInteraction: d.latest.urgent});
+                n.onclick = function () { window.focus(); location.href = "{% url 'notify:inbox' %}"; };
+              }
+              seen = String(d.latest.id);
+              try { localStorage.setItem('notif-seen', seen); } catch (e) {}
+            }
+          }).catch(function () {});
+        }
+        tick();
+        setInterval(function () { if (!document.hidden) tick(); }, 15000);
       })();
     </script>
   {% endif %}

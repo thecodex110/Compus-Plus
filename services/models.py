@@ -3,6 +3,16 @@ from django.db import models
 from django.utils import timezone
 
 
+def floor_key(floor):
+    """Sort floors the way people expect: basement, ground, then 1, 2, 3…"""
+    f = floor.strip().upper()
+    if f in ('B', 'LG', 'BASEMENT'):
+        return (-2, f)
+    if f in ('G', 'GF', 'GROUND', '0'):
+        return (-1, f)
+    return (int(f), f) if f.isdigit() else (99, f)
+
+
 class Location(models.Model):
     building = models.CharField(max_length=80)
     floor = models.CharField(max_length=20)

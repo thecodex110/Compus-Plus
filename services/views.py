@@ -11,9 +11,10 @@ from django.views.decorators.http import require_POST
 
 from accounts.decorators import role_required
 from accounts.models import User
+from notify.models import notify
 
 from .forms import ServiceRequestForm
-from .models import Location, ServiceRequest
+from .models import Location, ServiceRequest, floor_key
 
 R = User.Role
 S = ServiceRequest.Status
@@ -28,7 +29,7 @@ def location_tree():
     tree = {}
     for loc in Location.objects.all():
         tree.setdefault(loc.building, {}).setdefault(loc.floor, []).append([loc.pk, loc.classroom])
-    return tree
+    return {b: dict(sorted(floors.items(), key=lambda kv: floor_key(kv[0]))) for b, floors in tree.items()}
 
 
 @role_required(R.STUDENT, R.TEACHER)
@@ -40,6 +41,10 @@ def new_request(request):
         sr = form.save(commit=False)
         sr.user = request.user
         sr.save()
+        staff = User.objects.filter(role=R.BVG, is_active=True)
+        notify(staff, f"{'🚨 ' if sr.is_high else ''}{sr.get_category_display()} request #{sr.pk}",
+               f'{sr.location}' + (f' — {sr.note}' if sr.note else ''),
+               reverse('services:detail', args=[sr.pk]), urgent=sr.is_high)
         messages.success(request, f'Request #{sr.pk} sent to BVG staff.')
         return redirect('services:detail', pk=sr.pk)
     selected = form['location'].value()
@@ -118,6 +123,8 @@ def advance(request, pk):
         sr = get_object_or_404(ServiceRequest.objects.select_for_update(), pk=pk)
         before = sr.status
         if sr.advance(request.user):
+            notify(sr.user, f'Your {sr.get_category_display().lower()} request is {sr.get_status_display()}',
+                   f'#{sr.pk} · {sr.location} · {request.user.name}', reverse('services:detail', args=[sr.pk]))
             messages.success(request, f'#{sr.pk} marked {sr.get_status_display()}.')
         elif before == S.PENDING or sr.assigned_staff_id != request.user.pk:
             messages.error(request, f'#{sr.pk} was already taken by someone else.')

@@ -11,6 +11,7 @@
     {% include '_field.html' with field=form.password %}
     <button class="btn btn-primary btn-block">Log in</button>
   </form>
+  <p class="center small"><a href="{% url 'accounts:password_reset' %}">Forgot password?</a></p>
   <p class="muted center">New here? <a href="{% url 'accounts:signup' %}">Create an account</a> with your COEP email.</p>
 </section>
 {% endblock %}
