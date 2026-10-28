@@ -10,8 +10,8 @@ Django + PostgreSQL web portal for COEP Technological University. Spec: see the 
 | 2 | Lost & Found | ✅ done |
 | 3 | Photocopy ordering | ✅ done |
 | 4 | COEP Market | ✅ done |
-| 5 | Blood directory & hospitals | next |
-| 6 | Notifications, admin dashboard, polish | — |
+| 5 | Blood directory & hospitals | ✅ done |
+| 6 | Notifications, admin dashboard, polish | next |
 
 ## Run locally
 
@@ -81,6 +81,14 @@ The demo shops use a fake QR marked "DEMO QR – DO NOT PAY".
 - Selling (students): up to 5 photos (resized, EXIF stripped), title, price in ₹ (0 = free), category, condition, description. Edit to change details or add/remove photos.
 - Buyer contacts the seller by college email; phone, call and WhatsApp only if the seller ticks "Show my phone number". Payment happens directly between buyer and seller; the seller then taps **Mark as sold**, which hides it from the market.
 - Admins can remove a listing. Teachers, BVG staff and shops don't see the market (spec: students buy and sell).
+
+## Module 5 — Blood directory & hospitals
+
+- **Opt-in only** (`/blood/me/`): a student adds their blood group (and optionally last donation date) only after ticking a consent box. They can hide themselves with one switch or delete the entry; hidden entries never appear anywhere.
+- **Search** (`/blood/`, students, teachers, admins): tap the needed group; optionally include compatible donor groups (e.g. B+ can receive B+, B−, O+, O−). Exact matches come first; donors who gave in the last 90 days are flagged.
+- **Phone privacy**: numbers are hidden until the searcher taps "Show number". Every lookup is logged, the donor sees who looked them up, and one person can view at most 15 numbers a day.
+- **Hospitals** (`/blood/hospitals/`, every role incl. BVG staff): name, address, distance, phone, emergency phone, 24×7 and blood-bank tags, Directions link, plus 108 / 112 buttons. Admins manage the list in `/django-admin/`.
+- The seeded hospitals are real names with **approximate** distances and **no phone numbers**: add verified numbers in admin before relying on the page.
 
 ## Tests
 

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}My blood group · COEP Campus Portal{% endblock %}
+{% block content %}
+<a class="muted" href="{% url 'health:directory' %}">← Blood donors</a>
+<h1>My blood group</h1>
+
+{% if donor %}
+  <form method="post" action="{% url 'health:toggle' %}" class="shop-bar {% if donor.visible %}is-open{% endif %}">
+    {% csrf_token %}
+    <div>
+      <div class="shop-bar-name">{% if donor.visible %}Listed in the directory{% else %}Hidden from the directory{% endif %}</div>
+      <div class="small">{% if donor.visible %}Others can find you and see your number.{% else %}Nobody can see your blood group or number.{% endif %}</div>
+    </div>
+    <button class="switch" role="switch" aria-checked="{{ donor.visible|yesno:'true,false' }}" aria-label="Show me in the directory"><span></span></button>
+  </form>
+{% else %}
+  <p class="muted">The blood directory is <b>opt-in</b>. You're not listed until you save this, and you can hide or delete your entry at any time.</p>
+{% endif %}
+
+<form method="post" novalidate class="card">
+  {% csrf_token %}
+  <div class="field">
+    <span class="label">Blood group</span>
+    <div class="bg-grid">
+      {% for radio in form.blood_group %}<label class="bg-opt">{{ radio.tag }}<span>{{ radio.choice_label }}</span></label>{% endfor %}
+    </div>
+    {% for e in form.blood_group.errors %}<small class="err">{{ e }}</small>{% endfor %}
+  </div>
+  {% include '_field.html' with field=form.last_donated %}
+  {% if not donor %}
+    <label class="check">{{ form.visible }} <span>{{ form.visible.label }}</span></label>
+    <label class="check consent">{{ form.consent }} <span>{{ form.consent.label }}</span></label>
+    {% for e in form.consent.errors %}<small class="err">You must agree to be listed.</small>{% endfor %}
+  {% else %}
+    <input type="hidden" name="visible" value="{{ donor.visible|yesno:'on,' }}">
+  {% endif %}
+  <button class="btn btn-primary btn-block">{% if donor %}Save{% else %}Add me to the directory{% endif %}</button>
+</form>
+
+{% if donor %}
+  <h2>Who viewed your number</h2>
+  {% if recent %}
+    <ul class="list">
+      {% for r in recent %}
+        <li class="row"><div class="row-main"><div class="row-title">{{ r.viewer.name }}</div><div class="row-sub muted">{{ r.viewer.get_role_display }}{% if r.viewer.department %} · {{ r.viewer.department }}{% endif %}</div></div><span class="muted small">{{ r.at|date:"j M, g:i A" }}</span></li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="empty">Nobody yet.</p>
+  {% endif %}
+
+  <form method="post" action="{% url 'health:delete' %}" class="center" onsubmit="return confirm('Delete your blood group entry?')">
+    {% csrf_token %}<button class="link muted">Delete my entry completely</button>
+  </form>
+{% endif %}
+{% endblock %}

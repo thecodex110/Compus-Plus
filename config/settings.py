@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'lostfound',
     'printing',
     'market',
+    'health',
 ]
 
 MIDDLEWARE = [

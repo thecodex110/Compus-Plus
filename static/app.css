@@ -339,3 +339,28 @@ select:disabled { background: #f0f2f6; color: var(--muted); }
 @media (min-width: 720px) {
   .tiles { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* Blood directory & hospitals */
+.warn { color: var(--amber); }
+.health-row { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-top: .6rem; }
+.health-row a { display: block; text-align: center; padding: .7rem .5rem; border-radius: 10px; background: var(--red-bg); color: var(--red); font-weight: 700; text-decoration: none; font-size: .92rem; }
+.emergency-strip { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; padding: .5rem; margin-bottom: 1rem; border-radius: 10px; background: var(--red-bg); color: var(--red); font-weight: 700; font-size: .9rem; }
+.emergency-strip a { color: #fff; background: var(--red); padding: .55rem .5rem; border-radius: 8px; text-decoration: none; text-align: center; }
+.me-card { display: flex; align-items: center; gap: .8rem; text-decoration: none; color: var(--ink); }
+.bg-badge { flex-shrink: 0; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--red); color: #fff; font-weight: 800; }
+.bg-badge.bg-empty { background: var(--red-bg); color: var(--red); }
+.bg-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin-bottom: .6rem; }
+.bg-opt { position: relative; text-align: center; padding: .75rem 0; border: 2px solid var(--line); border-radius: 12px; background: #fff; font-weight: 800; font-size: 1.1rem; cursor: pointer; }
+.bg-opt input { position: absolute; opacity: 0; pointer-events: none; }
+.bg-opt:has(input:checked) { background: var(--red); border-color: var(--red); color: #fff; }
+.bg-opt:has(input:focus-visible) { outline: 2px solid var(--navy-2); outline-offset: 2px; }
+.donor-row { align-items: center; }
+.donor-row form { margin: 0; }
+.donor-row .btn { padding: .5rem .75rem; font-size: .88rem; white-space: nowrap; }
+.consent { align-items: flex-start; font-size: .88rem; }
+.consent input { margin-top: .15rem; flex-shrink: 0; }
+.hospital { margin: 0; }
+.hospital .contact { margin-top: .5rem; }
+.hospital .contact .btn { padding: .55rem .8rem; font-size: .9rem; }
+.dist { flex-shrink: 0; font-weight: 800; color: var(--navy); }
+.btn-danger-solid { background: var(--red); color: #fff; }

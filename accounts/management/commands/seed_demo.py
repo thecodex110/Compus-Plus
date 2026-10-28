@@ -6,6 +6,7 @@ from django.core.management.base import BaseCommand
 from PIL import Image, ImageDraw
 
 from accounts.models import User
+from health.models import Hospital
 from printing.models import Shop
 from services.models import Location
 
@@ -46,6 +47,7 @@ class Command(BaseCommand):
             User.objects.create_user(email=email, password=password, name=name, role=role, **extra)
             self.stdout.write(f'  {role:8} {email}')
         self.seed_shops()
+        self.seed_hospitals()
         self.stdout.write(self.style.SUCCESS('Demo data ready. Password is DEMO_PASSWORD (see README).'))
 
     def seed_shops(self):
@@ -61,6 +63,24 @@ class Command(BaseCommand):
             shop.qr_image.save('demo-qr.png', ContentFile(demo_qr_png()), save=False)
             shop.save()
             self.stdout.write(f'  shop     {name}')
+
+    def seed_hospitals(self):
+        # Names and rough distances only. Phone numbers are left blank on purpose:
+        # an admin must add verified numbers before anyone relies on this page.
+        hospitals = [
+            ('Sancheti Hospital', 'Thube Park, Shivajinagar, Pune', '0.8', False),
+            ('Sassoon General Hospital', 'Station Road, near Pune Railway Station, Pune', '2.5', True),
+            ('Jehangir Hospital', 'Sassoon Road, near Pune Railway Station, Pune', '2.8', True),
+            ('Ruby Hall Clinic', 'Sassoon Road, near Pune Railway Station, Pune', '3.2', True),
+            ('Deenanath Mangeshkar Hospital', 'Erandwane, Pune', '4.5', True),
+        ]
+        n = 0
+        for name, address, km, blood_bank in hospitals:
+            _, created = Hospital.objects.get_or_create(
+                name=name, defaults={'address': address, 'distance_km': km, 'has_blood_bank': blood_bank,
+                                     'notes': 'Demo entry: verify the phone numbers and distance in admin.'})
+            n += created
+        self.stdout.write(f'Hospitals added: {n}')
 
 
 def demo_qr_png():

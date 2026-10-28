@@ -13,6 +13,11 @@
 
 <a class="btn btn-block btn-ghost" href="{% url 'services:new' %}">Other request (cleaning, item, …)</a>
 
+<div class="health-row">
+  <a href="{% url 'health:directory' %}">🩸 Find blood donors</a>
+  <a href="{% url 'health:hospitals' %}">🏥 Nearby hospitals</a>
+</div>
+
 <div class="quick-row">
   <a class="card quick" href="{% url 'lostfound:feed' %}"><b>Lost & Found</b><span class="muted small">See what's lost or found on campus</span></a>
   {% if user.role == 'student' %}
