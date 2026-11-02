@@ -1,54 +1,47 @@
 {% extends 'base.html' %}
-{% block title %}Admin dashboard · COEP Campus Portal{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "Dashboard" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<h1>Admin dashboard</h1>
+<div class="ph"><div><h1>{% translate "Dashboard" %}</h1><div class="ph-sub">{% now "l, j F · g:i A" %}</div></div></div>
 
-<div class="stats">
-  {% for label, n, link in stats %}
-    {% if link %}<a class="stat card" href="{% url link %}">{% else %}<div class="stat card">{% endif %}
-      <div class="stat-n">{{ n }}</div><div class="muted small">{{ label }}</div>
-    {% if link %}</a>{% else %}</div>{% endif %}
-  {% endfor %}
+{% with high=stats.1 %}
+  <a class="alert-figure{% if not high.1 %} is-calm{% endif %}" href="{% url 'services:history' %}?status=pending">
+    <b>{{ high.1 }}</b><span>{% translate "high-priority requests open right now" %}</span>
+  </a>
+{% endwith %}
+<div class="tally">
+  {% for label, n, link in stats %}{% if forloop.counter != 2 %}
+    {% if link %}<a href="{% url link %}">{% else %}<div>{% endif %}<span>{{ label }}</span><b>{{ n }}</b>{% if link %}</a>{% else %}</div>{% endif %}
+  {% endif %}{% endfor %}
 </div>
 
 {% if stale %}
-  <div class="card verify">
-    <h2>Waiting more than 15 minutes</h2>
-    <ul class="list">{% for sr in stale %}{% include 'services/_row.html' with staff_view=True %}{% endfor %}</ul>
+  <div class="panel verify">
+    <div class="panel-head"><h2>{% translate "Waiting more than 15 minutes" %}</h2></div>
+    <ul class="rows" data-module="req">{% for sr in stale %}{% include 'services/_row.html' with staff_view=True %}{% endfor %}</ul>
   </div>
 {% endif %}
 
-<div class="card">
-  <h2>People</h2>
-  <table class="kv">
-    {% for label, n in roles.items %}<tr><td>{{ label }}</td><td>{{ n }}</td></tr>{% endfor %}
-  </table>
-  <div class="contact">
-    <a class="btn btn-primary" href="{% url 'panel:create_user' %}">+ Add staff / shop / admin</a>
-    <a class="btn btn-ghost" href="{% url 'panel:users' %}">All users</a>
-  </div>
+<div class="panel">
+  <div class="panel-head"><h2>{% translate "People" %}</h2><a class="small" href="{% url 'panel:users' %}">{% translate "All users" %}</a></div>
+  <table class="kv">{% for label, n in roles.items %}<tr><td>{{ label }}</td><td>{{ n }}</td></tr>{% endfor %}</table>
+  <div class="btn-row"><a class="btn" href="{% url 'panel:create_user' %}">{% icon "plus" %} {% translate "Add staff, shop or admin" %}</a></div>
 </div>
 
-<div class="card">
-  <h2>Photocopy shops</h2>
+<div class="panel">
+  <div class="panel-head"><h2>{% translate "Photocopy shops" %}</h2><a class="small" href="{% url 'panel:shops' %}">{% translate "Manage" %}</a></div>
   {% if shops %}
-    <ul class="mini-list">
-      {% for s in shops %}
-        <li><span>{{ s.name }} <span class="muted small">· {{ s.owner.email }}</span></span><span class="open-badge {% if s.is_open %}is-open{% endif %}">{% if s.is_open %}Open{% else %}Closed{% endif %}</span></li>
-      {% endfor %}
-    </ul>
-  {% else %}<p class="muted">No shops yet.</p>{% endif %}
-  <a class="btn btn-ghost" href="{% url 'panel:create_user' %}?role=shop">+ Add a shop</a>
+    {% for s in shops %}<div class="stat-row"><span>{{ s.name }} <span class="muted small">· {{ s.owner.email }}</span></span><span class="badge {% if s.is_open %}badge-open{% else %}badge-closed{% endif %}">{% if s.is_open %}{% translate "Open" %}{% else %}{% translate "Closed" %}{% endif %}</span></div>{% endfor %}
+  {% else %}<p class="muted">{% translate "No shops yet." %}</p>{% endif %}
 </div>
 
-<div class="card">
-  <h2>Manage</h2>
-  <div class="manage-grid">
-    <a href="{% url 'panel:locations' %}">🏫 Buildings & classrooms</a>
-    <a href="{% url 'panel:hospitals' %}">🏥 Hospitals</a>
-    <a href="{% url 'panel:moderate' %}">🛡️ Moderate posts</a>
-    <a href="{% url 'services:history' %}">🧹 All service requests</a>
-    <a href="{% url 'admin:index' %}">⚙️ Advanced (Django admin)</a>
-  </div>
+<h2>{% translate "Manage" %}</h2>
+<div class="links">
+  <a href="{% url 'panel:locations' %}">{% icon "campus" %} {% translate "Buildings & classrooms" %}</a>
+  <a href="{% url 'panel:shops' %}">{% icon "store" %} {% translate "Shops" %}</a>
+  <a href="{% url 'panel:hospitals' %}">{% icon "hospital" %} {% translate "Hospitals" %}</a>
+  <a href="{% url 'panel:moderate' %}">{% icon "shield" %} {% translate "Moderate posts" %}</a>
+  <a href="{% url 'services:history' %}">{% icon "requests" %} {% translate "All service requests" %}</a>
+  <a href="{% url 'admin:index' %}">{% icon "settings" %} {% translate "Advanced (Django admin)" %}</a>
 </div>
 {% endblock %}

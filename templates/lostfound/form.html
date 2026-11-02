@@ -1,25 +1,25 @@
 {% extends 'base.html' %}
-{% block title %}New post · Lost & Found{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "New post" %}&nbsp;· {% translate "Lost & Found" %}{% endblock %}
 {% block content %}
-<h1>New Lost & Found post</h1>
-<form method="post" enctype="multipart/form-data" novalidate class="card">
+<a class="back" href="{% url 'lostfound:feed' %}">{% icon "back" "i-sm" %} {% translate "Lost & Found" %}</a>
+<div class="ph"><h1>{% translate "New post" %}</h1></div>
+<form method="post" enctype="multipart/form-data" novalidate class="form">
   {% csrf_token %}
-  <div class="seg">
+  <div class="pick">
     {% for radio in form.type %}
-      <label class="seg-opt seg-{{ radio.data.value }}">{{ radio.tag }}<span>I {{ radio.choice_label|lower }} something</span></label>
+      <label class="pick-{{ radio.data.value }}">{{ radio.tag }}<span>{% if radio.data.value == 'lost' %}{% translate "I lost something" %}{% else %}{% translate "I found something" %}{% endif %}</span></label>
     {% endfor %}
   </div>
-  {% for e in form.type.errors %}<small class="err">{{ e }}</small>{% endfor %}
+  {% for e in form.type.errors %}<p class="err">{{ e }}</p>{% endfor %}
 
-  <label class="field">
-    <span class="label">Photo</span>
-    <div class="photo-drop">
-      <span id="photo-hint">📷 Tap to add a photo</span>
-      {{ form.photo }}
-    </div>
-    <small class="hint">Required for found items. Location data is removed from the photo.</small>
+  <div class="field{% if form.photo.errors %} has-error{% endif %}">
+    <span class="label">{% translate "Photo" %}</span>
+    <div class="drop">{% icon "camera" %}<span id="photo-hint">{% translate "Tap to add a photo" %}</span>{{ form.photo }}</div>
+    <div class="drop-media" id="photo-preview"></div>
+    <small class="hint">{% translate "Needed for found items. Location data is removed from the photo." %}</small>
     {% for e in form.photo.errors %}<small class="err">{{ e }}</small>{% endfor %}
-  </label>
+  </div>
 
   {% include '_field.html' with field=form.title %}
   {% include '_field.html' with field=form.description %}
@@ -27,26 +27,22 @@
     {% include '_field.html' with field=form.place %}
     {% include '_field.html' with field=form.date %}
   </div>
-  <label class="check">{{ form.show_phone }} <span>{{ form.show_phone.label }}</span></label>
-  <small class="hint">Otherwise people can reach you by your college email.</small>
-
-  <button class="btn btn-primary btn-block btn-lg">Post</button>
+  <label class="check">{{ form.show_phone }} <span>{{ form.show_phone.label }}<br><small class="hint">{% translate "Otherwise people reach you by your college email." %}</small></span></label>
+  <button class="btn btn-hue btn-block btn-lg">{% translate "Post" %}</button>
 </form>
 {% endblock %}
 
 {% block scripts %}
 <script>
 (function () {
-  var input = document.getElementById('id_photo'), hint = document.getElementById('photo-hint'), img = null;
+  var input = document.getElementById('id_photo'), box = document.getElementById('photo-preview'), hint = document.getElementById('photo-hint');
   input.addEventListener('change', function () {
     var f = input.files && input.files[0];
     if (!f) return;
-    if (!img) {
-      img = document.createElement('img');
-      img.alt = 'Selected photo';
-      input.parentNode.insertBefore(img, hint);
-    }
-    img.src = URL.createObjectURL(f); hint.hidden = true;
+    box.innerHTML = '';
+    var img = document.createElement('img');
+    img.alt = f.name; img.src = URL.createObjectURL(f);
+    box.appendChild(img); hint.textContent = f.name;
   });
 })();
 </script>

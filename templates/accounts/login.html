@@ -1,17 +1,23 @@
 {% extends 'base.html' %}
-{% block title %}Log in · COEP Campus Portal{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Log in" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<section class="auth card">
-  <h1>Log in</h1>
-  <p class="muted">Students, teachers, BVG staff, shops and admins all log in here.</p>
-  <form method="post" novalidate>
-    {% csrf_token %}
-    {% for e in form.non_field_errors %}<div class="flash flash-error">{{ e }}</div>{% endfor %}
-    {% include '_field.html' with field=form.email %}
-    {% include '_field.html' with field=form.password %}
-    <button class="btn btn-primary btn-block">Log in</button>
-  </form>
-  <p class="center small"><a href="{% url 'accounts:password_reset' %}">Forgot password?</a></p>
-  <p class="muted center">New here? <a href="{% url 'accounts:signup' %}">Create an account</a> with your COEP email.</p>
+<section class="auth">
+  <div class="auth-sheet">
+    <div class="auth-head">
+      <h1>{% translate "Log in" %}</h1>
+      <p class="muted">{% translate "One login for students, teachers, BVG staff, shops and admins." %}</p>
+    </div>
+    <form method="post" novalidate class="form">
+      {% csrf_token %}
+      {% for e in form.non_field_errors %}<div class="flash flash-error"><span>{{ e }}</span></div>{% endfor %}
+      {% include '_field.html' with field=form.email %}
+      {% include '_field.html' with field=form.password %}
+      <button class="btn btn-block btn-lg">{% translate "Log in" %}</button>
+    </form>
+    <p class="auth-foot"><a href="{% url 'accounts:password_reset' %}">{% translate "Forgot password?" %}</a></p>
+  </div>
+  <p class="auth-foot center">{% translate "New here?" %} <a href="{% url 'accounts:signup' %}">{% translate "Create an account with your COEP email" %}</a></p>
+  <p class="small muted center">{% translate "Campus Plus is a student project for COEP Technological University." %}</p>
 </section>
 {% endblock %}

@@ -1,0 +1,2533 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-02 18:33+0530\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: accounts/context_processors.py:10
+msgid "Home"
+msgstr "होम"
+
+#: accounts/context_processors.py:11 accounts/context_processors.py:26
+#: templates/services/detail.html:5
+msgid "Requests"
+msgstr "अनुरोध"
+
+#: accounts/context_processors.py:12
+msgid "Market"
+msgstr "मार्केट"
+
+#: accounts/context_processors.py:13 templates/accounts/home.html:26
+#: templates/lostfound/detail.html:3 templates/lostfound/detail.html:5
+#: templates/lostfound/feed.html:3 templates/lostfound/feed.html:6
+#: templates/lostfound/form.html:3 templates/lostfound/form.html:5
+#: templates/lostfound/mine.html:3 templates/lostfound/mine.html:5
+#: templates/panel/moderate.html:6
+msgid "Lost & Found"
+msgstr "खोया-पाया"
+
+#: accounts/context_processors.py:14 templates/printing/_order_tb.html:10
+msgid "Print"
+msgstr "प्रिंट"
+
+#: accounts/context_processors.py:15
+msgid "Blood"
+msgstr "रक्त"
+
+#: accounts/context_processors.py:20
+msgid "Queue"
+msgstr "कतार"
+
+#: accounts/context_processors.py:20 services/views.py:98
+msgid "My jobs"
+msgstr "मेरे काम"
+
+#: accounts/context_processors.py:21 templates/printing/order.html:13
+#: templates/printing/shop_order.html:46 templates/services/detail.html:35
+msgid "History"
+msgstr "इतिहास"
+
+#: accounts/context_processors.py:21 templates/accounts/home.html:50
+#: templates/health/directory.html:7 templates/panel/dashboard.html:42
+#: templates/panel/hospital_form.html:5 templates/panel/hospitals.html:3
+#: templates/panel/hospitals.html:6
+msgid "Hospitals"
+msgstr "अस्पताल"
+
+#: accounts/context_processors.py:22 templates/printing/shop_dashboard.html:3
+#: templates/printing/shop_order.html:5
+msgid "Orders"
+msgstr "ऑर्डर"
+
+#: accounts/context_processors.py:23 templates/printing/_order_tb.html:17
+#: templates/printing/options.html:41
+#: templates/printing/shop_stationery.html:3
+#: templates/printing/shop_stationery.html:5 templates/printing/shops.html:33
+msgid "Stationery"
+msgstr "स्टेशनरी"
+
+#: accounts/context_processors.py:24 templates/printing/shop_settings.html:3
+msgid "Settings"
+msgstr "सेटिंग्स"
+
+#: accounts/context_processors.py:25 templates/panel/dashboard.html:3
+#: templates/panel/dashboard.html:5
+msgid "Dashboard"
+msgstr "डैशबोर्ड"
+
+#: accounts/context_processors.py:25 templates/panel/user_form.html:5
+#: templates/panel/users.html:3 templates/panel/users.html:6
+msgid "Users"
+msgstr "यूज़र"
+
+#: accounts/context_processors.py:26 templates/panel/moderate.html:3
+#: templates/panel/moderate.html:5
+msgid "Moderate"
+msgstr "मॉडरेट"
+
+#: accounts/context_processors.py:27
+msgid "Campus"
+msgstr "कैंपस"
+
+#: accounts/forms.py:16
+msgid "Use your college email."
+msgstr "अपना कॉलेज ईमेल डालें।"
+
+#: accounts/forms.py:18 accounts/forms.py:65 panel/forms.py:32
+msgid "Enter a 10-digit mobile number."
+msgstr "10 अंकों का मोबाइल नंबर डालें।"
+
+#: accounts/forms.py:24 panel/forms.py:17
+msgid "Confirm password"
+msgstr "पासवर्ड दोबारा डालें"
+
+#: accounts/forms.py:30
+#, python-format
+msgid "Only COEP emails (%(domains)s) can sign up."
+msgstr "सिर्फ़ COEP ईमेल (%(domains)s) से साइन अप हो सकता है।"
+
+#: accounts/forms.py:32 panel/forms.py:26
+msgid "An account with this email already exists."
+msgstr "इस ईमेल से अकाउंट पहले से बना है।"
+
+#: accounts/forms.py:38
+msgid "Students must pick their year."
+msgstr "छात्रों को अपना वर्ष चुनना होगा।"
+
+#: accounts/forms.py:41 panel/forms.py:39
+msgid "Passwords do not match."
+msgstr "दोनों पासवर्ड एक जैसे नहीं हैं।"
+
+#: accounts/forms.py:51
+msgid "6-digit code"
+msgstr "6 अंकों का कोड"
+
+#: accounts/forms.py:52
+msgid "Enter the 6-digit code."
+msgstr "6 अंकों का कोड डालें।"
+
+#: accounts/models.py:33
+msgid "Student"
+msgstr "छात्र"
+
+#: accounts/models.py:34
+msgid "Teacher"
+msgstr "शिक्षक"
+
+#: accounts/models.py:35
+msgid "BVG Staff"
+msgstr "BVG स्टाफ़"
+
+#: accounts/models.py:36
+msgid "Photocopy Shop"
+msgstr "फ़ोटोकॉपी दुकान"
+
+#: accounts/models.py:37
+msgid "Admin"
+msgstr "एडमिन"
+
+#: accounts/otp.py:18
+msgid "Your Campus Plus code"
+msgstr "आपका Campus Plus कोड"
+
+#: accounts/otp.py:19
+#, python-format
+msgid "Your verification code is %(code)s. It expires in %(minutes)s minutes."
+msgstr ""
+"आपका वेरिफ़िकेशन कोड %(code)s है। यह %(minutes)s मिनट में खत्म हो जाएगा।"
+
+#: accounts/otp.py:30
+msgid "No active code. Request a new one."
+msgstr "कोई चालू कोड नहीं है। नया कोड मंगाएँ।"
+
+#: accounts/otp.py:32
+msgid "Code expired. Request a new one."
+msgstr "कोड की समय-सीमा खत्म हो गई। नया कोड मंगाएँ।"
+
+#: accounts/otp.py:34
+msgid "Too many attempts. Request a new code."
+msgstr "बहुत बार कोशिश हुई। नया कोड मंगाएँ।"
+
+#: accounts/otp.py:38
+msgid "Incorrect code."
+msgstr "कोड गलत है।"
+
+#: accounts/tests.py:37 services/models.py:47
+#: templates/services/detail.html:37
+msgid "Pending"
+msgstr "बाकी"
+
+#: accounts/views.py:61
+msgid "This email is already registered. Please log in."
+msgstr "यह ईमेल पहले से रजिस्टर है। कृपया लॉग इन करें।"
+
+#: accounts/views.py:72
+#, python-format
+msgid "Welcome, %(get_short_name)s!"
+msgstr "स्वागत है, %(get_short_name)s!"
+
+#: accounts/views.py:83
+msgid "A new code has been sent."
+msgstr "नया कोड भेज दिया गया है।"
+
+#: accounts/views.py:95
+msgid "Too many wrong attempts. Wait 15 minutes or reset your password."
+msgstr "बहुत बार गलत कोशिश हुई। 15 मिनट रुकें या पासवर्ड रीसेट करें।"
+
+#: accounts/views.py:100
+msgid "Wrong email or password."
+msgstr "ईमेल या पासवर्ड गलत है।"
+
+#: accounts/views.py:154
+msgid "Profile updated."
+msgstr "प्रोफ़ाइल अपडेट हो गई।"
+
+#: accounts/views.py:159
+msgid "Password changed."
+msgstr "पासवर्ड बदल गया।"
+
+#: health/forms.py:10
+msgid ""
+"I agree that logged-in COEP students and teachers can see my name, "
+"department, year, blood group and phone number in the blood directory."
+msgstr ""
+"मैं सहमत हूँ कि लॉग-इन किए हुए COEP छात्र और शिक्षक ब्लड डायरेक्टरी में मेरा"
+" नाम, विभाग, वर्ष, ब्लड ग्रुप और फ़ोन नंबर देख सकते हैं।"
+
+#: health/forms.py:33 lostfound/forms.py:58
+msgid "Date cannot be in the future."
+msgstr "तारीख आगे की नहीं हो सकती।"
+
+#: health/models.py:13
+msgid "A+"
+msgstr "A+"
+
+#: health/models.py:14
+msgid "A−"
+msgstr "A−"
+
+#: health/models.py:15
+msgid "B+"
+msgstr "B+"
+
+#: health/models.py:16
+msgid "B−"
+msgstr "B−"
+
+#: health/models.py:17
+msgid "AB+"
+msgstr "AB+"
+
+#: health/models.py:18
+msgid "AB−"
+msgstr "AB−"
+
+#: health/models.py:19
+msgid "O+"
+msgstr "O+"
+
+#: health/models.py:20
+msgid "O−"
+msgstr "O−"
+
+#: health/models.py:42 templates/health/me.html:15
+msgid "Show me in the directory"
+msgstr "मुझे डायरेक्टरी में दिखाएँ"
+
+#: health/models.py:43
+msgid "Last donated (optional)"
+msgstr "पिछली बार रक्तदान (वैकल्पिक)"
+
+#: health/models.py:80
+msgid "Emergency / casualty phone"
+msgstr "इमरजेंसी / कैज़ुअल्टी फ़ोन"
+
+#: health/models.py:81
+msgid "Distance from COEP (km)"
+msgstr "COEP से दूरी (किमी)"
+
+#: health/models.py:83 templates/health/hospitals.html:22
+msgid "24×7 emergency"
+msgstr "24×7 इमरजेंसी"
+
+#: health/models.py:84
+msgid "Google Maps link"
+msgstr "Google Maps लिंक"
+
+#: health/views.py:59
+#, python-format
+msgid ""
+"You can view at most %(limit)s numbers a day. For a real emergency call 108 "
+"or the hospital blood bank."
+msgstr ""
+"आप एक दिन में ज़्यादा से ज़्यादा %(limit)s नंबर देख सकते हैं। असली इमरजेंसी "
+"में 108 या अस्पताल के ब्लड बैंक को फ़ोन करें।"
+
+#: health/views.py:63
+#, python-format
+msgid "%(name)s viewed your number"
+msgstr "%(name)s ने आपका नंबर देखा"
+
+#: health/views.py:64
+#, python-format
+msgid ""
+"They searched the blood directory (%(role)s). You can hide yourself any "
+"time."
+msgstr ""
+"उन्होंने ब्लड डायरेक्टरी में खोजा (%(role)s)। आप कभी भी खुद को छिपा सकते "
+"हैं।"
+
+#: health/views.py:75
+msgid "Saved. You are listed in the blood directory."
+msgstr "सेव हो गया। आप ब्लड डायरेक्टरी में दिख रहे हैं।"
+
+#: health/views.py:76
+msgid "Saved. You are hidden from the directory."
+msgstr "सेव हो गया। आप डायरेक्टरी में छिपे हुए हैं।"
+
+#: health/views.py:88
+msgid "You are now listed in the directory."
+msgstr "अब आप डायरेक्टरी में दिख रहे हैं।"
+
+#: health/views.py:89
+msgid "You are now hidden. Nobody can see your blood group or number."
+msgstr "अब आप छिपे हुए हैं। कोई आपका ब्लड ग्रुप या नंबर नहीं देख सकता।"
+
+#: health/views.py:97
+msgid "Your blood group entry has been deleted."
+msgstr "आपकी ब्लड ग्रुप जानकारी हटा दी गई है।"
+
+#: lostfound/forms.py:21
+msgid "That file is not a valid image."
+msgstr "यह फ़ाइल सही फ़ोटो नहीं है।"
+
+#: lostfound/forms.py:35
+msgid "e.g. Black HP laptop charger"
+msgstr "जैसे: काला HP लैपटॉप चार्जर"
+
+#: lostfound/forms.py:36
+msgid "Colour, brand, stickers, anything that helps identify it"
+msgstr "रंग, ब्रांड, स्टिकर — पहचान में जो भी मदद करे"
+
+#: lostfound/forms.py:37
+msgid "e.g. Library reading hall"
+msgstr "जैसे: लाइब्रेरी रीडिंग हॉल"
+
+#: lostfound/forms.py:40
+msgid "Show my phone number on this post"
+msgstr "इस पोस्ट पर मेरा फ़ोन नंबर दिखाएँ"
+
+#: lostfound/forms.py:52
+#, python-format
+msgid "Photo must be under %(MAX_UPLOAD_MB)s MB."
+msgstr "फ़ोटो %(MAX_UPLOAD_MB)s MB से छोटी होनी चाहिए।"
+
+#: lostfound/forms.py:64
+msgid "Add a photo so the owner can recognise their item."
+msgstr "फ़ोटो लगाएँ ताकि मालिक अपनी चीज़ पहचान सके।"
+
+#: lostfound/models.py:15
+msgid "Lost"
+msgstr "खोया"
+
+#: lostfound/models.py:16
+msgid "Found"
+msgstr "मिला"
+
+#: lostfound/models.py:19 templates/panel/dashboard.html:34
+#: templates/panel/shops.html:19 templates/printing/shops.html:35
+msgid "Open"
+msgstr "खुला"
+
+#: lostfound/models.py:20
+msgid "Returned"
+msgstr "लौटा दिया"
+
+#: lostfound/models.py:21 market/models.py:35
+msgid "Removed by admin"
+msgstr "एडमिन ने हटाया"
+
+#: lostfound/models.py:28
+msgid "Where it was lost or found"
+msgstr "कहाँ खोया या मिला"
+
+#: lostfound/models.py:29
+msgid "When it was lost or found"
+msgstr "कब खोया या मिला"
+
+#: lostfound/views.py:43
+msgid "Posted to Lost & Found."
+msgstr "खोया-पाया में पोस्ट हो गया।"
+
+#: lostfound/views.py:70
+msgid "Marked as returned and removed from the feed. 🎉"
+msgstr "लौटाया गया मार्क हुआ और फ़ीड से हटा दिया गया। 🎉"
+
+#: lostfound/views.py:80
+msgid "Post removed from the feed."
+msgstr "पोस्ट फ़ीड से हटा दी गई।"
+
+#: lostfound/views.py:91
+msgid "Post deleted."
+msgstr "पोस्ट डिलीट हो गई।"
+
+#: market/forms.py:22
+#, python-format
+msgid "Each photo must be under %(MAX_UPLOAD_MB)s MB."
+msgstr "हर फ़ोटो %(MAX_UPLOAD_MB)s MB से छोटी होनी चाहिए।"
+
+#: market/forms.py:28
+msgid "Photos"
+msgstr "फ़ोटो"
+
+#: market/forms.py:37
+msgid "e.g. Engineering Graphics drafter"
+msgstr "जैसे: इंजीनियरिंग ग्राफ़िक्स ड्राफ़्टर"
+
+#: market/forms.py:38
+msgid "₹"
+msgstr "₹"
+
+#: market/forms.py:39
+msgid "How old, any defects, edition, where to meet…"
+msgstr "कितना पुराना, कोई खराबी, एडिशन, कहाँ मिलें…"
+
+#: market/forms.py:41 printing/forms.py:157
+msgid "Price (₹)"
+msgstr "कीमत (₹)"
+
+#: market/forms.py:41
+msgid "Show my phone number to buyers"
+msgstr "खरीदारों को मेरा फ़ोन नंबर दिखाएँ"
+
+#: market/forms.py:54
+msgid "That price looks too high."
+msgstr "यह कीमत बहुत ज़्यादा लग रही है।"
+
+#: market/forms.py:62
+msgid "Add at least one photo."
+msgstr "कम से कम एक फ़ोटो लगाएँ।"
+
+#: market/models.py:17
+msgid "Books & Notes"
+msgstr "किताबें और नोट्स"
+
+#: market/models.py:18
+msgid "Electronics"
+msgstr "इलेक्ट्रॉनिक्स"
+
+#: market/models.py:19
+msgid "Calculators & Instruments"
+msgstr "कैलकुलेटर और उपकरण"
+
+#: market/models.py:20
+msgid "Lab & Drawing gear"
+msgstr "लैब और ड्रॉइंग सामान"
+
+#: market/models.py:21
+msgid "Cycles"
+msgstr "साइकिल"
+
+#: market/models.py:22
+msgid "Hostel & Room"
+msgstr "हॉस्टल और कमरा"
+
+#: market/models.py:23
+msgid "Clothing"
+msgstr "कपड़े"
+
+#: market/models.py:24 services/models.py:39
+msgid "Other"
+msgstr "अन्य"
+
+#: market/models.py:27
+msgid "New"
+msgstr "नया"
+
+#: market/models.py:28
+msgid "Like new"
+msgstr "नए जैसा"
+
+#: market/models.py:29
+msgid "Good"
+msgstr "अच्छा"
+
+#: market/models.py:30
+msgid "Fair"
+msgstr "ठीक-ठाक"
+
+#: market/models.py:33
+msgid "Available"
+msgstr "उपलब्ध"
+
+#: market/models.py:34 templates/market/_tile.html:5
+msgid "Sold"
+msgstr "बिक गया"
+
+#: market/models.py:39
+msgid "In rupees. 0 = free"
+msgstr "रुपयों में। 0 = मुफ़्त"
+
+#: market/views.py:84
+msgid "Your item is live on COEP Market."
+msgstr "आपकी चीज़ COEP मार्केट पर दिख रही है।"
+
+#: market/views.py:95
+msgid "Listing updated."
+msgstr "लिस्टिंग अपडेट हो गई।"
+
+#: market/views.py:113
+msgid "Marked as sold. 🎉"
+msgstr "बिका हुआ मार्क हो गया। 🎉"
+
+#: market/views.py:124
+msgid "Listing deleted."
+msgstr "लिस्टिंग डिलीट हो गई।"
+
+#: market/views.py:134
+msgid "Listing removed from the market."
+msgstr "लिस्टिंग मार्केट से हटा दी गई।"
+
+#: panel/forms.py:16
+msgid "Password"
+msgstr "पासवर्ड"
+
+#: panel/forms.py:58
+msgid "e.g. G, 1, 2"
+msgstr "जैसे: G, 1, 2"
+
+#: panel/forms.py:59
+msgid "Comma-separated, e.g. 101, 102, Seminar Hall"
+msgstr "कॉमा से अलग करें, जैसे: 101, 102, सेमिनार हॉल"
+
+#: panel/forms.py:85
+msgid "Open for orders"
+msgstr "ऑर्डर के लिए खुला"
+
+#: panel/forms.py:90
+msgid "This shop hasn't uploaded a payment QR code yet."
+msgstr "इस दुकान ने अभी पेमेंट QR कोड नहीं डाला है।"
+
+#: panel/views.py:34
+msgid "Open service requests"
+msgstr "खुले अनुरोध"
+
+#: panel/views.py:35
+msgid "…of which high priority"
+msgstr "…जिनमें से ज़रूरी"
+
+#: panel/views.py:36
+msgid "Requests this week"
+msgstr "इस हफ़्ते के अनुरोध"
+
+#: panel/views.py:37
+msgid "Active print orders"
+msgstr "चालू प्रिंट ऑर्डर"
+
+#: panel/views.py:38
+msgid "Open Lost & Found posts"
+msgstr "खुली खोया-पाया पोस्ट"
+
+#: panel/views.py:39
+msgid "Items for sale"
+msgstr "बिकने वाली चीज़ें"
+
+#: panel/views.py:40
+msgid "Listed blood donors"
+msgstr "लिस्टेड रक्तदाता"
+
+#: panel/views.py:41
+msgid "Shops open now"
+msgstr "अभी खुली दुकानें"
+
+#: panel/views.py:77
+#, python-format
+msgid "%(get_role_display)s account created for %(email)s."
+msgstr "%(email)s के लिए %(get_role_display)s अकाउंट बन गया।"
+
+#: panel/views.py:87
+msgid "You can't deactivate your own account."
+msgstr "आप अपना खुद का अकाउंट बंद नहीं कर सकते।"
+
+#: panel/views.py:93
+#, python-format
+msgid "%(email)s activated."
+msgstr "%(email)s चालू कर दिया गया।"
+
+#: panel/views.py:93
+#, python-format
+msgid "%(email)s deactivated."
+msgstr "%(email)s बंद कर दिया गया।"
+
+#: panel/views.py:103
+#, python-format
+msgid "%(n)s classroom added."
+msgid_plural "%(n)s classrooms added."
+msgstr[0] "%(n)s क्लासरूम जोड़ा गया।"
+msgstr[1] "%(n)s क्लासरूम जोड़े गए।"
+
+#: panel/views.py:119
+#, python-format
+msgid "Removed %(loc)s."
+msgstr "%(loc)s हटा दिया गया।"
+
+#: panel/views.py:121
+#, python-format
+msgid "%(loc)s has service requests in its history, so it cannot be removed."
+msgstr "%(loc)s से पहले अनुरोध आ चुके हैं, इसलिए इसे हटाया नहीं जा सकता।"
+
+#: panel/views.py:136
+msgid "Hospital saved."
+msgstr "अस्पताल सेव हो गया।"
+
+#: panel/views.py:145
+msgid "Hospital removed."
+msgstr "अस्पताल हटा दिया गया।"
+
+#: panel/views.py:165
+msgid "Removed."
+msgstr "हटा दिया गया।"
+
+#: panel/views.py:184
+#, python-format
+msgid "%(name)s saved."
+msgstr "%(name)s सेव हो गया।"
+
+#: printing/forms.py:22
+msgid ""
+"Upload a PDF or an image (JPG/PNG). Convert Word/PPT files to PDF first."
+msgstr ""
+"PDF या फ़ोटो (JPG/PNG) अपलोड करें। Word/PPT फ़ाइल को पहले PDF में बदलें।"
+
+#: printing/forms.py:27
+msgid "This PDF is password-protected. Remove the password and upload again."
+msgstr "यह PDF पासवर्ड से लॉक है। पासवर्ड हटाकर दोबारा अपलोड करें।"
+
+#: printing/forms.py:33
+msgid "Could not read this file. Is it a valid PDF or image?"
+msgstr "यह फ़ाइल पढ़ी नहीं जा सकी। क्या यह सही PDF या फ़ोटो है?"
+
+#: printing/forms.py:37
+msgid "This file has no pages."
+msgstr "इस फ़ाइल में कोई पेज नहीं है।"
+
+#: printing/forms.py:47
+msgid "Use page numbers and ranges like 1-5, 8, 10-12."
+msgstr "पेज नंबर ऐसे लिखें: 1-5, 8, 10-12"
+
+#: printing/forms.py:53
+#, python-format
+msgid "Pages must be between 1 and %(page_count)s."
+msgstr "पेज 1 से %(page_count)s के बीच होने चाहिए।"
+
+#: printing/forms.py:63
+msgid "Document"
+msgstr "डॉक्यूमेंट"
+
+#: printing/forms.py:73
+msgid "All pages"
+msgstr "सभी पेज"
+
+#: printing/forms.py:74
+msgid "Optional note for the shop"
+msgstr "दुकान के लिए नोट (वैकल्पिक)"
+
+#: printing/forms.py:76 printing/models.py:136
+msgid "Colour"
+msgstr "रंग"
+
+#: printing/forms.py:97
+msgid "Copies must be between 1 and 50."
+msgstr "कॉपियाँ 1 से 50 के बीच होनी चाहिए।"
+
+#: printing/forms.py:105
+#, python-format
+msgid "File must be under %(PRINT_MAX_UPLOAD_MB)s MB."
+msgstr "फ़ाइल %(PRINT_MAX_UPLOAD_MB)s MB से छोटी होनी चाहिए।"
+
+#: printing/forms.py:117
+msgid "Upload a document to print, or pick some stationery below."
+msgstr "प्रिंट के लिए डॉक्यूमेंट अपलोड करें, या नीचे से स्टेशनरी चुनें।"
+
+#: printing/forms.py:154
+msgid "e.g. Classmate notebook, 172 pages"
+msgstr "जैसे: Classmate नोटबुक, 172 पेज"
+
+#: printing/forms.py:162
+msgid "Cannot be negative."
+msgstr "माइनस में नहीं हो सकता।"
+
+#: printing/forms.py:174
+msgid "e.g. 4821"
+msgstr "जैसे: 4821"
+
+#: printing/forms.py:178 templates/printing/shop_order.html:17
+msgid "Payment screenshot"
+msgstr "पेमेंट का स्क्रीनशॉट"
+
+#: printing/forms.py:179
+msgid "Last 4–6 digits of the transaction / UTR ID"
+msgstr "ट्रांज़ैक्शन / UTR ID के आखिरी 4–6 अंक"
+
+#: printing/forms.py:180 templates/printing/_order_tb.html:5
+msgid "Deliver to"
+msgstr "कहाँ पहुँचाएँ"
+
+#: printing/forms.py:192
+msgid "Enter the last 4 to 6 digits (numbers only)."
+msgstr "आखिरी 4 से 6 अंक डालें (सिर्फ़ नंबर)।"
+
+#: printing/forms.py:199
+msgid "Screenshot must be under 10 MB."
+msgstr "स्क्रीनशॉट 10 MB से छोटा होना चाहिए।"
+
+#: printing/forms.py:206
+msgid "e.g. Payment not received"
+msgstr "जैसे: पेमेंट नहीं मिला"
+
+#: printing/models.py:63
+msgid "e.g. Opposite main gate, Shivajinagar"
+msgstr "जैसे: मेन गेट के सामने, शिवाजीनगर"
+
+#: printing/models.py:65 templates/printing/shop_settings.html:16
+msgid "Payment QR code"
+msgstr "पेमेंट QR कोड"
+
+#: printing/models.py:66
+msgid "UPI ID (optional)"
+msgstr "UPI ID (वैकल्पिक)"
+
+#: printing/models.py:70
+msgid "B/W single side, per page"
+msgstr "ब्लैक-व्हाइट एक तरफ़, प्रति पेज"
+
+#: printing/models.py:71
+msgid "B/W double side, per page"
+msgstr "ब्लैक-व्हाइट दोनों तरफ़, प्रति पेज"
+
+#: printing/models.py:72
+msgid "Colour single side, per page"
+msgstr "कलर एक तरफ़, प्रति पेज"
+
+#: printing/models.py:73
+msgid "Colour double side, per page"
+msgstr "कलर दोनों तरफ़, प्रति पेज"
+
+#: printing/models.py:75
+msgid "A3 costs this many times A4"
+msgstr "A3 की कीमत A4 से कितने गुना"
+
+#: printing/models.py:76
+msgid "Staple, per copy"
+msgstr "स्टेपल, प्रति कॉपी"
+
+#: printing/models.py:77
+msgid "Spiral binding, per copy"
+msgstr "स्पाइरल बाइंडिंग, प्रति कॉपी"
+
+#: printing/models.py:78
+msgid "Hard binding, per copy"
+msgstr "हार्ड बाइंडिंग, प्रति कॉपी"
+
+#: printing/models.py:79
+msgid "Delivery charge, per order"
+msgstr "डिलीवरी चार्ज, प्रति ऑर्डर"
+
+#: printing/models.py:135
+msgid "Black & white"
+msgstr "ब्लैक-व्हाइट"
+
+#: printing/models.py:139
+msgid "Single sided"
+msgstr "एक तरफ़"
+
+#: printing/models.py:140
+msgid "Double sided"
+msgstr "दोनों तरफ़"
+
+#: printing/models.py:147
+msgid "None"
+msgstr "कोई नहीं"
+
+#: printing/models.py:148
+msgid "Staple"
+msgstr "स्टेपल"
+
+#: printing/models.py:149
+msgid "Spiral"
+msgstr "स्पाइरल"
+
+#: printing/models.py:150
+msgid "Hard binding"
+msgstr "हार्ड बाइंडिंग"
+
+#: printing/models.py:153
+msgid "Main Gate"
+msgstr "मेन गेट"
+
+#: printing/models.py:154
+msgid "Library"
+msgstr "लाइब्रेरी"
+
+#: printing/models.py:157
+msgid "Awaiting payment"
+msgstr "पेमेंट बाकी"
+
+#: printing/models.py:158
+msgid "Placed"
+msgstr "ऑर्डर हुआ"
+
+#: printing/models.py:159
+msgid "Payment Verified"
+msgstr "पेमेंट जाँचा गया"
+
+#: printing/models.py:160
+msgid "Printing"
+msgstr "प्रिंट हो रहा है"
+
+#: printing/models.py:161
+msgid "Out for Delivery"
+msgstr "डिलीवरी के लिए निकला"
+
+#: printing/models.py:162
+msgid "Delivered"
+msgstr "पहुँच गया"
+
+#: printing/models.py:163
+msgid "Rejected"
+msgstr "रद्द किया"
+
+#: printing/models.py:187
+msgid "e.g. 1-5, 8, 10-12. Empty = all pages"
+msgstr "जैसे: 1-5, 8, 10-12। खाली = सभी पेज"
+
+#: printing/models.py:243
+#, python-format
+msgid "%(pages)s pg × %(copies)s · %(color)s"
+msgstr "%(pages)s पेज × %(copies)s · %(color)s"
+
+#: printing/models.py:247
+#, python-format
+msgid "%(n)s stationery item"
+msgid_plural "%(n)s stationery items"
+msgstr[0] "%(n)s स्टेशनरी आइटम"
+msgstr[1] "%(n)s स्टेशनरी आइटम"
+
+#: printing/views.py:46
+#, python-format
+msgid "%(name)s is closed right now."
+msgstr "%(name)s अभी बंद है।"
+
+#: printing/views.py:77
+#, python-format
+msgid "%(name)s closed before you finished. Pick another shop."
+msgstr "आपके पूरा करने से पहले %(name)s बंद हो गई। दूसरी दुकान चुनें।"
+
+#: printing/views.py:85
+#, python-format
+msgid "New order %(number)s — ₹%(amount)s"
+msgstr "नया ऑर्डर %(number)s — ₹%(amount)s"
+
+#: printing/views.py:87
+#, python-format
+msgid "%(name)s · txn …%(digits)s · verify the payment"
+msgstr "%(name)s · txn …%(digits)s · पेमेंट जाँचें"
+
+#: printing/views.py:90
+#, python-format
+msgid "Order %(number)s placed. %(name)s will verify your payment."
+msgstr "ऑर्डर %(number)s हो गया। %(name)s आपका पेमेंट जाँचेगी।"
+
+#: printing/views.py:102
+msgid "Order discarded."
+msgstr "ऑर्डर हटा दिया गया।"
+
+#: printing/views.py:134
+msgid "To verify"
+msgstr "जाँचना है"
+
+#: printing/views.py:135
+msgid "In progress"
+msgstr "चल रहे"
+
+#: printing/views.py:136 services/models.py:50
+msgid "Done"
+msgstr "पूरे"
+
+#: printing/views.py:169
+msgid "This order cannot move further."
+msgstr "यह ऑर्डर आगे नहीं बढ़ सकता।"
+
+#: printing/views.py:174
+#, python-format
+msgid "Collect it at the %(place)s."
+msgstr "%(place)s पर ले लें।"
+
+#: printing/views.py:176
+#, python-format
+msgid "Order %(number)s: %(status)s"
+msgstr "ऑर्डर %(number)s: %(status)s"
+
+#: printing/views.py:181
+#, python-format
+msgid "Order %(number)s: %(get_status_display)s."
+msgstr "ऑर्डर %(number)s: %(get_status_display)s।"
+
+#: printing/views.py:191
+msgid "Only new orders can be rejected, with a reason."
+msgstr "सिर्फ़ नए ऑर्डर ही कारण बताकर रद्द किए जा सकते हैं।"
+
+#: printing/views.py:197
+#, python-format
+msgid "Order %(number)s was rejected"
+msgstr "ऑर्डर %(number)s रद्द कर दिया गया"
+
+#: printing/views.py:201
+#, python-format
+msgid "Order %(number)s rejected."
+msgstr "ऑर्डर %(number)s रद्द हो गया।"
+
+#: printing/views.py:210
+msgid "Upload your payment QR code in Settings before opening."
+msgstr "दुकान खोलने से पहले सेटिंग्स में अपना पेमेंट QR कोड डालें।"
+
+#: printing/views.py:214
+msgid "Shop is now open."
+msgstr "दुकान अब खुली है।"
+
+#: printing/views.py:214
+msgid "Shop is now closed."
+msgstr "दुकान अब बंद है।"
+
+#: printing/views.py:224
+msgid "Settings saved."
+msgstr "सेटिंग्स सेव हो गईं।"
+
+#: printing/views.py:237
+#, python-format
+msgid "Added %(name)s."
+msgstr "%(name)s जोड़ दिया गया।"
+
+#: printing/views.py:254
+#, python-format
+msgid "Removed %(name)s."
+msgstr "%(name)s हटा दिया गया।"
+
+#: printing/views.py:260
+#, python-format
+msgid "%(name)s: ₹%(price)s."
+msgstr "%(name)s: ₹%(price)s।"
+
+#: printing/views.py:262
+msgid "Enter a valid price."
+msgstr "सही कीमत डालें।"
+
+#: services/forms.py:9
+msgid "Pick what you need."
+msgstr "चुनें कि आपको क्या चाहिए।"
+
+#: services/forms.py:11
+msgid "Pick the building, floor and classroom."
+msgstr "बिल्डिंग, फ़्लोर और क्लासरूम चुनें।"
+
+#: services/forms.py:17
+msgid "Optional — e.g. \"bring the projector remote\""
+msgstr "वैकल्पिक — जैसे: \"प्रोजेक्टर का रिमोट ले आइए\""
+
+#: services/models.py:29
+#, python-format
+#| msgid "%(building)s · Floor %(floor)s · %(room)s"
+msgid "%(building)s · Floor %(floor)s · %(room)s"
+msgstr "%(building)s · फ़्लोर %(floor)s · %(room)s"
+
+#: services/models.py:35 templates/accounts/home.html:13
+msgid "Medical"
+msgstr "मेडिकल"
+
+#: services/models.py:36 templates/accounts/home.html:17
+msgid "Security"
+msgstr "सिक्योरिटी"
+
+#: services/models.py:37
+msgid "Cleaning"
+msgstr "सफ़ाई"
+
+#: services/models.py:38
+msgid "Item Request"
+msgstr "सामान मँगाना"
+
+#: services/models.py:43 templates/services/detail.html:13
+msgid "High"
+msgstr "ज़रूरी"
+
+#: services/models.py:44 templates/services/detail.html:13
+msgid "Normal"
+msgstr "सामान्य"
+
+#: services/models.py:48
+msgid "Accepted"
+msgstr "स्वीकार किया"
+
+#: services/models.py:49
+msgid "In Progress"
+msgstr "काम चल रहा है"
+
+#: services/models.py:51
+msgid "Cancelled"
+msgstr "रद्द"
+
+#: services/views.py:46
+#, python-format
+msgid "%(category)s request %(number)s"
+msgstr "%(category)s अनुरोध %(number)s"
+
+#: services/views.py:50
+#, python-format
+msgid "Request %(number)s sent to BVG staff."
+msgstr "अनुरोध %(number)s BVG स्टाफ़ को भेज दिया गया।"
+
+#: services/views.py:66
+msgid "My requests"
+msgstr "मेरे अनुरोध"
+
+#: services/views.py:89
+msgid "Open queue"
+msgstr "खुली कतार"
+
+#: services/views.py:90
+msgid "No pending requests right now."
+msgstr "अभी कोई बाकी अनुरोध नहीं है।"
+
+#: services/views.py:99
+msgid "You have no active jobs."
+msgstr "आपके पास कोई चालू काम नहीं है।"
+
+#: services/views.py:108
+msgid "My history"
+msgstr "मेरा इतिहास"
+
+#: services/views.py:110
+msgid "All requests"
+msgstr "सभी अनुरोध"
+
+#: services/views.py:116
+msgid "Nothing here yet."
+msgstr "अभी यहाँ कुछ नहीं है।"
+
+#: services/views.py:128
+#, python-format
+msgid "Your %(category)s request is %(status)s"
+msgstr "आपका %(category)s अनुरोध: %(status)s"
+
+#: services/views.py:131
+#, python-format
+msgid "%(number)s marked %(get_status_display)s."
+msgstr "%(number)s: %(get_status_display)s मार्क हुआ।"
+
+#: services/views.py:133
+#, python-format
+msgid "%(number)s was already taken by someone else."
+msgstr "%(number)s पहले ही किसी और ने ले लिया।"
+
+#: services/views.py:135
+msgid "That request cannot move further."
+msgstr "यह अनुरोध आगे नहीं बढ़ सकता।"
+
+#: services/views.py:169
+msgid ""
+"Staff have already accepted this request, so it can no longer be cancelled."
+msgstr ""
+"स्टाफ़ ने यह अनुरोध स्वीकार कर लिया है, इसलिए अब यह रद्द नहीं हो सकता।"
+
+#: services/views.py:174
+#, python-format
+msgid "Request %(number)s cancelled."
+msgstr "अनुरोध %(number)s रद्द हो गया।"
+
+#: templates/accounts/home.html:6 templates/accounts/home_other.html:4
+#, python-format
+msgid "Hello, %(name)s"
+msgstr "नमस्ते, %(name)s"
+
+#: templates/accounts/home.html:13
+msgid "Get first aid to your classroom"
+msgstr "क्लासरूम में फ़र्स्ट एड बुलाएँ"
+
+#: templates/accounts/home.html:17
+msgid "Fight, theft or a stranger on campus"
+msgstr "झगड़ा, चोरी या कैंपस में अनजान व्यक्ति"
+
+#: templates/accounts/home.html:21
+msgid "Cleaning, bring an item, or something else"
+msgstr "सफ़ाई, कोई सामान मँगाना, या कुछ और"
+
+#: templates/accounts/home.html:27
+#, python-format
+msgid "%(n)s new today"
+msgid_plural "%(n)s new today"
+msgstr[0] "आज %(n)s नई"
+msgstr[1] "आज %(n)s नई"
+
+#: templates/accounts/home.html:27
+msgid "Nothing posted yet"
+msgstr "अभी कुछ पोस्ट नहीं हुआ"
+
+#: templates/accounts/home.html:31 templates/printing/my_orders.html:5
+#: templates/printing/options.html:3 templates/printing/shops.html:3
+#: templates/printing/shops.html:6
+msgid "Print & stationery"
+msgstr "प्रिंट और स्टेशनरी"
+
+#: templates/accounts/home.html:32
+#, python-format
+msgid "%(n)s shop open"
+msgid_plural "%(n)s shops open"
+msgstr[0] "%(n)s दुकान खुली"
+msgstr[1] "%(n)s दुकानें खुली"
+
+#: templates/accounts/home.html:35 templates/market/browse.html:3
+#: templates/market/browse.html:6 templates/market/detail.html:3
+#: templates/market/detail.html:5 templates/market/form.html:5
+#: templates/market/mine.html:3 templates/market/mine.html:5
+#: templates/panel/moderate.html:24
+msgid "COEP Market"
+msgstr "COEP मार्केट"
+
+#: templates/accounts/home.html:36
+msgid "Sell your old books"
+msgstr "अपनी पुरानी किताबें बेचें"
+
+#: templates/accounts/home.html:39 templates/accounts/home.html:47
+#: templates/health/directory.html:3 templates/health/directory.html:6
+#: templates/health/me.html:5
+msgid "Blood donors"
+msgstr "रक्तदाता"
+
+#: templates/accounts/home.html:40
+#, python-format
+msgid "You're listed&nbsp;· %(g)s"
+msgstr "आप लिस्टेड हैं&nbsp;· %(g)s"
+
+#: templates/accounts/home.html:40
+msgid "Find a donor fast"
+msgstr "जल्दी रक्तदाता खोजें"
+
+#: templates/accounts/home.html:44
+msgid "Post an item"
+msgstr "चीज़ पोस्ट करें"
+
+#: templates/accounts/home.html:44
+msgid "Lost or found something?"
+msgstr "कुछ खोया या मिला?"
+
+#: templates/accounts/home.html:47
+msgid "Search by blood group"
+msgstr "ब्लड ग्रुप से खोजें"
+
+#: templates/accounts/home.html:50
+msgid "Nearest first, with 108"
+msgstr "सबसे पास वाले पहले, 108 के साथ"
+
+#: templates/accounts/home.html:55
+msgid "Your latest request"
+msgstr "आपका पिछला अनुरोध"
+
+#: templates/accounts/home.html:60 templates/lostfound/detail.html:23
+#: templates/market/detail.html:21 templates/printing/_order_tb.html:3
+#: templates/services/detail.html:11
+msgid "Sheet"
+msgstr "शीट"
+
+#: templates/accounts/home.html:61 templates/services/detail.html:12
+msgid "Location"
+msgstr "जगह"
+
+#: templates/accounts/home.html:62
+msgid "Type"
+msgstr "प्रकार"
+
+#: templates/accounts/home.html:63 templates/printing/_order_tb.html:7
+#: templates/services/detail.html:16
+msgid "Checked by"
+msgstr "जाँचने वाले"
+
+#: templates/accounts/home.html:64 templates/lostfound/detail.html:26
+#: templates/market/detail.html:25 templates/printing/_order_tb.html:6
+#: templates/services/detail.html:17
+msgid "Status"
+msgstr "स्थिति"
+
+#: templates/accounts/home.html:67
+msgid "All my requests"
+msgstr "मेरे सभी अनुरोध"
+
+#: templates/accounts/home.html:69
+msgid "No requests yet. When you raise one, its status shows up here."
+msgstr "अभी कोई अनुरोध नहीं। जब आप अनुरोध भेजेंगे, उसकी स्थिति यहाँ दिखेगी।"
+
+#: templates/accounts/home_other.html:5
+msgid "There's nothing on this screen for your account yet."
+msgstr "आपके अकाउंट के लिए अभी इस स्क्रीन पर कुछ नहीं है।"
+
+#: templates/accounts/login.html:3 templates/accounts/login.html:8
+#: templates/accounts/login.html:16
+#: templates/accounts/password_reset_complete.html:8
+#: templates/accounts/signup.html:26
+msgid "Log in"
+msgstr "लॉग इन"
+
+#: templates/accounts/login.html:9
+msgid "One login for students, teachers, BVG staff, shops and admins."
+msgstr "छात्र, शिक्षक, BVG स्टाफ़, दुकानें और एडमिन — सबके लिए एक लॉग इन।"
+
+#: templates/accounts/login.html:18 templates/accounts/password_reset.html:6
+msgid "Forgot password?"
+msgstr "पासवर्ड भूल गए?"
+
+#: templates/accounts/login.html:20
+msgid "New here?"
+msgstr "नए हैं?"
+
+#: templates/accounts/login.html:20
+msgid "Create an account with your COEP email"
+msgstr "अपने COEP ईमेल से अकाउंट बनाएँ"
+
+#: templates/accounts/login.html:21
+msgid "Campus Plus is a student project for COEP Technological University."
+msgstr ""
+"Campus Plus, COEP टेक्नोलॉजिकल यूनिवर्सिटी के लिए छात्रों का प्रोजेक्ट है।"
+
+#: templates/accounts/password_reset.html:3
+msgid "Reset password"
+msgstr "पासवर्ड रीसेट करें"
+
+#: templates/accounts/password_reset.html:7
+msgid ""
+"Enter the email you log in with. We'll send you a link to set a new "
+"password."
+msgstr ""
+"जिस ईमेल से लॉग इन करते हैं वह डालें। हम नया पासवर्ड बनाने का लिंक भेजेंगे।"
+
+#: templates/accounts/password_reset.html:11
+msgid "Send reset link"
+msgstr "रीसेट लिंक भेजें"
+
+#: templates/accounts/password_reset.html:13
+#: templates/accounts/password_reset_done.html:8
+msgid "Back to log in"
+msgstr "लॉग इन पर वापस जाएँ"
+
+#: templates/accounts/password_reset_complete.html:3
+#: templates/accounts/password_reset_complete.html:6
+msgid "Password changed"
+msgstr "पासवर्ड बदल गया"
+
+#: templates/accounts/password_reset_complete.html:7
+msgid "You can now log in with your new password."
+msgstr "अब आप नए पासवर्ड से लॉग इन कर सकते हैं।"
+
+#: templates/accounts/password_reset_confirm.html:3
+#: templates/accounts/password_reset_confirm.html:7
+msgid "Set a new password"
+msgstr "नया पासवर्ड बनाएँ"
+
+#: templates/accounts/password_reset_confirm.html:11
+msgid "Save password"
+msgstr "पासवर्ड सेव करें"
+
+#: templates/accounts/password_reset_confirm.html:14
+msgid "Link expired"
+msgstr "लिंक की समय-सीमा खत्म"
+
+#: templates/accounts/password_reset_confirm.html:15
+msgid "This reset link was already used or has expired."
+msgstr "यह रीसेट लिंक पहले इस्तेमाल हो चुका है या पुराना हो गया है।"
+
+#: templates/accounts/password_reset_confirm.html:16
+msgid "Get a new link"
+msgstr "नया लिंक पाएँ"
+
+#: templates/accounts/password_reset_done.html:3
+#: templates/accounts/password_reset_done.html:6
+#: templates/accounts/verify.html:8
+msgid "Check your email"
+msgstr "अपना ईमेल देखें"
+
+#: templates/accounts/password_reset_done.html:7
+msgid ""
+"If an account exists for that email, a reset link is on its way. It works "
+"once."
+msgstr ""
+"अगर इस ईमेल से अकाउंट है, तो रीसेट लिंक आ रहा है। यह एक ही बार काम करेगा।"
+
+#: templates/accounts/profile.html:3 templates/base.html:32
+msgid "My profile"
+msgstr "मेरी प्रोफ़ाइल"
+
+#: templates/accounts/profile.html:9
+msgid "Details"
+msgstr "जानकारी"
+
+#: templates/accounts/profile.html:11
+msgid "Save details"
+msgstr "जानकारी सेव करें"
+
+#: templates/accounts/profile.html:16 templates/accounts/profile.html:18
+msgid "Change password"
+msgstr "पासवर्ड बदलें"
+
+#: templates/accounts/profile.html:23
+msgid "Who can see your phone number"
+msgstr "आपका फ़ोन नंबर कौन देख सकता है"
+
+#: templates/accounts/profile.html:24
+msgid ""
+"Only where you choose: on a Lost & Found post or market listing when you "
+"tick “Show my phone”, in the blood directory if you opt in, and to a "
+"photocopy shop for an order you place."
+msgstr ""
+"सिर्फ़ वहीं जहाँ आप चुनें: खोया-पाया पोस्ट या मार्केट लिस्टिंग पर जब आप "
+"“फ़ोन नंबर दिखाएँ” टिक करें, ब्लड डायरेक्टरी में अगर आप जुड़ें, और उस "
+"फ़ोटोकॉपी दुकान को जहाँ आप ऑर्डर दें।"
+
+#: templates/accounts/profile.html:25
+msgid "Blood directory settings"
+msgstr "ब्लड डायरेक्टरी सेटिंग्स"
+
+#: templates/accounts/profile.html:30
+msgid "Log out"
+msgstr "लॉग आउट"
+
+#: templates/accounts/signup.html:3
+msgid "Sign up"
+msgstr "साइन अप"
+
+#: templates/accounts/signup.html:8 templates/panel/user_form.html:20
+msgid "Create account"
+msgstr "अकाउंट बनाएँ"
+
+#: templates/accounts/signup.html:9
+msgid "Only verified COEP emails can sign up. We'll email you a 6-digit code."
+msgstr ""
+"सिर्फ़ वेरिफ़ाइड COEP ईमेल से साइन अप होता है। हम आपको 6 अंकों का कोड ईमेल "
+"करेंगे।"
+
+#: templates/accounts/signup.html:23
+msgid "Send verification code"
+msgstr "वेरिफ़िकेशन कोड भेजें"
+
+#: templates/accounts/signup.html:26
+msgid "Already registered?"
+msgstr "पहले से रजिस्टर हैं?"
+
+#: templates/accounts/verify.html:3
+msgid "Verify email"
+msgstr "ईमेल वेरिफ़ाई करें"
+
+#: templates/accounts/verify.html:9
+#, python-format
+msgid "We sent a 6-digit code to <strong>%(email)s</strong>."
+msgstr "हमने <strong>%(email)s</strong> पर 6 अंकों का कोड भेजा है।"
+
+#: templates/accounts/verify.html:14
+msgid "Verify and create account"
+msgstr "वेरिफ़ाई करें और अकाउंट बनाएँ"
+
+#: templates/accounts/verify.html:17
+msgid "Resend code"
+msgstr "कोड दोबारा भेजें"
+
+#: templates/accounts/verify.html:18
+msgid "Use a different email"
+msgstr "दूसरा ईमेल इस्तेमाल करें"
+
+#: templates/base.html:16
+msgid "Skip to content"
+msgstr "सीधे सामग्री पर जाएँ"
+
+#: templates/base.html:22
+msgid "Language"
+msgstr "भाषा"
+
+#: templates/base.html:28 templates/notify/inbox.html:3
+#: templates/notify/inbox.html:6
+msgid "Notifications"
+msgstr "सूचनाएँ"
+
+#: templates/base.html:38
+msgid "Main"
+msgstr "मुख्य"
+
+#: templates/health/_sos.html:3
+msgid "108 Ambulance"
+msgstr "108 एम्बुलेंस"
+
+#: templates/health/_sos.html:4
+msgid "112 Emergency"
+msgstr "112 इमरजेंसी"
+
+#: templates/health/directory.html:14
+msgid "You're listed in the directory."
+msgstr "आप डायरेक्टरी में दिख रहे हैं।"
+
+#: templates/health/directory.html:14
+msgid "You're hidden from the directory."
+msgstr "आप डायरेक्टरी में छिपे हुए हैं।"
+
+#: templates/health/directory.html:14 templates/services/new.html:26
+msgid "Change"
+msgstr "बदलें"
+
+#: templates/health/directory.html:16
+msgid "Add your blood group"
+msgstr "अपना ब्लड ग्रुप जोड़ें"
+
+#: templates/health/directory.html:16
+msgid "Opt-in only. You can hide it any time."
+msgstr "सिर्फ़ आपकी मर्ज़ी से। कभी भी छिपा सकते हैं।"
+
+#: templates/health/directory.html:22
+msgid "Which blood group is needed?"
+msgstr "कौन सा ब्लड ग्रुप चाहिए?"
+
+#: templates/health/directory.html:26
+msgid "Also show compatible donors"
+msgstr "मेल खाने वाले रक्तदाता भी दिखाएँ"
+
+#: templates/health/directory.html:27
+#, python-format
+msgid "%(g)s can receive from %(list)s."
+msgstr "%(g)s को %(list)s से खून मिल सकता है।"
+
+#: templates/health/directory.html:28 templates/lostfound/feed.html:13
+#: templates/market/browse.html:11
+msgid "Search"
+msgstr "खोजें"
+
+#: templates/health/directory.html:32
+#, python-format
+msgid "%(n)s donor found"
+msgid_plural "%(n)s donors found"
+msgstr[0] "%(n)s रक्तदाता मिला"
+msgstr[1] "%(n)s रक्तदाता मिले"
+
+#: templates/health/directory.html:40 templates/lostfound/detail.html:11
+#: templates/market/detail.html:24 templates/printing/shop_order.html:7
+#, python-format
+msgid "Year %(y)s"
+msgstr "वर्ष %(y)s"
+
+#: templates/health/directory.html:41
+#, python-format
+msgid "Gave blood recently — may not be able to until %(d)s"
+msgstr "हाल ही में रक्तदान किया — %(d)s तक शायद न दे पाएँ"
+
+#: templates/health/directory.html:46 templates/lostfound/detail.html:42
+msgid "Email"
+msgstr "ईमेल"
+
+#: templates/health/directory.html:49
+msgid "Show number"
+msgstr "नंबर दिखाएँ"
+
+#: templates/health/directory.html:55
+msgid ""
+"Only students who chose to be listed appear here. Every number you view is "
+"recorded and the donor can see who looked. Contact donors only for a real "
+"need."
+msgstr ""
+"यहाँ सिर्फ़ वही छात्र दिखते हैं जिन्होंने खुद चुना है। आप जो भी नंबर देखते "
+"हैं वह रिकॉर्ड होता है और रक्तदाता देख सकता है कि किसने देखा। सिर्फ़ असली "
+"ज़रूरत पर ही संपर्क करें।"
+
+#: templates/health/directory.html:57
+#, python-format
+msgid "No listed donors for %(group)s. Call a hospital blood bank."
+msgstr ""
+"%(group)s के लिए कोई रक्तदाता लिस्टेड नहीं है। अस्पताल के ब्लड बैंक को फ़ोन "
+"करें।"
+
+#: templates/health/directory.html:57
+#, python-format
+msgid "No listed donors for %(group)s — try “Also show compatible donors”."
+msgstr ""
+"%(group)s के लिए कोई रक्तदाता नहीं — “मेल खाने वाले रक्तदाता भी दिखाएँ” "
+"आज़माएँ।"
+
+#: templates/health/hospitals.html:3 templates/health/hospitals.html:6
+msgid "Nearby hospitals"
+msgstr "पास के अस्पताल"
+
+#: templates/health/hospitals.html:7
+msgid "Donors"
+msgstr "रक्तदाता"
+
+#: templates/health/hospitals.html:11 templates/lostfound/feed.html:17
+#: templates/market/browse.html:28 templates/panel/users.html:14
+#: templates/services/list.html:12
+msgid "All"
+msgstr "सभी"
+
+#: templates/health/hospitals.html:12
+msgid "With blood bank"
+msgstr "ब्लड बैंक वाले"
+
+#: templates/health/hospitals.html:22
+msgid "Blood bank"
+msgstr "ब्लड बैंक"
+
+#: templates/health/hospitals.html:25 templates/panel/hospitals.html:17
+msgid "Emergency"
+msgstr "इमरजेंसी"
+
+#: templates/health/hospitals.html:27
+msgid "Directions"
+msgstr "रास्ता"
+
+#: templates/health/hospitals.html:29
+msgid "Phone number not added yet."
+msgstr "फ़ोन नंबर अभी नहीं जोड़ा गया।"
+
+#: templates/health/hospitals.html:36
+msgid "No hospitals added yet."
+msgstr "अभी कोई अस्पताल नहीं जोड़ा गया।"
+
+#: templates/health/hospitals.html:38
+msgid "Manage the hospital list"
+msgstr "अस्पतालों की लिस्ट संभालें"
+
+#: templates/health/me.html:3 templates/health/me.html:6
+msgid "My blood group"
+msgstr "मेरा ब्लड ग्रुप"
+
+#: templates/health/me.html:12
+msgid "Listed in the directory"
+msgstr "डायरेक्टरी में दिख रहे हैं"
+
+#: templates/health/me.html:12
+msgid "Hidden from the directory"
+msgstr "डायरेक्टरी में छिपे हुए"
+
+#: templates/health/me.html:13
+msgid "Others can find you and see your number."
+msgstr "दूसरे आपको खोज सकते हैं और आपका नंबर देख सकते हैं।"
+
+#: templates/health/me.html:13
+msgid "Nobody can see your blood group or number."
+msgstr "कोई आपका ब्लड ग्रुप या नंबर नहीं देख सकता।"
+
+#: templates/health/me.html:18
+msgid ""
+"The blood directory is opt-in. You're not listed until you save this, and "
+"you can hide or delete your entry at any time."
+msgstr ""
+"ब्लड डायरेक्टरी में जुड़ना आपकी मर्ज़ी है। जब तक आप इसे सेव नहीं करते, आप "
+"नहीं दिखेंगे, और कभी भी छिप सकते हैं या जानकारी हटा सकते हैं।"
+
+#: templates/health/me.html:24
+msgid "Blood group"
+msgstr "ब्लड ग्रुप"
+
+#: templates/health/me.html:32
+msgid "You must agree to be listed."
+msgstr "लिस्ट में आने के लिए सहमति ज़रूरी है।"
+
+#: templates/health/me.html:36 templates/panel/hospital_form.html:20
+#: templates/panel/shop_form.html:15
+#: templates/printing/shop_stationery.html:29
+msgid "Save"
+msgstr "सेव करें"
+
+#: templates/health/me.html:36
+msgid "Add me to the directory"
+msgstr "मुझे डायरेक्टरी में जोड़ें"
+
+#: templates/health/me.html:40
+msgid "Who viewed your number"
+msgstr "आपका नंबर किसने देखा"
+
+#: templates/health/me.html:50
+msgid "Nobody yet."
+msgstr "अभी किसी ने नहीं।"
+
+#: templates/health/me.html:52
+msgid "Delete your blood group entry?"
+msgstr "अपनी ब्लड ग्रुप जानकारी हटाएँ?"
+
+#: templates/health/me.html:53
+msgid "Delete my entry completely"
+msgstr "मेरी जानकारी पूरी तरह हटाएँ"
+
+#: templates/lostfound/_card.html:5 templates/notify/inbox.html:18
+#: templates/printing/shop_dashboard.html:19 templates/services/_row.html:9
+#: templates/services/list.html:30
+#, python-format
+msgid "%(t)s ago"
+msgstr "%(t)s पहले"
+
+#: templates/lostfound/detail.html:24
+msgid "Place"
+msgstr "जगह"
+
+#: templates/lostfound/detail.html:25
+msgid "Date"
+msgstr "तारीख"
+
+#: templates/lostfound/detail.html:32
+msgid "Mark as returned"
+msgstr "लौटाया गया मार्क करें"
+
+#: templates/lostfound/detail.html:34
+msgid "This takes it off the main feed."
+msgstr "इससे यह मुख्य फ़ीड से हट जाएगा।"
+
+#: templates/lostfound/detail.html:36
+msgid "Delete this post for good?"
+msgstr "यह पोस्ट हमेशा के लिए हटाएँ?"
+
+#: templates/lostfound/detail.html:37
+msgid "Delete post"
+msgstr "पोस्ट हटाएँ"
+
+#: templates/lostfound/detail.html:40
+#, python-format
+msgid "Contact %(name)s"
+msgstr "%(name)s से संपर्क करें"
+
+#: templates/lostfound/detail.html:48
+msgid "Remove this post from the feed?"
+msgstr "यह पोस्ट फ़ीड से हटाएँ?"
+
+#: templates/lostfound/detail.html:49
+msgid "Remove post (admin)"
+msgstr "पोस्ट हटाएँ (एडमिन)"
+
+#: templates/lostfound/feed.html:7 templates/lostfound/form.html:31
+#: templates/lostfound/mine.html:8
+msgid "Post"
+msgstr "पोस्ट करें"
+
+#: templates/lostfound/feed.html:13
+msgid "Search an item or a place"
+msgstr "कोई चीज़ या जगह खोजें"
+
+#: templates/lostfound/feed.html:16
+msgid "Filter"
+msgstr "फ़िल्टर"
+
+#: templates/lostfound/feed.html:21 templates/lostfound/mine.html:3
+#: templates/lostfound/mine.html:7
+msgid "My posts"
+msgstr "मेरी पोस्ट"
+
+#: templates/lostfound/feed.html:28
+msgid "Newer"
+msgstr "नए"
+
+#: templates/lostfound/feed.html:29
+msgid "Older"
+msgstr "पुराने"
+
+#: templates/lostfound/feed.html:33
+msgid "Nothing matches. Try another word."
+msgstr "कुछ नहीं मिला। कोई और शब्द आज़माएँ।"
+
+#: templates/lostfound/feed.html:33
+msgid "Nothing posted yet. Lost something, or found something? Post it."
+msgstr "अभी कुछ पोस्ट नहीं हुआ। कुछ खोया या मिला? पोस्ट करें।"
+
+#: templates/lostfound/form.html:3 templates/lostfound/form.html:6
+msgid "New post"
+msgstr "नई पोस्ट"
+
+#: templates/lostfound/form.html:11
+msgid "I lost something"
+msgstr "मेरा कुछ खो गया"
+
+#: templates/lostfound/form.html:11
+msgid "I found something"
+msgstr "मुझे कुछ मिला"
+
+#: templates/lostfound/form.html:17
+msgid "Photo"
+msgstr "फ़ोटो"
+
+#: templates/lostfound/form.html:18
+msgid "Tap to add a photo"
+msgstr "फ़ोटो जोड़ने के लिए टैप करें"
+
+#: templates/lostfound/form.html:20
+msgid "Needed for found items. Location data is removed from the photo."
+msgstr ""
+"मिली हुई चीज़ के लिए ज़रूरी। फ़ोटो से लोकेशन की जानकारी हटा दी जाती है।"
+
+#: templates/lostfound/form.html:30
+msgid "Otherwise people reach you by your college email."
+msgstr "नहीं तो लोग आपके कॉलेज ईमेल से संपर्क करेंगे।"
+
+#: templates/lostfound/mine.html:26
+msgid "You haven't posted anything yet."
+msgstr "आपने अभी कुछ पोस्ट नहीं किया।"
+
+#: templates/market/_tile.html:8 templates/market/detail.html:14
+#: templates/market/mine.html:18
+msgid "Free"
+msgstr "मुफ़्त"
+
+#: templates/market/browse.html:7 templates/market/mine.html:8
+msgid "Sell"
+msgstr "बेचें"
+
+#: templates/market/browse.html:11
+msgid "Search books, cycles, drafters…"
+msgstr "किताबें, साइकिल, ड्राफ़्टर खोजें…"
+
+#: templates/market/browse.html:14
+msgid "Filters"
+msgstr "फ़िल्टर"
+
+#: templates/market/browse.html:14
+msgid "On"
+msgstr "चालू"
+
+#: templates/market/browse.html:16 templates/market/detail.html:23
+msgid "Condition"
+msgstr "हालत"
+
+#: templates/market/browse.html:17
+msgid "Any"
+msgstr "कोई भी"
+
+#: templates/market/browse.html:18
+msgid "Sort"
+msgstr "क्रम"
+
+#: templates/market/browse.html:20
+msgid "Min ₹"
+msgstr "कम से कम ₹"
+
+#: templates/market/browse.html:21
+msgid "Max ₹"
+msgstr "ज़्यादा से ज़्यादा ₹"
+
+#: templates/market/browse.html:23
+msgid "Apply"
+msgstr "लागू करें"
+
+#: templates/market/browse.html:23
+msgid "Clear all"
+msgstr "सब हटाएँ"
+
+#: templates/market/browse.html:27 templates/market/detail.html:22
+msgid "Category"
+msgstr "श्रेणी"
+
+#: templates/market/browse.html:30 templates/market/mine.html:3
+#: templates/market/mine.html:7
+msgid "My listings"
+msgstr "मेरी लिस्टिंग"
+
+#: templates/market/browse.html:37 templates/panel/users.html:40
+msgid "Previous"
+msgstr "पिछला"
+
+#: templates/market/browse.html:38 templates/panel/users.html:41
+msgid "Next"
+msgstr "अगला"
+
+#: templates/market/browse.html:42
+msgid "Nothing matches. Try fewer filters."
+msgstr "कुछ नहीं मिला। कम फ़िल्टर लगाएँ।"
+
+#: templates/market/browse.html:42
+msgid "Nothing for sale yet. Be the first to sell something."
+msgstr "अभी कुछ नहीं बिक रहा। सबसे पहले आप कुछ बेचें।"
+
+#: templates/market/browse.html:44
+msgid ""
+"Pay the seller directly when you meet. Campus Plus never handles money."
+msgstr "मिलने पर सीधे बेचने वाले को पैसे दें। Campus Plus कभी पैसे नहीं लेता।"
+
+#: templates/market/detail.html:9
+#, python-format
+msgid "photo %(n)s"
+msgstr "फ़ोटो %(n)s"
+
+#: templates/market/detail.html:10
+#, python-format
+msgid "Swipe for %(n)s photo"
+msgid_plural "Swipe for %(n)s photos"
+msgstr[0] "%(n)s फ़ोटो के लिए स्वाइप करें"
+msgstr[1] "%(n)s फ़ोटो के लिए स्वाइप करें"
+
+#: templates/market/detail.html:24
+msgid "Seller"
+msgstr "बेचने वाले"
+
+#: templates/market/detail.html:31
+msgid "Mark as sold"
+msgstr "बिका हुआ मार्क करें"
+
+#: templates/market/detail.html:32
+msgid "Edit"
+msgstr "बदलें"
+
+#: templates/market/detail.html:37
+msgid "Email seller"
+msgstr "बेचने वाले को ईमेल करें"
+
+#: templates/market/detail.html:39
+msgid "Call"
+msgstr "फ़ोन करें"
+
+#: templates/market/detail.html:43
+msgid "Meet on campus, check the item, then pay the seller directly."
+msgstr "कैंपस में मिलें, चीज़ जाँचें, फिर सीधे बेचने वाले को पैसे दें।"
+
+#: templates/market/detail.html:47 templates/panel/moderate.html:34
+msgid "Remove this listing?"
+msgstr "यह लिस्टिंग हटाएँ?"
+
+#: templates/market/detail.html:48
+msgid "Remove listing (admin)"
+msgstr "लिस्टिंग हटाएँ (एडमिन)"
+
+#: templates/market/form.html:3 templates/market/form.html:6
+msgid "Edit listing"
+msgstr "लिस्टिंग बदलें"
+
+#: templates/market/form.html:3 templates/market/form.html:6
+msgid "Sell something"
+msgstr "कुछ बेचें"
+
+#: templates/market/form.html:10
+msgid "Photos (up to 5)"
+msgstr "फ़ोटो (5 तक)"
+
+#: templates/market/form.html:14 templates/panel/moderate.html:17
+#: templates/panel/moderate.html:35 templates/printing/shop_stationery.html:36
+msgid "Remove"
+msgstr "हटाएँ"
+
+#: templates/market/form.html:18
+msgid "Tap to add photos"
+msgstr "फ़ोटो जोड़ने के लिए टैप करें"
+
+#: templates/market/form.html:29
+msgid "Otherwise buyers reach you by your college email."
+msgstr "नहीं तो खरीदार आपके कॉलेज ईमेल से संपर्क करेंगे।"
+
+#: templates/market/form.html:30
+msgid "Save changes"
+msgstr "बदलाव सेव करें"
+
+#: templates/market/form.html:30
+msgid "Post listing"
+msgstr "लिस्टिंग पोस्ट करें"
+
+#: templates/market/form.html:33
+msgid "Delete this listing for good?"
+msgstr "यह लिस्टिंग हमेशा के लिए हटाएँ?"
+
+#: templates/market/form.html:34
+msgid "Delete listing"
+msgstr "लिस्टिंग हटाएँ"
+
+#: templates/market/form.html:43
+msgid "1 photo selected"
+msgstr "1 फ़ोटो चुनी गई"
+
+#: templates/market/form.html:43
+msgid "photos selected"
+msgstr "फ़ोटो चुनी गईं"
+
+#: templates/market/mine.html:26
+msgid "You haven't listed anything yet."
+msgstr "आपने अभी कुछ लिस्ट नहीं किया।"
+
+#: templates/notify/inbox.html:7
+msgid "Turn on alerts"
+msgstr "अलर्ट चालू करें"
+
+#: templates/notify/inbox.html:9
+msgid "Alerts pop up on this device while Campus Plus is open in a tab."
+msgstr "जब Campus Plus किसी टैब में खुला हो, तब इस डिवाइस पर अलर्ट आएँगे।"
+
+#: templates/notify/inbox.html:16 templates/services/_row.html:6
+#: templates/services/list.html:27
+msgid "Urgent"
+msgstr "ज़रूरी"
+
+#: templates/notify/inbox.html:24
+msgid "You're all caught up."
+msgstr "सब देख लिया, कुछ नया नहीं।"
+
+#: templates/panel/dashboard.html:9
+msgid "high-priority requests open right now"
+msgstr "ज़रूरी अनुरोध अभी खुले हैं"
+
+#: templates/panel/dashboard.html:20
+msgid "Waiting more than 15 minutes"
+msgstr "15 मिनट से ज़्यादा से रुके हुए"
+
+#: templates/panel/dashboard.html:26
+msgid "People"
+msgstr "लोग"
+
+#: templates/panel/dashboard.html:26
+msgid "All users"
+msgstr "सभी यूज़र"
+
+#: templates/panel/dashboard.html:28
+msgid "Add staff, shop or admin"
+msgstr "स्टाफ़, दुकान या एडमिन जोड़ें"
+
+#: templates/panel/dashboard.html:32
+msgid "Photocopy shops"
+msgstr "फ़ोटोकॉपी दुकानें"
+
+#: templates/panel/dashboard.html:32 templates/panel/dashboard.html:38
+msgid "Manage"
+msgstr "संभालें"
+
+#: templates/panel/dashboard.html:34 templates/panel/shops.html:19
+#: templates/printing/shops.html:35
+msgid "Closed"
+msgstr "बंद"
+
+#: templates/panel/dashboard.html:35 templates/panel/shops.html:24
+msgid "No shops yet."
+msgstr "अभी कोई दुकान नहीं।"
+
+#: templates/panel/dashboard.html:40 templates/panel/locations.html:3
+#: templates/panel/locations.html:5
+msgid "Buildings & classrooms"
+msgstr "बिल्डिंग और क्लासरूम"
+
+#: templates/panel/dashboard.html:41 templates/panel/shop_form.html:5
+#: templates/panel/shops.html:3 templates/panel/shops.html:6
+#: templates/printing/options.html:5
+msgid "Shops"
+msgstr "दुकानें"
+
+#: templates/panel/dashboard.html:43
+msgid "Moderate posts"
+msgstr "पोस्ट मॉडरेट करें"
+
+#: templates/panel/dashboard.html:44
+msgid "All service requests"
+msgstr "सभी अनुरोध"
+
+#: templates/panel/dashboard.html:45
+msgid "Advanced (Django admin)"
+msgstr "एडवांस्ड (Django admin)"
+
+#: templates/panel/hospital_form.html:3 templates/panel/hospital_form.html:6
+msgid "Add a hospital"
+msgstr "अस्पताल जोड़ें"
+
+#: templates/panel/hospital_form.html:16
+msgid "Has a blood bank"
+msgstr "ब्लड बैंक है"
+
+#: templates/panel/hospital_form.html:23
+msgid "Remove this hospital?"
+msgstr "यह अस्पताल हटाएँ?"
+
+#: templates/panel/hospital_form.html:24
+msgid "Remove hospital"
+msgstr "अस्पताल हटाएँ"
+
+#: templates/panel/hospitals.html:7 templates/panel/locations.html:14
+#: templates/panel/users.html:7
+msgid "Add"
+msgstr "जोड़ें"
+
+#: templates/panel/hospitals.html:17
+msgid "No phone number yet"
+msgstr "अभी फ़ोन नंबर नहीं"
+
+#: templates/panel/hospitals.html:24
+msgid "No hospitals yet."
+msgstr "अभी कोई अस्पताल नहीं।"
+
+#: templates/panel/hospitals.html:26
+msgid "See the public page"
+msgstr "सबके लिए वाला पेज देखें"
+
+#: templates/panel/locations.html:8
+msgid "Add classrooms"
+msgstr "क्लासरूम जोड़ें"
+
+#: templates/panel/locations.html:21
+#, python-format
+msgid "Floor %(floor)s"
+msgstr "फ़्लोर %(floor)s"
+
+#: templates/panel/locations.html:24
+msgid "Remove this classroom?"
+msgstr "यह क्लासरूम हटाएँ?"
+
+#: templates/panel/locations.html:26
+#, python-format
+msgid "Remove %(r)s"
+msgstr "%(r)s हटाएँ"
+
+#: templates/panel/locations.html:34
+msgid "No buildings yet. Add the first classrooms above."
+msgstr "अभी कोई बिल्डिंग नहीं। ऊपर से पहले क्लासरूम जोड़ें।"
+
+#: templates/panel/locations.html:36
+msgid ""
+"The number in brackets is how many requests came from that room. Rooms with "
+"requests can't be removed, so history stays intact."
+msgstr ""
+"ब्रैकेट में लिखी संख्या बताती है कि उस कमरे से कितने अनुरोध आए। जिन कमरों से"
+" अनुरोध आए हैं वे हटाए नहीं जा सकते, ताकि इतिहास बना रहे।"
+
+#: templates/panel/moderate.html:16
+msgid "Remove this post?"
+msgstr "यह पोस्ट हटाएँ?"
+
+#: templates/panel/moderate.html:22
+msgid "Nothing open."
+msgstr "कुछ खुला नहीं है।"
+
+#: templates/panel/moderate.html:40
+msgid "Nothing for sale."
+msgstr "कुछ नहीं बिक रहा।"
+
+#: templates/panel/shop_form.html:14
+msgid ""
+"Prices, the QR code and stationery are managed by the shop itself. To stop a"
+" shop from logging in, deactivate its account under Users."
+msgstr ""
+"कीमतें, QR कोड और स्टेशनरी दुकान खुद संभालती है। दुकान का लॉग इन रोकने के "
+"लिए यूज़र में जाकर उसका अकाउंट बंद करें।"
+
+#: templates/panel/shops.html:7
+msgid "Add shop"
+msgstr "दुकान जोड़ें"
+
+#: templates/panel/shops.html:17
+#, python-format
+msgid "%(a)s active&nbsp;· %(d)s delivered&nbsp;· %(i)s stationery items"
+msgstr "%(a)s चालू&nbsp;· %(d)s पहुँचे&nbsp;· %(i)s स्टेशनरी आइटम"
+
+#: templates/panel/shops.html:17
+msgid "No QR code"
+msgstr "QR कोड नहीं"
+
+#: templates/panel/user_form.html:3 templates/panel/user_form.html:6
+msgid "Add an account"
+msgstr "अकाउंट जोड़ें"
+
+#: templates/panel/user_form.html:6
+msgid ""
+"For BVG staff, photocopy shops and admins. Students and teachers sign up "
+"themselves."
+msgstr ""
+"BVG स्टाफ़, फ़ोटोकॉपी दुकानों और एडमिन के लिए। छात्र और शिक्षक खुद साइन अप "
+"करते हैं।"
+
+#: templates/panel/user_form.html:19
+msgid ""
+"Share the password privately and ask them to change it from their profile."
+msgstr "पासवर्ड निजी तौर पर बताएँ और उनसे प्रोफ़ाइल में जाकर बदलने को कहें।"
+
+#: templates/panel/users.html:11
+msgid "Search name, email or phone"
+msgstr "नाम, ईमेल या फ़ोन खोजें"
+
+#: templates/panel/users.html:11
+msgid "Search users"
+msgstr "यूज़र खोजें"
+
+#: templates/panel/users.html:23
+msgid "Off"
+msgstr "बंद"
+
+#: templates/panel/users.html:29
+msgid "Deactivate"
+msgstr "बंद करें"
+
+#: templates/panel/users.html:29
+msgid "Activate"
+msgstr "चालू करें"
+
+#: templates/panel/users.html:36
+msgid "No users match."
+msgstr "कोई यूज़र नहीं मिला।"
+
+#: templates/printing/_order_tb.html:4
+#: templates/printing/shop_settings.html:10
+msgid "Shop"
+msgstr "दुकान"
+
+#: templates/printing/_order_tb.html:8
+msgid "Amount"
+msgstr "रकम"
+
+#: templates/printing/_order_tb.html:12
+msgid "file deleted"
+msgstr "फ़ाइल हटा दी गई"
+
+#: templates/printing/_order_tb.html:13 templates/printing/options.html:14
+#: templates/printing/pay.html:15
+#, python-format
+msgid "%(n)s page"
+msgid_plural "%(n)s pages"
+msgstr[0] "%(n)s पेज"
+msgstr[1] "%(n)s पेज"
+
+#: templates/printing/_order_tb.html:19 templates/services/new.html:35
+msgid "Note"
+msgstr "नोट"
+
+#: templates/printing/_shopbar.html:6
+msgid "Open — students can order"
+msgstr "खुली — छात्र ऑर्डर कर सकते हैं"
+
+#: templates/printing/_shopbar.html:6
+msgid "Closed — students can't order"
+msgstr "बंद — छात्र ऑर्डर नहीं कर सकते"
+
+#: templates/printing/_shopbar.html:8
+msgid "Shop open"
+msgstr "दुकान खुली"
+
+#: templates/printing/_shopbar.html:11
+#, python-format
+msgid ""
+"Add your payment QR code in <a href=\"%(settings_url)s\">Settings</a> before"
+" opening."
+msgstr ""
+"दुकान खोलने से पहले <a href=\"%(settings_url)s\">सेटिंग्स</a> में पेमेंट QR "
+"कोड डालें।"
+
+#: templates/printing/_timeline.html:6
+msgid "next"
+msgstr "अगला"
+
+#: templates/printing/my_orders.html:3 templates/printing/my_orders.html:7
+#: templates/printing/order.html:5 templates/printing/shops.html:7
+msgid "My orders"
+msgstr "मेरे ऑर्डर"
+
+#: templates/printing/my_orders.html:8
+msgid "New order"
+msgstr "नया ऑर्डर"
+
+#: templates/printing/my_orders.html:25
+msgid "No orders yet."
+msgstr "अभी कोई ऑर्डर नहीं।"
+
+#: templates/printing/options.html:7 templates/printing/pay.html:6
+msgid "What you need"
+msgstr "क्या चाहिए"
+
+#: templates/printing/options.html:7 templates/printing/pay.html:3
+#: templates/printing/pay.html:6
+msgid "Pay"
+msgstr "पेमेंट"
+
+#: templates/printing/options.html:7 templates/printing/options.html:33
+#: templates/printing/pay.html:6 templates/printing/pay.html:20
+msgid "Delivery"
+msgstr "डिलीवरी"
+
+#: templates/printing/options.html:12
+msgid "Document to print"
+msgstr "प्रिंट करने वाला डॉक्यूमेंट"
+
+#: templates/printing/options.html:14
+msgid "Tap to choose a PDF or photo"
+msgstr "PDF या फ़ोटो चुनने के लिए टैप करें"
+
+#: templates/printing/options.html:15
+msgid ""
+"PDF, JPG or PNG, up to 25 MB. Pages are counted for you. Convert Word/PPT to"
+" PDF first."
+msgstr ""
+"PDF, JPG या PNG, 25 MB तक। पेज अपने आप गिने जाते हैं। Word/PPT को पहले PDF "
+"में बदलें।"
+
+#: templates/printing/options.html:15
+msgid "Skip this if you only want stationery."
+msgstr "सिर्फ़ स्टेशनरी चाहिए तो इसे छोड़ दें।"
+
+#: templates/printing/options.html:27
+msgid "Price list"
+msgstr "रेट लिस्ट"
+
+#: templates/printing/options.html:29
+msgid "B/W single / double side"
+msgstr "ब्लैक-व्हाइट एक / दोनों तरफ़"
+
+#: templates/printing/options.html:30
+msgid "Colour single / double side"
+msgstr "कलर एक / दोनों तरफ़"
+
+#: templates/printing/options.html:32
+msgid "Staple / Spiral / Hard binding"
+msgstr "स्टेपल / स्पाइरल / हार्ड बाइंडिंग"
+
+#: templates/printing/options.html:54
+msgid "See the price"
+msgstr "कीमत देखें"
+
+#: templates/printing/order.html:6
+msgid "Order"
+msgstr "ऑर्डर"
+
+#: templates/printing/order.html:8
+#, python-format
+msgid "Rejected by the shop: %(reason)s"
+msgstr "दुकान ने रद्द किया: %(reason)s"
+
+#: templates/printing/pay.html:5
+#, python-format
+msgid "Pay %(shop)s"
+msgstr "%(shop)s को पेमेंट करें"
+
+#: templates/printing/pay.html:10
+msgid "to pay, rounded up to the nearest rupee"
+msgstr "देने हैं, पूरे रुपये में"
+
+#: templates/printing/pay.html:17
+#, python-format
+msgid "%(n)s copy"
+msgid_plural "%(n)s copies"
+msgstr[0] "%(n)s कॉपी"
+msgstr[1] "%(n)s कॉपियाँ"
+
+#: templates/printing/pay.html:21
+msgid "Total"
+msgstr "कुल"
+
+#: templates/printing/pay.html:24
+msgid "Change the order"
+msgstr "ऑर्डर बदलें"
+
+#: templates/printing/pay.html:28
+msgid "Scan and pay with any UPI app"
+msgstr "किसी भी UPI ऐप से स्कैन करके पेमेंट करें"
+
+#: templates/printing/pay.html:29
+#, python-format
+msgid "%(shop)s payment QR code"
+msgstr "%(shop)s का पेमेंट QR कोड"
+
+#: templates/printing/pay.html:30
+msgid "This shop has not added a QR code. Pick another shop."
+msgstr "इस दुकान ने QR कोड नहीं डाला है। दूसरी दुकान चुनें।"
+
+#: templates/printing/pay.html:32
+#, python-format
+msgid "Pay exactly <b>₹%(amount)s</b>. The money goes straight to the shop."
+msgstr "ठीक <b>₹%(amount)s</b> भेजें। पैसा सीधे दुकान को जाता है।"
+
+#: templates/printing/pay.html:37
+msgid "Proof of payment"
+msgstr "पेमेंट का सबूत"
+
+#: templates/printing/pay.html:40
+msgid "Tap to upload the screenshot"
+msgstr "स्क्रीनशॉट अपलोड करने के लिए टैप करें"
+
+#: templates/printing/pay.html:45
+#, python-format
+msgid ""
+"Placing the order shares your name, department and phone with %(shop)s so "
+"they can deliver it."
+msgstr ""
+"ऑर्डर करने पर आपका नाम, विभाग और फ़ोन %(shop)s के साथ शेयर होगा ताकि वे "
+"डिलीवर कर सकें।"
+
+#: templates/printing/pay.html:46
+msgid "Place order"
+msgstr "ऑर्डर करें"
+
+#: templates/printing/pay.html:49
+msgid "Discard this order?"
+msgstr "यह ऑर्डर हटाएँ?"
+
+#: templates/printing/pay.html:50
+msgid "Discard order"
+msgstr "ऑर्डर हटाएँ"
+
+#: templates/printing/shop_dashboard.html:26
+msgid "No new orders."
+msgstr "कोई नया ऑर्डर नहीं।"
+
+#: templates/printing/shop_dashboard.html:26
+msgid "Nothing in progress."
+msgstr "कुछ चल नहीं रहा।"
+
+#: templates/printing/shop_dashboard.html:26
+msgid "No finished orders yet."
+msgstr "अभी कोई पूरा ऑर्डर नहीं।"
+
+#: templates/printing/shop_order.html:14
+msgid "First, check the payment"
+msgstr "पहले पेमेंट जाँचें"
+
+#: templates/printing/shop_order.html:15
+#, python-format
+msgid ""
+"Open <b>your own</b> payment app and check you received <b>₹%(amount)s</b> "
+"with a transaction ID ending in <b>%(digits)s</b>. Don't trust the "
+"screenshot alone."
+msgstr ""
+"<b>अपना</b> पेमेंट ऐप खोलें और देखें कि <b>₹%(amount)s</b> आए हैं और "
+"ट्रांज़ैक्शन ID के आखिर में <b>%(digits)s</b> है। सिर्फ़ स्क्रीनशॉट पर भरोसा"
+" न करें।"
+
+#: templates/printing/shop_order.html:26
+msgid "Payment received — verify"
+msgstr "पेमेंट मिल गया — जाँचा"
+
+#: templates/printing/shop_order.html:27
+msgid "Start printing"
+msgstr "प्रिंट शुरू करें"
+
+#: templates/printing/shop_order.html:28
+#, python-format
+msgid "Out for delivery → %(place)s"
+msgstr "डिलीवरी के लिए निकला → %(place)s"
+
+#: templates/printing/shop_order.html:29
+msgid "Mark delivered"
+msgstr "पहुँचा दिया मार्क करें"
+
+#: templates/printing/shop_order.html:33
+msgid "Download file to print"
+msgstr "प्रिंट के लिए फ़ाइल डाउनलोड करें"
+
+#: templates/printing/shop_order.html:35
+msgid "The print file is deleted once the order is delivered."
+msgstr "ऑर्डर पहुँचते ही प्रिंट फ़ाइल हटा दी जाती है।"
+
+#: templates/printing/shop_order.html:41
+msgid "Payment not received?"
+msgstr "पेमेंट नहीं मिला?"
+
+#: templates/printing/shop_order.html:42
+msgid "Reject"
+msgstr "रद्द करें"
+
+#: templates/printing/shop_settings.html:6
+msgid "Shop settings"
+msgstr "दुकान की सेटिंग्स"
+
+#: templates/printing/shop_settings.html:17
+msgid ""
+"Students scan this to pay you directly. Campus Plus never handles money."
+msgstr ""
+"छात्र इसे स्कैन करके सीधे आपको पेमेंट करते हैं। Campus Plus कभी पैसे नहीं "
+"लेता।"
+
+#: templates/printing/shop_settings.html:18
+msgid "Current payment QR code"
+msgstr "अभी का पेमेंट QR कोड"
+
+#: templates/printing/shop_settings.html:19
+msgid "Tap to change the QR image"
+msgstr "QR फ़ोटो बदलने के लिए टैप करें"
+
+#: templates/printing/shop_settings.html:19
+msgid "Tap to upload your QR image"
+msgstr "अपनी QR फ़ोटो अपलोड करने के लिए टैप करें"
+
+#: templates/printing/shop_settings.html:24
+msgid "Print prices (₹)"
+msgstr "प्रिंट की कीमतें (₹)"
+
+#: templates/printing/shop_settings.html:36
+msgid "Stationery items and prices are on the Stationery page."
+msgstr "स्टेशनरी आइटम और उनकी कीमतें स्टेशनरी पेज पर हैं।"
+
+#: templates/printing/shop_settings.html:38
+msgid "Save settings"
+msgstr "सेटिंग्स सेव करें"
+
+#: templates/printing/shop_stationery.html:5
+msgid "What students can order besides printing."
+msgstr "प्रिंट के अलावा छात्र क्या ऑर्डर कर सकते हैं।"
+
+#: templates/printing/shop_stationery.html:9
+msgid "Add an item"
+msgstr "आइटम जोड़ें"
+
+#: templates/printing/shop_stationery.html:13
+#: templates/printing/shop_stationery.html:34
+msgid "In stock"
+msgstr "स्टॉक में"
+
+#: templates/printing/shop_stationery.html:15
+msgid "Add item"
+msgstr "आइटम जोड़ें"
+
+#: templates/printing/shop_stationery.html:27
+msgid "Price"
+msgstr "कीमत"
+
+#: templates/printing/shop_stationery.html:34
+msgid "Tap to switch"
+msgstr "बदलने के लिए टैप करें"
+
+#: templates/printing/shop_stationery.html:34
+msgid "Out of stock"
+msgstr "स्टॉक खत्म"
+
+#: templates/printing/shop_stationery.html:35
+msgid "Remove this item?"
+msgstr "यह आइटम हटाएँ?"
+
+#: templates/printing/shop_stationery.html:42
+msgid "No stationery yet. Add pens, notebooks, files, lab journals…"
+msgstr "अभी कोई स्टेशनरी नहीं। पेन, नोटबुक, फ़ाइल, लैब जर्नल जोड़ें…"
+
+#: templates/printing/shops.html:11
+msgid "On the way"
+msgstr "रास्ते में"
+
+#: templates/printing/shops.html:23
+msgid "Choose a shop"
+msgstr "दुकान चुनें"
+
+#: templates/printing/shops.html:33
+#, python-format
+msgid "B/W ₹%(bw)s&nbsp;· Colour ₹%(c)s per page"
+msgstr "ब्लैक-व्हाइट ₹%(bw)s&nbsp;· कलर ₹%(c)s प्रति पेज"
+
+#: templates/printing/shops.html:41
+msgid "No shops have joined yet."
+msgstr "अभी कोई दुकान नहीं जुड़ी।"
+
+#: templates/printing/shops.html:43
+msgid ""
+"You pay the shop directly with its own QR code. Campus Plus never takes your"
+" money."
+msgstr ""
+"आप दुकान के अपने QR कोड से सीधे पेमेंट करते हैं। Campus Plus कभी आपके पैसे "
+"नहीं लेता।"
+
+#: templates/services/detail.html:13
+msgid "Priority"
+msgstr "प्राथमिकता"
+
+#: templates/services/detail.html:14
+msgid "Raised by"
+msgstr "भेजने वाले"
+
+#: templates/services/detail.html:15
+msgid "Raised"
+msgstr "भेजा गया"
+
+#: templates/services/detail.html:24
+msgid "Accept request"
+msgstr "अनुरोध स्वीकार करें"
+
+#: templates/services/detail.html:24 templates/services/list.html:37
+msgid "Start work"
+msgstr "काम शुरू करें"
+
+#: templates/services/detail.html:24 templates/services/list.html:37
+msgid "Mark done"
+msgstr "पूरा मार्क करें"
+
+#: templates/services/detail.html:29
+msgid "Cancel this request?"
+msgstr "यह अनुरोध रद्द करें?"
+
+#: templates/services/detail.html:30
+msgid "Cancel request"
+msgstr "अनुरोध रद्द करें"
+
+#: templates/services/detail.html:32
+msgid "You can cancel until a staff member accepts it."
+msgstr "स्टाफ़ के स्वीकार करने तक आप इसे रद्द कर सकते हैं।"
+
+#: templates/services/detail.html:41
+msgid "waiting"
+msgstr "इंतज़ार में"
+
+#: templates/services/list.html:7 templates/services/new.html:3
+#: templates/services/new.html:5
+msgid "New request"
+msgstr "नया अनुरोध"
+
+#: templates/services/list.html:11
+msgid "Filter by status"
+msgstr "स्थिति से फ़िल्टर करें"
+
+#: templates/services/list.html:37
+msgid "Accept"
+msgstr "स्वीकार करें"
+
+#: templates/services/list.html:47
+msgid "No requests yet."
+msgstr "अभी कोई अनुरोध नहीं।"
+
+#: templates/services/new.html:8
+msgid "What do you need?"
+msgstr "आपको क्या चाहिए?"
+
+#: templates/services/new.html:22
+msgid "Where?"
+msgstr "कहाँ?"
+
+#: templates/services/new.html:29 templates/services/new.html:50
+msgid "Building"
+msgstr "बिल्डिंग"
+
+#: templates/services/new.html:30 templates/services/new.html:50
+msgid "Floor"
+msgstr "फ़्लोर"
+
+#: templates/services/new.html:31 templates/services/new.html:50
+msgid "Classroom"
+msgstr "क्लासरूम"
+
+#: templates/services/new.html:35
+msgid "optional"
+msgstr "वैकल्पिक"
+
+#: templates/services/new.html:38
+msgid "Send request"
+msgstr "अनुरोध भेजें"

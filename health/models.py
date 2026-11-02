@@ -3,20 +3,21 @@ from datetime import timedelta
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 # A donor can usually give whole blood again after about 3 months.
 DONATION_GAP_DAYS = 90
 
 
 class BloodGroup(models.TextChoices):
-    A_POS = 'A+', 'A+'
-    A_NEG = 'A-', 'A−'
-    B_POS = 'B+', 'B+'
-    B_NEG = 'B-', 'B−'
-    AB_POS = 'AB+', 'AB+'
-    AB_NEG = 'AB-', 'AB−'
-    O_POS = 'O+', 'O+'
-    O_NEG = 'O-', 'O−'
+    A_POS = 'A+', _('A+')
+    A_NEG = 'A-', _('A−')
+    B_POS = 'B+', _('B+')
+    B_NEG = 'B-', _('B−')
+    AB_POS = 'AB+', _('AB+')
+    AB_NEG = 'AB-', _('AB−')
+    O_POS = 'O+', _('O+')
+    O_NEG = 'O-', _('O−')
 
 
 # Recipient group -> donor groups whose red cells they can receive.
@@ -38,8 +39,8 @@ class Donor(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='donor')
     blood_group = models.CharField(max_length=3, choices=BloodGroup.choices)
-    visible = models.BooleanField(default=True, verbose_name='Show me in the directory')
-    last_donated = models.DateField(null=True, blank=True, verbose_name='Last donated (optional)')
+    visible = models.BooleanField(default=True, verbose_name=_('Show me in the directory'))
+    last_donated = models.DateField(null=True, blank=True, verbose_name=_('Last donated (optional)'))
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -76,11 +77,11 @@ class Hospital(models.Model):
     name = models.CharField(max_length=120)
     address = models.CharField(max_length=250)
     phone = models.CharField(max_length=40, blank=True)
-    emergency_phone = models.CharField(max_length=40, blank=True, verbose_name='Emergency / casualty phone')
-    distance_km = models.DecimalField(max_digits=4, decimal_places=1, verbose_name='Distance from COEP (km)')
+    emergency_phone = models.CharField(max_length=40, blank=True, verbose_name=_('Emergency / casualty phone'))
+    distance_km = models.DecimalField(max_digits=4, decimal_places=1, verbose_name=_('Distance from COEP (km)'))
     has_blood_bank = models.BooleanField(default=False)
-    is_24x7 = models.BooleanField(default=True, verbose_name='24×7 emergency')
-    maps_url = models.URLField(blank=True, verbose_name='Google Maps link')
+    is_24x7 = models.BooleanField(default=True, verbose_name=_('24×7 emergency'))
+    maps_url = models.URLField(blank=True, verbose_name=_('Google Maps link'))
     notes = models.CharField(max_length=200, blank=True)
 
     class Meta:

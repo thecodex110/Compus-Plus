@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}{% if hospital %}Edit hospital{% else %}Add hospital{% endif %} · Admin{% endblock %}
+{% load i18n ui %}
+{% block title %}{% if hospital %}{{ hospital.name }}{% else %}{% translate "Add a hospital" %}{% endif %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<a class="muted" href="{% url 'panel:hospitals' %}">← Hospitals</a>
-<h1>{% if hospital %}Edit {{ hospital.name }}{% else %}Add a hospital{% endif %}</h1>
-<form method="post" novalidate class="card">
+<a class="back" href="{% url 'panel:hospitals' %}">{% icon "back" "i-sm" %} {% translate "Hospitals" %}</a>
+<div class="ph"><h1>{% if hospital %}{{ hospital.name }}{% else %}{% translate "Add a hospital" %}{% endif %}</h1></div>
+<form method="post" novalidate class="panel form">
   {% csrf_token %}
   {% include '_field.html' with field=form.name %}
   {% include '_field.html' with field=form.address %}
@@ -12,15 +13,15 @@
     {% include '_field.html' with field=form.emergency_phone %}
   </div>
   {% include '_field.html' with field=form.distance_km %}
-  <label class="check">{{ form.has_blood_bank }} <span>Has a blood bank</span></label>
+  <label class="check">{{ form.has_blood_bank }} <span>{% translate "Has a blood bank" %}</span></label>
   <label class="check">{{ form.is_24x7 }} <span>{{ form.is_24x7.label }}</span></label>
   {% include '_field.html' with field=form.maps_url %}
   {% include '_field.html' with field=form.notes %}
-  <button class="btn btn-primary btn-block">Save</button>
+  <button class="btn btn-block btn-lg">{% translate "Save" %}</button>
 </form>
 {% if hospital %}
-  <form method="post" action="{% url 'panel:hospital_delete' hospital.pk %}" class="center" onsubmit="return confirm('Remove this hospital?')">
-    {% csrf_token %}<button class="link muted">Remove hospital</button>
+  <form method="post" action="{% url 'panel:hospital_delete' hospital.pk %}" class="btn-row" onsubmit="return confirm('{% filter escapejs %}{% translate "Remove this hospital?" %}{% endfilter %}')">
+    {% csrf_token %}<button class="link link-danger">{% translate "Remove hospital" %}</button>
   </form>
 {% endif %}
 {% endblock %}

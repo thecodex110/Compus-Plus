@@ -1,37 +1,41 @@
 {% extends 'base.html' %}
-{% block title %}New request · COEP Campus Portal{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "New request" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<h1>New request</h1>
+<div class="ph"><h1>{% translate "New request" %}</h1></div>
 <form method="post" novalidate id="req-form">
   {% csrf_token %}
-
-  <h2 class="step">1 · What do you need?</h2>
-  <div class="cat-grid">
+  <h2 class="step"><span>1</span> {% translate "What do you need?" %}</h2>
+  <div class="cats" role="radiogroup">
     {% for radio in form.category %}
-      <label class="cat {% if radio.data.value in high %}cat-high cat-{{ radio.data.value }}{% endif %}">
-        {{ radio.tag }}<span>{{ radio.choice_label }}</span>
+      <label class="cat{% if radio.data.value in high %} is-high{% endif %}">
+        {{ radio.tag }}
+        <span>
+          {% if radio.data.value == 'medical' %}{% icon "medical" %}{% elif radio.data.value == 'security' %}{% icon "security" %}{% elif radio.data.value == 'cleaning' %}{% icon "cleaning" %}{% elif radio.data.value == 'item' %}{% icon "item" %}{% else %}{% icon "other" %}{% endif %}
+          {{ radio.choice_label }}
+        </span>
       </label>
     {% endfor %}
   </div>
-  {% for e in form.category.errors %}<small class="err">{{ e }}</small>{% endfor %}
+  {% for e in form.category.errors %}<p class="err">{{ e }}</p>{% endfor %}
 
-  <h2 class="step">2 · Where?</h2>
+  <h2 class="step"><span>2</span> {% translate "Where?" %}</h2>
   {{ form.location }}
   <div id="loc-saved" class="loc-saved" {% if not selected_loc %}hidden{% endif %}>
-    <span>📍 <span id="loc-text">{{ selected_loc|default:"" }}</span></span>
-    <button type="button" class="link" id="loc-change">Change</button>
+    {% icon "pin" %}<span id="loc-text">{{ selected_loc|default:"" }}</span>
+    <button type="button" class="link" id="loc-change">{% translate "Change" %}</button>
   </div>
   <div id="loc-pick" class="loc-pick" {% if selected_loc %}hidden{% endif %}>
-    <select id="sel-building" aria-label="Building"><option value="">Building</option></select>
-    <select id="sel-floor" aria-label="Floor" disabled><option value="">Floor</option></select>
-    <select id="sel-room" aria-label="Classroom" disabled><option value="">Classroom</option></select>
+    <select id="sel-building" aria-label="{% translate 'Building' %}"><option value="">{% translate "Building" %}</option></select>
+    <select id="sel-floor" aria-label="{% translate 'Floor' %}" disabled><option value="">{% translate "Floor" %}</option></select>
+    <select id="sel-room" aria-label="{% translate 'Classroom' %}" disabled><option value="">{% translate "Classroom" %}</option></select>
   </div>
-  {% for e in form.location.errors %}<small class="err">{{ e }}</small>{% endfor %}
+  {% for e in form.location.errors %}<p class="err">{{ e }}</p>{% endfor %}
 
-  <h2 class="step">3 · Note <span class="muted">(optional)</span></h2>
+  <h2 class="step"><span>3</span> {% translate "Note" %} <small class="muted">({% translate "optional" %})</small></h2>
   {{ form.note }}
 
-  <button class="btn btn-primary btn-block btn-lg" id="send-btn">Send request</button>
+  <button class="btn btn-hue btn-block btn-lg form-end" id="send-btn">{% translate "Send request" %}</button>
 </form>
 {{ tree|json_script:"loc-tree" }}
 {% endblock %}
@@ -43,9 +47,11 @@
   var hidden = document.getElementById('id_location');
   var b = document.getElementById('sel-building'), f = document.getElementById('sel-floor'), r = document.getElementById('sel-room');
   var saved = document.getElementById('loc-saved'), pick = document.getElementById('loc-pick');
+  var L = {building: "{% translate 'Building'|escapejs %}", floor: "{% translate 'Floor'|escapejs %}", room: "{% translate 'Classroom'|escapejs %}", floorN: "{% translate 'Floor'|escapejs %} "};
 
   function fill(sel, items, placeholder) {
-    sel.innerHTML = '<option value="">' + placeholder + '</option>';
+    sel.innerHTML = '';
+    var o0 = document.createElement('option'); o0.value = ''; o0.textContent = placeholder; sel.appendChild(o0);
     items.forEach(function (it) {
       var o = document.createElement('option');
       o.value = it[0]; o.textContent = it[1]; sel.appendChild(o);
@@ -55,16 +61,16 @@
     if (items.length === 1) { sel.value = items[0][0]; sel.dispatchEvent(new Event('change')); }
   }
 
-  fill(b, Object.keys(tree).map(function (k) { return [k, k]; }), 'Building');
+  fill(b, Object.keys(tree).map(function (k) { return [k, k]; }), L.building);
   b.addEventListener('change', function () {
     hidden.value = '';
     var floors = b.value ? Object.keys(tree[b.value]) : [];
-    fill(f, floors.map(function (k) { return [k, 'Floor ' + k]; }), 'Floor');
-    fill(r, [], 'Classroom');
+    fill(f, floors.map(function (k) { return [k, L.floorN + k]; }), L.floor);
+    fill(r, [], L.room);
   });
   f.addEventListener('change', function () {
     hidden.value = '';
-    fill(r, (b.value && f.value) ? tree[b.value][f.value] : [], 'Classroom');
+    fill(r, (b.value && f.value) ? tree[b.value][f.value] : [], L.room);
   });
   r.addEventListener('change', function () { hidden.value = r.value; });
 

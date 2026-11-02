@@ -1,41 +1,44 @@
 {% extends 'base.html' %}
-{% block title %}Users · Admin{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "Users" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>Users</h1>
-  <a class="btn btn-primary" href="{% url 'panel:create_user' %}">+ Add</a>
+<div class="ph">
+  <h1>{% translate "Users" %}</h1>
+  <div class="ph-actions"><a class="btn" href="{% url 'panel:create_user' %}">{% icon "plus" %} {% translate "Add" %}</a></div>
 </div>
-<form method="get" class="search">
+<form method="get" class="search" role="search">
   {% if role %}<input type="hidden" name="role" value="{{ role }}">{% endif %}
-  <input type="search" name="q" value="{{ q }}" placeholder="Search name, email or phone" aria-label="Search users">
+  {% icon "search" %}<input type="search" name="q" value="{{ q }}" placeholder="{% translate 'Search name, email or phone' %}" aria-label="{% translate 'Search users' %}">
 </form>
-<div class="filters">
-  <a class="chip {% if not role %}active{% endif %}" href="?{% if q %}q={{ q|urlencode }}{% endif %}">All</a>
-  {% for v, l in roles %}<a class="chip {% if role == v %}active{% endif %}" href="?role={{ v }}{% if q %}&q={{ q|urlencode }}{% endif %}">{{ l }}</a>{% endfor %}
-</div>
-<ul class="list">
-  {% for u in page.object_list %}
-    <li class="row {% if not u.is_active %}is-closed{% endif %}">
-      <div class="row-main">
-        <div class="row-title">{{ u.name }} <span class="muted small">· {{ u.get_role_display }}</span></div>
-        <div class="row-sub muted">{{ u.email }}{% if u.phone %} · {{ u.phone }}{% endif %}</div>
-        {% if u.department %}<div class="row-sub muted">{{ u.department }}{% if u.year %} · Year {{ u.year }}{% endif %}</div>{% endif %}
-      </div>
-      {% if u != user %}
-        <form method="post" action="{% url 'panel:toggle_active' u.pk %}">
-          {% csrf_token %}<input type="hidden" name="back" value="{{ request.get_full_path }}">
-          <button class="btn {% if u.is_active %}btn-danger{% else %}btn-ghost{% endif %} btn-sm">{% if u.is_active %}Deactivate{% else %}Activate{% endif %}</button>
-        </form>
-      {% endif %}
-    </li>
-  {% empty %}
-    <p class="empty">No users match.</p>
-  {% endfor %}
-</ul>
+<nav class="chips">
+  <a class="chip" href="?{% if q %}q={{ q|urlencode }}{% endif %}" {% if not role %}aria-current="true"{% endif %}>{% translate "All" %}</a>
+  {% for v, l in roles %}<a class="chip" href="?role={{ v }}{% if q %}&q={{ q|urlencode }}{% endif %}" {% if role == v %}aria-current="true"{% endif %}>{{ l }}</a>{% endfor %}
+</nav>
+{% if page.object_list %}
+  <ul class="rows">
+    {% for u in page.object_list %}
+      <li class="rec{% if not u.is_active %} is-off{% endif %}">
+        <span class="avatar">{{ u.name|slice:":1"|upper }}</span>
+        <div class="rec-main">
+          <div class="rec-title">{{ u.name }} <span class="stamp st-go">{{ u.get_role_display }}</span>{% if not u.is_active %} <span class="stamp st-void">{% translate "Off" %}</span>{% endif %}</div>
+          <div class="rec-meta">{% segs %}{{ u.email }}{% if u.phone %}&nbsp;· {{ u.phone }}{% endif %}{% if u.department %}&nbsp;· {{ u.department }}{% endif %}{% endsegs %}</div>
+        </div>
+        {% if u != user %}
+          <form class="rec-side" method="post" action="{% url 'panel:toggle_active' u.pk %}">
+            {% csrf_token %}<input type="hidden" name="back" value="{{ request.get_full_path }}">
+            <button class="btn btn-sm {% if u.is_active %}btn-danger{% else %}btn-ghost{% endif %}">{% if u.is_active %}{% translate "Deactivate" %}{% else %}{% translate "Activate" %}{% endif %}</button>
+          </form>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div class="empty">{% icon "users" %}<p>{% translate "No users match." %}</p></div>
+{% endif %}
 {% if page.has_other_pages %}
   <nav class="pager">
-    {% if page.has_previous %}<a class="btn btn-ghost" href="?page={{ page.previous_page_number }}{% if role %}&role={{ role }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">← Previous</a>{% else %}<span></span>{% endif %}
-    {% if page.has_next %}<a class="btn btn-ghost" href="?page={{ page.next_page_number }}{% if role %}&role={{ role }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">Next →</a>{% endif %}
+    {% if page.has_previous %}<a class="btn btn-ghost" href="?page={{ page.previous_page_number }}{% if role %}&role={{ role }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">{% icon "back" %} {% translate "Previous" %}</a>{% else %}<span></span>{% endif %}
+    {% if page.has_next %}<a class="btn btn-ghost" href="?page={{ page.next_page_number }}{% if role %}&role={{ role }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">{% translate "Next" %} {% icon "chevron" %}</a>{% endif %}
   </nav>
 {% endif %}
 {% endblock %}

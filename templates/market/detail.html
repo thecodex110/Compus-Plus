@@ -1,58 +1,51 @@
 {% extends 'base.html' %}
-{% block title %}{{ listing.title }} · COEP Market{% endblock %}
+{% load i18n ui %}
+{% block title %}{{ listing.title }}&nbsp;· {% translate "COEP Market" %}{% endblock %}
 {% block content %}
-<a class="muted" href="{% url 'market:browse' %}">← Market</a>
+<a class="back" href="{% url 'market:browse' %}">{% icon "back" "i-sm" %} {% translate "COEP Market" %}</a>
 <article class="post post-full">
   {% with photos=listing.photos.all %}
     {% if photos %}
-      <div class="gallery">
-        {% for p in photos %}<img src="{{ p.image.url }}" alt="{{ listing.title }} photo {{ forloop.counter }}">{% endfor %}
-      </div>
-      {% if photos|length > 1 %}<div class="muted small center">Swipe for {{ photos|length }} photos</div>{% endif %}
+      <div class="gallery">{% for p in photos %}<img src="{{ p.image.url }}" alt="{{ listing.title }} — {% blocktranslate with n=forloop.counter %}photo {{ n }}{% endblocktranslate %}">{% endfor %}</div>
+      {% if photos|length > 1 %}<p class="hint center">{% blocktranslate count n=photos|length %}Swipe for {{ n }} photo{% plural %}Swipe for {{ n }} photos{% endblocktranslate %}</p>{% endif %}
     {% endif %}
   {% endwith %}
   <div class="post-body">
-    {% if listing.status != 'available' %}<div class="flash flash-info">{{ listing.get_status_display }}</div>{% endif %}
-    <div class="price-tag">{% if listing.price %}₹{{ listing.price }}{% else %}Free{% endif %}</div>
-    <h1 class="post-h1">{{ listing.title }}</h1>
-    <div class="chips-inline">
-      <span class="chip">{{ listing.get_category_display }}</span>
-      <span class="chip">{{ listing.get_condition_display }}</span>
-    </div>
+    <div class="price-big">{% if listing.price %}₹{{ listing.price }}{% else %}{% translate "Free" %}{% endif %}</div>
+    <h1>{{ listing.title }}</h1>
     {% if listing.description %}<p class="post-desc">{{ listing.description|linebreaksbr }}</p>{% endif %}
-    <p class="muted small">Listed {{ listing.created_at|date:"j M Y" }}</p>
-
-    <div class="seller">
-      <span class="avatar">{{ listing.seller.name|slice:":1"|upper }}</span>
-      <div>
-        <div class="post-user">{{ listing.seller.name }}</div>
-        <div class="muted small">{{ listing.seller.department }}{% if listing.seller.year %} · Year {{ listing.seller.year }}{% endif %}</div>
-      </div>
-    </div>
-
-    {% if is_owner %}
-      {% if listing.status == 'available' %}
-        <div class="contact">
-          <a class="btn btn-ghost" href="{% url 'market:edit' listing.pk %}">Edit</a>
-          <form method="post" action="{% url 'market:sold' listing.pk %}">{% csrf_token %}<button class="btn btn-primary">Mark as sold</button></form>
-        </div>
-      {% endif %}
-    {% elif listing.status == 'available' %}
-      <div class="contact">
-        <a class="btn btn-primary" href="mailto:{{ listing.seller.email }}?subject={{ 'COEP Market: '|add:listing.title|urlencode }}">Email seller</a>
-        {% if listing.show_phone and listing.seller.phone %}
-          <a class="btn btn-ghost" href="tel:{{ listing.seller.phone }}">Call</a>
-          <a class="btn btn-ghost" href="https://wa.me/91{{ listing.seller.phone }}?text={{ 'Hi, is your COEP Market item still available? '|add:listing.title|urlencode }}" target="_blank" rel="noopener">WhatsApp</a>
-        {% endif %}
-      </div>
-      <p class="muted small">Meet on campus and pay the seller directly. Check the item before paying.</p>
-    {% endif %}
-
-    {% if user.is_admin_role and listing.status == 'available' %}
-      <form method="post" action="{% url 'market:remove' listing.pk %}" onsubmit="return confirm('Remove this listing?')">
-        {% csrf_token %}<button class="btn btn-danger btn-block">Remove listing (admin)</button>
-      </form>
-    {% endif %}
   </div>
 </article>
+
+<dl class="tb tb-hero">
+  <div class="tb-no"><dt>{% translate "Sheet" %}</dt><dd><b>{{ listing|sheet_no:'MKT' }}</b></dd></div>
+  <div class="tb-wide"><dt>{% translate "Category" %}</dt><dd>{{ listing.get_category_display }}</dd></div>
+  <div><dt>{% translate "Condition" %}</dt><dd>{{ listing.get_condition_display }}</dd></div>
+  <div class="tb-wide"><dt>{% translate "Seller" %}</dt><dd>{% segs %}{{ listing.seller.name }}{% if listing.seller.department %}&nbsp;· {{ listing.seller.department }}{% endif %}{% if listing.seller.year %}&nbsp;· {% blocktranslate with y=listing.seller.year %}Year {{ y }}{% endblocktranslate %}{% endif %}{% endsegs %}</dd></div>
+  <div><dt>{% translate "Status" %}</dt><dd><span class="stamp {{ listing.status|stamp }}">{{ listing.get_status_display }}</span></dd></div>
+</dl>
+
+{% if is_owner %}
+  {% if listing.status == 'available' %}
+    <div class="btn-row">
+      <form method="post" action="{% url 'market:sold' listing.pk %}">{% csrf_token %}<button class="btn btn-hue">{% icon "check" %} {% translate "Mark as sold" %}</button></form>
+      <a class="btn btn-ghost" href="{% url 'market:edit' listing.pk %}">{% icon "edit" %} {% translate "Edit" %}</a>
+    </div>
+  {% endif %}
+{% elif listing.status == 'available' %}
+  <div class="btn-row">
+    <a class="btn btn-hue" href="mailto:{{ listing.seller.email }}?subject={{ listing.title|urlencode }}">{% icon "mail" %} {% translate "Email seller" %}</a>
+    {% if listing.show_phone and listing.seller.phone %}
+      <a class="btn btn-ghost" href="tel:{{ listing.seller.phone }}">{% icon "phone" %} {% translate "Call" %}</a>
+      <a class="btn btn-ghost" href="https://wa.me/91{{ listing.seller.phone }}" target="_blank" rel="noopener">{% icon "chat" %} WhatsApp</a>
+    {% endif %}
+  </div>
+  <p class="hint">{% translate "Meet on campus, check the item, then pay the seller directly." %}</p>
+{% endif %}
+
+{% if user.is_admin_role and listing.status == 'available' %}
+  <form method="post" action="{% url 'market:remove' listing.pk %}" class="btn-row" onsubmit="return confirm('{% filter escapejs %}{% translate "Remove this listing?" %}{% endfilter %}')">
+    {% csrf_token %}<button class="btn btn-danger btn-block">{% translate "Remove listing (admin)" %}</button>
+  </form>
+{% endif %}
 {% endblock %}

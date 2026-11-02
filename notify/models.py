@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils import translation
 
 
 class Notification(models.Model):
@@ -20,8 +21,18 @@ class Notification(models.Model):
 
 
 def notify(users, title, body='', url='', urgent=False):
-    """Create one notification per user. `users` may be a user or an iterable."""
+    """Create one notification per user, written in that user's language.
+
+    `title` and `body` may be strings or zero-argument callables; callables are
+    evaluated once per recipient with their language active, so a Hindi user
+    gets Hindi text even when an English user triggered it.
+    """
     if hasattr(users, 'pk'):
         users = [users]
-    Notification.objects.bulk_create(
-        [Notification(user=u, title=title[:120], body=body[:250], url=url, urgent=urgent) for u in users])
+    items = []
+    for u in users:
+        with translation.override(getattr(u, 'language', None) or settings.LANGUAGE_CODE):
+            t = str(title() if callable(title) else title)
+            b = str(body() if callable(body) else body)
+        items.append(Notification(user=u, title=t[:120], body=b[:250], url=url, urgent=urgent))
+    Notification.objects.bulk_create(items)

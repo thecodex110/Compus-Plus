@@ -1,49 +1,39 @@
 {% extends 'base.html' %}
-{% block title %}Nearby hospitals · COEP Campus Portal{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "Nearby hospitals" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>Nearby hospitals</h1>
-  {% if user.role != 'bvg' and user.role != 'shop' %}<a class="btn btn-ghost" href="{% url 'health:directory' %}">Blood donors</a>{% endif %}
+<div class="ph">
+  <h1>{% translate "Nearby hospitals" %}</h1>
+  {% if user.role != 'bvg' and user.role != 'shop' %}<div class="ph-actions"><a class="btn btn-ghost" href="{% url 'health:directory' %}">{% icon "blood" %} {% translate "Donors" %}</a></div>{% endif %}
 </div>
-
-<div class="emergency-strip">
-  <a href="tel:108">📞 108 Ambulance</a>
-  <a href="tel:112">📞 112 Emergency</a>
-</div>
-
-<div class="filters">
-  <a class="chip {% if not blood_bank %}active{% endif %}" href="?">All</a>
-  <a class="chip {% if blood_bank %}active{% endif %}" href="?blood_bank=1">🩸 With blood bank</a>
-</div>
-
+{% include 'health/_sos.html' %}
+<nav class="chips">
+  <a class="chip" href="?" {% if not blood_bank %}aria-current="true"{% endif %}>{% translate "All" %}</a>
+  <a class="chip" href="?blood_bank=1" {% if blood_bank %}aria-current="true"{% endif %}>{% translate "With blood bank" %}</a>
+</nav>
 {% if hospitals %}
-  <ul class="list">
+  <ul class="rows">
     {% for h in hospitals %}
-      <li class="card hospital">
-        <div class="detail-head">
-          <div>
-            <div class="row-title">{{ h.name }}</div>
-            <div class="row-sub muted">{{ h.address }}</div>
+      <li class="rec">
+        <span class="rec-thumb">{% icon "hospital" %}</span>
+        <div class="rec-main">
+          <div class="rec-title">{{ h.name }}</div>
+          <div class="rec-sub">{{ h.address }}</div>
+          <div class="rec-meta">{% segs %}{% if h.is_24x7 %}{% translate "24×7 emergency" %}{% endif %}{% if h.is_24x7 and h.has_blood_bank %}&nbsp;· {% endif %}{% if h.has_blood_bank %}{% translate "Blood bank" %}{% endif %}{% endsegs %}</div>
+          {% if h.notes %}<div class="rec-meta">{{ h.notes }}</div>{% endif %}
+          <div class="btn-row">
+            {% if h.emergency_phone %}<a class="btn btn-urgent btn-sm" href="tel:{{ h.emergency_phone }}">{% icon "phone" "i-sm" %} {% translate "Emergency" %} {{ h.emergency_phone }}</a>{% endif %}
+            {% if h.phone %}<a class="btn btn-ghost btn-sm" href="tel:{{ h.phone }}">{% icon "phone" "i-sm" %} {{ h.phone }}</a>{% endif %}
+            <a class="btn btn-ghost btn-sm" href="{% if h.maps_url %}{{ h.maps_url }}{% else %}https://www.google.com/maps/search/?api=1&query={{ h.name|add:', '|add:h.address|urlencode }}{% endif %}" target="_blank" rel="noopener">{% icon "directions" "i-sm" %} {% translate "Directions" %}</a>
           </div>
-          <span class="dist">{{ h.distance_km }} km</span>
+          {% if not h.phone and not h.emergency_phone %}<p class="rec-meta warn">{% translate "Phone number not added yet." %}</p>{% endif %}
         </div>
-        <div class="chips-inline">
-          {% if h.is_24x7 %}<span class="chip">24×7 emergency</span>{% endif %}
-          {% if h.has_blood_bank %}<span class="chip">🩸 Blood bank</span>{% endif %}
-        </div>
-        {% if h.notes %}<p class="small muted">{{ h.notes }}</p>{% endif %}
-        <div class="contact">
-          {% if h.emergency_phone %}<a class="btn btn-danger-solid" href="tel:{{ h.emergency_phone }}">Emergency {{ h.emergency_phone }}</a>{% endif %}
-          {% if h.phone %}<a class="btn btn-ghost" href="tel:{{ h.phone }}">Call {{ h.phone }}</a>{% endif %}
-          {% if h.maps_url %}<a class="btn btn-ghost" href="{{ h.maps_url }}" target="_blank" rel="noopener">Directions</a>
-          {% else %}<a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&query={{ h.name|add:', '|add:h.address|urlencode }}" target="_blank" rel="noopener">Directions</a>{% endif %}
-        </div>
-        {% if not h.phone and not h.emergency_phone %}<p class="small warn">Phone number not added yet.</p>{% endif %}
+        <span class="rec-side dist">{{ h.distance_km }} km</span>
       </li>
     {% endfor %}
   </ul>
 {% else %}
-  <p class="empty">No hospitals added yet.</p>
+  <div class="empty">{% icon "hospital" %}<p>{% translate "No hospitals added yet." %}</p></div>
 {% endif %}
-{% if user.is_admin_role %}<p class="small center"><a href="{% url 'panel:hospitals' %}">Manage hospital list →</a></p>{% endif %}
+{% if user.is_admin_role %}<p class="small center form-end"><a href="{% url 'panel:hospitals' %}">{% translate "Manage the hospital list" %}</a></p>{% endif %}
 {% endblock %}

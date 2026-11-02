@@ -13,4 +13,5 @@ urlpatterns = [
     path('poll/', views.poll, name='poll'),
     path('<int:pk>/', views.detail, name='detail'),
     path('<int:pk>/advance/', views.advance, name='advance'),
+    path('<int:pk>/cancel/', views.cancel, name='cancel'),
 ]

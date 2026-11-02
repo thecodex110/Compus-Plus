@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw
 
 from accounts.models import User
 from health.models import Hospital
-from printing.models import Shop
+from printing.models import Shop, StationeryItem
 from services.models import Location
 
 BUILDINGS = {
@@ -63,6 +63,13 @@ class Command(BaseCommand):
             shop.qr_image.save('demo-qr.png', ContentFile(demo_qr_png()), save=False)
             shop.save()
             self.stdout.write(f'  shop     {name}')
+        gate = Shop.objects.filter(owner__email='shop@coeptech.ac.in').first()
+        if gate and not gate.stationery.exists():
+            for item, price in [('Classmate notebook, 172 pages', '60'), ('Blue ball pen (Reynolds)', '10'),
+                                ('A4 transparent file folder', '15'), ('Lab journal (ruled + plain)', '90'),
+                                ('Engineering drawing sheet, A2', '12')]:
+                StationeryItem.objects.create(shop=gate, name=item, price=price)
+            self.stdout.write('  stationery: 5 items for Gate Xerox')
 
     def seed_hospitals(self):
         # Names and rough distances only. Phone numbers are left blank on purpose:

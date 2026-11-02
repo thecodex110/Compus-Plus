@@ -1,13 +1,12 @@
+{% load i18n ui %}
 <a class="tile" href="{% url 'market:detail' listing.pk %}">
   <div class="tile-img">
-    {% with photo=listing.cover %}
-      {% if photo %}<img src="{{ photo.image.url }}" alt="{{ listing.title }}" loading="lazy">{% endif %}
-    {% endwith %}
-    {% if listing.status == 'sold' %}<span class="sold-flag">Sold</span>{% endif %}
+    {% with photo=listing.cover %}{% if photo %}<img src="{{ photo.image.url }}" alt="{{ listing.title }}" loading="lazy">{% endif %}{% endwith %}
+    {% if listing.status == 'sold' %}<span class="sold-flag">{% translate "Sold" %}</span>{% endif %}
   </div>
   <div class="tile-body">
-    <div class="tile-price">{% if listing.price %}₹{{ listing.price }}{% else %}Free{% endif %}</div>
-    <div class="tile-title">{{ listing.title }}</div>
-    <div class="muted small">{{ listing.get_condition_display }} · {{ listing.created_at|date:"j M" }}</div>
+    <span class="tile-price">{% if listing.price %}₹{{ listing.price }}{% else %}{% translate "Free" %}{% endif %}</span>
+    <span class="tile-title">{{ listing.title }}</span>
+    <span class="tile-meta">{% segs %}{{ listing|sheet_no:"MKT" }}&nbsp;· {{ listing.get_condition_display }}{% endsegs %}</span>
   </div>
 </a>

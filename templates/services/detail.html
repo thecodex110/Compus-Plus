@@ -1,34 +1,43 @@
 {% extends 'base.html' %}
-{% block title %}Request #{{ sr.pk }} · COEP Campus Portal{% endblock %}
+{% load i18n ui %}
+{% block title %}{{ sr|sheet_no:'REQ' }}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<div class="card">
-  <div class="detail-head">
-    <h1>{% if sr.is_high %}<span class="pill pill-high">High</span> {% endif %}{{ sr.get_category_display }} <span class="muted">#{{ sr.pk }}</span></h1>
-    <span class="status status-{{ sr.status }}">{{ sr.get_status_display }}</span>
-  </div>
-  <dl class="facts">
-    <dt>Where</dt><dd>{{ sr.location }}</dd>
-    {% if sr.note %}<dt>Note</dt><dd>{{ sr.note }}</dd>{% endif %}
-    <dt>Raised by</dt><dd>{{ sr.user.name }} ({{ sr.user.get_role_display }}){% if user.is_bvg and sr.user.phone %} · <a href="tel:{{ sr.user.phone }}">{{ sr.user.phone }}</a>{% endif %}</dd>
-    <dt>Staff</dt><dd>{{ sr.assigned_staff.name|default:"Not assigned yet" }}</dd>
-  </dl>
-
-  {% if can_advance %}
-    <form method="post" action="{% url 'services:advance' sr.pk %}">
-      {% csrf_token %}
-      <button class="btn btn-primary btn-block">
-        {% if sr.status == 'pending' %}Accept request{% elif sr.status == 'accepted' %}Start work{% else %}Mark done{% endif %}
-      </button>
-    </form>
-  {% endif %}
+<a class="back" href="{% if user.is_bvg %}{% url 'services:queue' %}{% else %}{% url 'services:mine' %}{% endif %}">{% icon "back" "i-sm" %} {% translate "Requests" %}</a>
+<div class="ph">
+  <div><h1>{{ sr.get_category_display }}</h1>{% if sr.note %}<div class="ph-sub">“{{ sr.note }}”</div>{% endif %}</div>
 </div>
 
-<h2>Timeline</h2>
+<dl class="tb tb-hero">
+  <div class="tb-no"><dt>{% translate "Sheet" %}</dt><dd><b>{{ sr|sheet_no:'REQ' }}</b></dd></div>
+  <div class="tb-wide"><dt>{% translate "Location" %}</dt><dd>{% segs %}{{ sr.location }}{% endsegs %}</dd></div>
+  <div><dt>{% translate "Priority" %}</dt><dd>{% if sr.is_high %}<b class="text-urgent">{% translate "High" %}</b>{% else %}{% translate "Normal" %}{% endif %}</dd></div>
+  <div class="tb-wide"><dt>{% translate "Raised by" %}</dt><dd>{% segs %}{{ sr.user.name }}&nbsp;· {{ sr.user.get_role_display }}{% if user.is_bvg and sr.user.phone %}&nbsp;· <a href="tel:{{ sr.user.phone }}">{{ sr.user.phone }}</a>{% endif %}{% endsegs %}</dd></div>
+  <div><dt>{% translate "Raised" %}</dt><dd>{{ sr.created_at|date:"j M, g:i A" }}</dd></div>
+  <div class="tb-wide"><dt>{% translate "Checked by" %}</dt><dd>{{ sr.assigned_staff.name|default:"—" }}</dd></div>
+  <div><dt>{% translate "Status" %}</dt><dd><span class="stamp {{ sr.status|stamp }}">{{ sr.get_status_display }}</span></dd></div>
+</dl>
+
+{% if can_advance %}
+  <form method="post" action="{% url 'services:advance' sr.pk %}" class="btn-row">
+    {% csrf_token %}
+    <button class="btn btn-block btn-lg {% if sr.status == 'pending' and sr.is_high %}btn-urgent{% endif %}">
+      {% if sr.status == 'pending' %}{% icon "check" %} {% translate "Accept request" %}{% elif sr.status == 'accepted' %}{% translate "Start work" %}{% else %}{% translate "Mark done" %}{% endif %}
+    </button>
+  </form>
+{% endif %}
+{% if sr.user_id == user.pk and sr.status == 'pending' %}
+  <form method="post" action="{% url 'services:cancel' sr.pk %}" class="btn-row" onsubmit="return confirm('{% filter escapejs %}{% translate "Cancel this request?" %}{% endfilter %}')">
+    {% csrf_token %}<button class="btn btn-danger btn-block">{% icon "x" %} {% translate "Cancel request" %}</button>
+  </form>
+  <p class="hint">{% translate "You can cancel until a staff member accepts it." %}</p>
+{% endif %}
+
+<h2>{% translate "History" %}</h2>
 <ol class="timeline">
-  <li class="done"><b>Pending</b> <span class="muted">{{ sr.created_at|date:"j M, g:i A" }} · raised by {{ sr.user.name }}</span></li>
+  <li><b>{% translate "Pending" %}</b><span>{{ sr.created_at|date:"j M, g:i A" }}&nbsp;· {{ sr.user.name }}</span></li>
   {% for ev in events %}
-    <li class="done"><b>{{ ev.get_status_display }}</b> <span class="muted">{{ ev.at|date:"j M, g:i A" }} · {{ ev.by.name }}</span></li>
+    <li class="{% if ev.status == 'cancelled' %}stop{% endif %}"><b>{{ ev.get_status_display }}</b><span>{{ ev.at|date:"j M, g:i A" }}&nbsp;· {{ ev.by.name }}</span></li>
   {% endfor %}
-  {% if sr.is_open %}<li class="todo"><b>{{ sr.next_status.label }}</b> <span class="muted">waiting…</span></li>{% endif %}
+  {% if sr.is_open %}<li class="todo"><b>{{ sr.next_status.label }}</b><span>{% translate "waiting" %}</span></li>{% endif %}
 </ol>
 {% endblock %}

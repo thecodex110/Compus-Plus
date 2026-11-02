@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
-<h1>Hi, {{ user.get_short_name }}</h1>
-<div class="card">
-  <p>Your {{ user.get_role_display }} dashboard is coming in a later module.</p>
-</div>
+<div class="ph"><h1>{% blocktranslate with name=user.get_short_name %}Hello, {{ name }}{% endblocktranslate %}</h1></div>
+<div class="empty"><p>{% translate "There's nothing on this screen for your account yet." %}</p></div>
 {% endblock %}

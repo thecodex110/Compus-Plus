@@ -8,13 +8,14 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
+from django.utils.translation import gettext as _
 
 from accounts.decorators import role_required
 from accounts.models import User
 from notify.models import notify
 
 from .forms import ServiceRequestForm
-from .models import Location, ServiceRequest, floor_key
+from .models import Location, RequestEvent, ServiceRequest, floor_key
 
 R = User.Role
 S = ServiceRequest.Status
@@ -42,10 +43,11 @@ def new_request(request):
         sr.user = request.user
         sr.save()
         staff = User.objects.filter(role=R.BVG, is_active=True)
-        notify(staff, f"{'🚨 ' if sr.is_high else ''}{sr.get_category_display()} request #{sr.pk}",
+        notify(staff, lambda: _('%(category)s request %(number)s') % {
+                   'category': sr.get_category_display(), 'number': f'REQ-{sr.pk:04d}'},
                f'{sr.location}' + (f' — {sr.note}' if sr.note else ''),
                reverse('services:detail', args=[sr.pk]), urgent=sr.is_high)
-        messages.success(request, f'Request #{sr.pk} sent to BVG staff.')
+        messages.success(request, _('Request %(number)s sent to BVG staff.') % {'number': f'REQ-{sr.pk:04d}'})
         return redirect('services:detail', pk=sr.pk)
     selected = form['location'].value()
     selected_loc = Location.objects.filter(pk=selected).first() if selected else None
@@ -61,7 +63,7 @@ def new_request(request):
 def my_requests(request):
     qs = ServiceRequest.objects.filter(user=request.user).select_related('location', 'assigned_staff')
     return render(request, 'services/list.html', {
-        'title': 'My requests', 'requests': qs.order_by('-created_at'), 'poll': 'mine', 'poll_url': poll_url('mine'),
+        'title': _('My requests'), 'requests': qs.order_by('-created_at'), 'poll': 'mine', 'poll_url': poll_url('mine'),
     })
 
 
@@ -84,8 +86,8 @@ def detail(request, pk):
 def queue(request):
     qs = ServiceRequest.objects.filter(status=S.PENDING).select_related('location', 'user')
     return render(request, 'services/list.html', {
-        'title': 'Open queue', 'requests': qs, 'staff_view': True, 'poll': 'queue', 'poll_url': poll_url('queue'),
-        'empty': 'No pending requests right now.',
+        'title': _('Open queue'), 'requests': qs, 'staff_view': True, 'poll': 'queue', 'poll_url': poll_url('queue'),
+        'empty': _('No pending requests right now.'),
     })
 
 
@@ -93,8 +95,8 @@ def queue(request):
 def my_jobs(request):
     qs = ServiceRequest.objects.filter(assigned_staff=request.user, status__in=[S.ACCEPTED, S.IN_PROGRESS])
     return render(request, 'services/list.html', {
-        'title': 'My jobs', 'requests': qs.select_related('location', 'user'), 'staff_view': True,
-        'poll': 'jobs', 'poll_url': poll_url('jobs'), 'empty': 'You have no active jobs.',
+        'title': _('My jobs'), 'requests': qs.select_related('location', 'user'), 'staff_view': True,
+        'poll': 'jobs', 'poll_url': poll_url('jobs'), 'empty': _('You have no active jobs.'),
     })
 
 
@@ -103,15 +105,15 @@ def history(request):
     qs = ServiceRequest.objects.select_related('location', 'user', 'assigned_staff')
     if request.user.is_bvg:
         qs = qs.filter(assigned_staff=request.user)
-        title = 'My history'
+        title = _('My history')
     else:
-        title = 'All requests'
+        title = _('All requests')
     status = request.GET.get('status')
     if status in S.values:
         qs = qs.filter(status=status)
     return render(request, 'services/list.html', {
         'title': title, 'requests': qs.order_by('-created_at')[:200], 'staff_view': True,
-        'statuses': S.choices, 'current_status': status, 'empty': 'Nothing here yet.',
+        'statuses': S.choices, 'current_status': status, 'empty': _('Nothing here yet.'),
     })
 
 
@@ -123,13 +125,14 @@ def advance(request, pk):
         sr = get_object_or_404(ServiceRequest.objects.select_for_update(), pk=pk)
         before = sr.status
         if sr.advance(request.user):
-            notify(sr.user, f'Your {sr.get_category_display().lower()} request is {sr.get_status_display()}',
-                   f'#{sr.pk} · {sr.location} · {request.user.name}', reverse('services:detail', args=[sr.pk]))
-            messages.success(request, f'#{sr.pk} marked {sr.get_status_display()}.')
+            notify(sr.user, lambda: _('Your %(category)s request is %(status)s') % {
+                       'category': sr.get_category_display(), 'status': sr.get_status_display()},
+                   f'REQ-{sr.pk:04d} · {sr.location} · {request.user.name}', reverse('services:detail', args=[sr.pk]))
+            messages.success(request, _('%(number)s marked %(get_status_display)s.') % {'number': f'REQ-{sr.pk:04d}', 'get_status_display': sr.get_status_display()})
         elif before == S.PENDING or sr.assigned_staff_id != request.user.pk:
-            messages.error(request, f'#{sr.pk} was already taken by someone else.')
+            messages.error(request, _('%(number)s was already taken by someone else.') % {'number': f'REQ-{sr.pk:04d}'})
         else:
-            messages.error(request, 'That request cannot move further.')
+            messages.error(request, _('That request cannot move further.'))
     nxt = request.POST.get('next', '')
     if url_has_allowed_host_and_scheme(nxt, allowed_hosts={request.get_host()}):
         return redirect(nxt)
@@ -155,3 +158,18 @@ def poll(request):
             qs = qs.filter(user=user)
     agg = qs.aggregate(m=Max('updated_at'))
     return JsonResponse({'v': f"{qs.count()}:{agg['m'].timestamp() if agg['m'] else 0}"})
+
+
+@require_POST
+@role_required(R.STUDENT, R.TEACHER)
+def cancel(request, pk):
+    with transaction.atomic():
+        sr = get_object_or_404(ServiceRequest.objects.select_for_update(), pk=pk, user=request.user)
+        if sr.status != S.PENDING:
+            messages.error(request, _('Staff have already accepted this request, so it can no longer be cancelled.'))
+        else:
+            sr.status = S.CANCELLED
+            sr.save()
+            RequestEvent.objects.create(request=sr, status=S.CANCELLED, by=request.user)
+            messages.success(request, _('Request %(number)s cancelled.') % {'number': f'REQ-{sr.pk:04d}'})
+    return redirect('services:detail', pk=pk)

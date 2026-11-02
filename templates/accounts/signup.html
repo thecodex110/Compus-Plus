@@ -1,23 +1,28 @@
 {% extends 'base.html' %}
-{% block title %}Sign up · COEP Campus Portal{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Sign up" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<section class="auth card">
-  <h1>Create account</h1>
-  <p class="muted">Only verified COEP emails can sign up. We'll email you a code.</p>
-  <form method="post" novalidate>
-    {% csrf_token %}
-    {% include '_field.html' with field=form.name %}
-    {% include '_field.html' with field=form.email %}
-    {% include '_field.html' with field=form.phone %}
-    <div class="row2">
-      {% include '_field.html' with field=form.role %}
-      {% include '_field.html' with field=form.year %}
+<section class="auth">
+  <div class="auth-sheet">
+    <div class="auth-head">
+      <h1>{% translate "Create account" %}</h1>
+      <p class="muted">{% translate "Only verified COEP emails can sign up. We'll email you a 6-digit code." %}</p>
     </div>
-    {% include '_field.html' with field=form.department %}
-    {% include '_field.html' with field=form.password %}
-    {% include '_field.html' with field=form.password2 %}
-    <button class="btn btn-primary btn-block">Send verification code</button>
-  </form>
-  <p class="muted center">Already registered? <a href="{% url 'accounts:login' %}">Log in</a></p>
+    <form method="post" novalidate class="form">
+      {% csrf_token %}
+      {% include '_field.html' with field=form.name %}
+      {% include '_field.html' with field=form.email %}
+      {% include '_field.html' with field=form.phone %}
+      <div class="row2">
+        {% include '_field.html' with field=form.role %}
+        {% include '_field.html' with field=form.year %}
+      </div>
+      {% include '_field.html' with field=form.department %}
+      {% include '_field.html' with field=form.password %}
+      {% include '_field.html' with field=form.password2 %}
+      <button class="btn btn-block btn-lg">{% translate "Send verification code" %}</button>
+    </form>
+  </div>
+  <p class="auth-foot center">{% translate "Already registered?" %} <a href="{% url 'accounts:login' %}">{% translate "Log in" %}</a></p>
 </section>
 {% endblock %}

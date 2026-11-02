@@ -1,20 +1,17 @@
+{% load i18n ui %}
 <article class="post">
-  <header class="post-head">
-    <span class="avatar">{{ post.user.name|slice:":1"|upper }}</span>
-    <div>
-      <div class="post-user">{{ post.user.name }}</div>
-      <div class="muted small">{{ post.user.get_role_display }}{% if post.user.department %} · {{ post.user.department }}{% endif %} · {{ post.created_at|timesince }} ago</div>
-    </div>
-    <span class="tag tag-{{ post.type }}">{{ post.get_type_display }}</span>
+  <header class="post-strip">
+    <span class="rec-no">{{ post|sheet_no:'LF' }}</span>
+    <span class="when">{% blocktranslate with t=post.created_at|timesince %}{{ t }} ago{% endblocktranslate %}</span>
+    <span><span class="tag tag-{{ post.type }}">{{ post.get_type_display }}</span></span>
   </header>
   {% if post.photo %}
-    <a href="{% url 'lostfound:detail' post.pk %}" class="post-media">
-      <img src="{{ post.photo.url }}" alt="{{ post.title }}" loading="lazy">
-    </a>
+    <a href="{% url 'lostfound:detail' post.pk %}" class="post-media"><img src="{{ post.photo.url }}" alt="{{ post.title }}" loading="lazy"></a>
   {% endif %}
   <div class="post-body">
     <a href="{% url 'lostfound:detail' post.pk %}" class="post-title">{{ post.title }}</a>
-    <div class="muted small">📍 {{ post.place }} · {{ post.date|date:"j M Y" }}</div>
+    <div class="post-meta"><span>{% icon "pin" "i-sm" %}{{ post.place }}</span><span>{% icon "calendar" "i-sm" %}{{ post.date|date:"j M Y" }}</span></div>
     {% if post.description %}<p class="post-desc">{{ post.description|truncatechars:140 }}</p>{% endif %}
+    <div class="post-meta">{% segs %}{% icon "user" "i-sm" %}{{ post.user.name }}{% if post.user.department %}&nbsp;· {{ post.user.department }}{% endif %}{% endsegs %}</div>
   </div>
 </article>

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load i18n ui %}
+{% block title %}{% translate "Shops" %}&nbsp;· Campus Plus{% endblock %}
+{% block content %}
+<div class="ph">
+  <h1>{% translate "Shops" %}</h1>
+  <div class="ph-actions"><a class="btn" href="{% url 'panel:create_user' %}?role=shop">{% icon "plus" %} {% translate "Add shop" %}</a></div>
+</div>
+{% if shops %}
+  <ul class="rows" data-module="print">
+    {% for s in shops %}
+      <li><a class="rec" href="{% url 'panel:shop_edit' s.pk %}">
+        <span class="rec-thumb">{% icon "store" %}</span>
+        <div class="rec-main">
+          <div class="rec-title">{{ s.name }}</div>
+          <div class="rec-sub">{% segs %}{{ s.owner.email }}{% if s.location %}&nbsp;· {{ s.location }}{% endif %}{% endsegs %}</div>
+          <div class="rec-meta">{% segs %}{% blocktranslate with a=s.active d=s.delivered i=s.items %}{{ a }} active&nbsp;· {{ d }} delivered&nbsp;· {{ i }} stationery items{% endblocktranslate %}{% if not s.qr_image %}&nbsp;· <span class="warn">{% translate "No QR code" %}</span>{% endif %}{% endsegs %}</div>
+        </div>
+        <span class="rec-side"><span class="badge {% if s.is_open %}badge-open{% else %}badge-closed{% endif %}">{% if s.is_open %}{% translate "Open" %}{% else %}{% translate "Closed" %}{% endif %}</span></span>
+      </a></li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div class="empty">{% icon "store" %}<p>{% translate "No shops yet." %}</p></div>
+{% endif %}
+{% endblock %}

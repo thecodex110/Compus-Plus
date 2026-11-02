@@ -1,67 +1,60 @@
 {% extends 'base.html' %}
-{% block title %}Blood donors · COEP Campus Portal{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "Blood donors" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>Blood donors</h1>
-  <a class="btn btn-ghost" href="{% url 'health:hospitals' %}">Hospitals</a>
+<div class="ph">
+  <h1>{% translate "Blood donors" %}</h1>
+  <div class="ph-actions"><a class="btn btn-ghost" href="{% url 'health:hospitals' %}">{% icon "hospital" %} {% translate "Hospitals" %}</a></div>
 </div>
-
-<div class="emergency-strip">
-  <a href="tel:108">📞 108 Ambulance</a>
-  <a href="tel:112">📞 112 Emergency</a>
-</div>
+{% include 'health/_sos.html' %}
 
 {% if user.role == 'student' %}
-  <a class="card me-card" href="{% url 'health:me' %}">
-    {% if me %}
-      <span class="bg-badge">{{ me.blood_group }}</span>
-      <span>You are <b>{% if me.visible %}listed{% else %}hidden{% endif %}</b> in the directory. <span class="muted">Change →</span></span>
-    {% else %}
-      <span class="bg-badge bg-empty">?</span>
-      <span><b>Add your blood group</b> to help someone in an emergency. <span class="muted">Opt-in only.</span></span>
-    {% endif %}
+  <a class="panel me-row" href="{% url 'health:me' %}">
+    {% if me %}<span class="bg-mark">{{ me.blood_group }}</span>
+      <span>{% if me.visible %}{% translate "You're listed in the directory." %}{% else %}{% translate "You're hidden from the directory." %}{% endif %} <span class="muted">{% translate "Change" %}</span></span>
+    {% else %}<span class="bg-mark is-empty">?</span>
+      <span><b>{% translate "Add your blood group" %}</b><br><span class="small muted">{% translate "Opt-in only. You can hide it any time." %}</span></span>{% endif %}
+    {% icon "chevron" %}
   </a>
 {% endif %}
 
-<h2>Which blood group is needed?</h2>
 <form method="get" id="bg-form">
-  <div class="bg-grid">
-    {% for v, l in groups %}
-      <label class="bg-opt"><input type="radio" name="group" value="{{ v }}" {% if group == v %}checked{% endif %} onchange="this.form.submit()"><span>{{ l }}</span></label>
-    {% endfor %}
+  <h2>{% translate "Which blood group is needed?" %}</h2>
+  <div class="groups">
+    {% for v, l in groups %}<label><input type="radio" name="group" value="{{ v }}" {% if group == v %}checked{% endif %} onchange="this.form.submit()"><span>{{ l }}</span></label>{% endfor %}
   </div>
-  <label class="check"><input type="checkbox" name="compatible" value="1" {% if compatible %}checked{% endif %} onchange="this.form.submit()"> <span>Also show compatible donors</span></label>
-  {% if compatible and group %}<small class="hint">{{ group }} can receive from: {{ compatible_list|join:", " }}</small>{% endif %}
-  <noscript><button class="btn btn-primary">Search</button></noscript>
+  <label class="check form-end-sm"><input type="checkbox" name="compatible" value="1" {% if compatible %}checked{% endif %} onchange="this.form.submit()"> <span>{% translate "Also show compatible donors" %}</span></label>
+  {% if compatible and group %}<p class="hint">{% blocktranslate with g=group list=compatible_list|join:", " %}{{ g }} can receive from {{ list }}.{% endblocktranslate %}</p>{% endif %}
+  <noscript><button class="btn">{% translate "Search" %}</button></noscript>
 </form>
 
 {% if donors is not None %}
-  <h2>{{ donors|length }} donor{{ donors|length|pluralize }} found</h2>
+  <h2>{% blocktranslate count n=donors|length %}{{ n }} donor found{% plural %}{{ n }} donors found{% endblocktranslate %}</h2>
   {% if donors %}
-    <ul class="list">
+    <ul class="rows">
       {% for d in donors %}
-        <li id="donor-{{ d.pk }}" class="row donor-row">
-          <span class="bg-badge">{{ d.blood_group }}</span>
-          <div class="row-main">
-            <div class="row-title">{{ d.user.name }}</div>
-            <div class="row-sub muted">{{ d.user.department }}{% if d.user.year %} · Year {{ d.user.year }}{% endif %}</div>
-            {% if d.recently_donated %}<div class="row-sub warn">Donated recently — may not be able to give until {{ d.can_donate_from|date:"j M" }}</div>{% endif %}
+        <li id="donor-{{ d.pk }}" class="rec">
+          <span class="bg-mark">{{ d.blood_group }}</span>
+          <div class="rec-main">
+            <div class="rec-title">{{ d.user.name }}</div>
+            <div class="rec-meta">{% segs %}{{ d.user.department }}{% if d.user.year %}&nbsp;· {% blocktranslate with y=d.user.year %}Year {{ y }}{% endblocktranslate %}{% endif %}{% endsegs %}</div>
+            {% if d.recently_donated %}<div class="rec-meta warn">{% blocktranslate with d=d.can_donate_from|date:"j M" %}Gave blood recently — may not be able to until {{ d }}{% endblocktranslate %}</div>{% endif %}
           </div>
-          {% if d.pk in revealed %}
-            {% if d.user.phone %}<a class="btn btn-primary" href="tel:{{ d.user.phone }}">Call {{ d.user.phone }}</a>
-            {% else %}<a class="btn btn-ghost" href="mailto:{{ d.user.email }}">Email</a>{% endif %}
-          {% else %}
-            <form method="post" action="{% url 'health:reveal' d.pk %}">
-              {% csrf_token %}<input type="hidden" name="back" value="{{ request.get_full_path }}">
-              <button class="btn btn-ghost">Show number</button>
-            </form>
-          {% endif %}
+          <div class="rec-side">
+            {% if d.pk in revealed %}
+              {% if d.user.phone %}<a class="btn btn-hue btn-sm" href="tel:{{ d.user.phone }}">{% icon "phone" "i-sm" %} {{ d.user.phone }}</a>
+              {% else %}<a class="btn btn-ghost btn-sm" href="mailto:{{ d.user.email }}">{% icon "mail" "i-sm" %} {% translate "Email" %}</a>{% endif %}
+            {% else %}
+              <form method="post" action="{% url 'health:reveal' d.pk %}">{% csrf_token %}<input type="hidden" name="back" value="{{ request.get_full_path }}">
+                <button class="btn btn-ghost btn-sm">{% translate "Show number" %}</button></form>
+            {% endif %}
+          </div>
         </li>
       {% endfor %}
     </ul>
-    <p class="muted small">Only students who chose to be listed appear here. Each number you view is recorded, and the donor can see who looked them up. Please contact donors only for a real need.</p>
+    <p class="hint form-end-sm">{% translate "Only students who chose to be listed appear here. Every number you view is recorded and the donor can see who looked. Contact donors only for a real need." %}</p>
   {% else %}
-    <p class="empty">No listed donors for {{ group }}{% if not compatible %} — try “Also show compatible donors”{% endif %}. You can also call a hospital blood bank.</p>
+    <div class="empty">{% icon "blood" %}<p>{% if compatible %}{% blocktranslate %}No listed donors for {{ group }}. Call a hospital blood bank.{% endblocktranslate %}{% else %}{% blocktranslate %}No listed donors for {{ group }} — try “Also show compatible donors”.{% endblocktranslate %}{% endif %}</p></div>
   {% endif %}
 {% endif %}
 {% endblock %}

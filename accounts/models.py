@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class UserManager(BaseUserManager):
@@ -28,11 +30,11 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     class Role(models.TextChoices):
-        STUDENT = 'student', 'Student'
-        TEACHER = 'teacher', 'Teacher'
-        BVG = 'bvg', 'BVG Staff'
-        SHOP = 'shop', 'Photocopy Shop'
-        ADMIN = 'admin', 'Admin'
+        STUDENT = 'student', _('Student')
+        TEACHER = 'teacher', _('Teacher')
+        BVG = 'bvg', _('BVG Staff')
+        SHOP = 'shop', _('Photocopy Shop')
+        ADMIN = 'admin', _('Admin')
 
     # Roles a person can pick on the public sign-up page. Staff, shops and
     # admins are created by an admin.
@@ -47,6 +49,7 @@ class User(AbstractUser):
     role = models.CharField(max_length=10, choices=Role.choices, default=Role.STUDENT)
     department = models.CharField(max_length=80, blank=True)
     year = models.PositiveSmallIntegerField(null=True, blank=True)
+    language = models.CharField(max_length=5, choices=settings.LANGUAGES, default='en')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']

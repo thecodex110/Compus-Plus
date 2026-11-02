@@ -1,57 +1,48 @@
 {% extends 'base.html' %}
-{% block title %}Order #{{ order.pk }} · {{ order.shop.name }}{% endblock %}
+{% load i18n ui %}
+{% block title %}{{ order|sheet_no:'ORD' }}&nbsp;· {{ order.shop.name }}{% endblock %}
 {% block content %}
-<a class="muted" href="{% url 'printing:shop_dashboard' %}">← Orders</a>
-<div class="card">
-  <div class="detail-head">
-    <h1>Order #{{ order.pk }}</h1>
-    <span class="status pstatus-{{ order.status }}">{{ order.get_status_display }}</span>
-  </div>
-  <div>{{ order.student.name }} · {{ order.student.department }}{% if order.student.year %} · Year {{ order.student.year }}{% endif %}
-    {% if order.student.phone %}· <a href="tel:{{ order.student.phone }}">{{ order.student.phone }}</a>{% endif %}</div>
-  {% if order.status == 'rejected' %}<div class="flash flash-error">Rejected: {{ order.reject_reason }}</div>{% endif %}
-  {% include 'printing/_order_facts.html' %}
+<a class="back" href="{% url 'printing:shop_dashboard' %}">{% icon "back" "i-sm" %} {% translate "Orders" %}</a>
+<div class="ph">
+  <div><h1>{{ order.student.name }}</h1><div class="ph-sub">{% segs %}{{ order.student.department }}{% if order.student.year %}&nbsp;· {% blocktranslate with y=order.student.year %}Year {{ y }}{% endblocktranslate %}{% endif %}{% if order.student.phone %}&nbsp;· <a href="tel:{{ order.student.phone }}">{{ order.student.phone }}</a>{% endif %}{% endsegs %}</div></div>
 </div>
+{% if order.status == 'rejected' %}<div class="flash flash-error">{% icon "alert" %}<span>{{ order.reject_reason }}</span></div>{% endif %}
+{% include 'printing/_order_tb.html' with shop_view=True %}
 
 {% if order.status == 'placed' %}
-  <div class="card verify">
-    <h2>Step 1 · Verify the payment</h2>
-    <p class="small">Open <b>your</b> payment app and check you received <b>₹{{ order.price|floatformat:0 }}</b> with a transaction ID ending in <b class="mono">{{ order.txn_last_digits }}</b>. Don't trust the screenshot alone.</p>
+  <div class="panel verify form-end">
+    <h2>{% translate "First, check the payment" %}</h2>
+    <p class="small">{% blocktranslate with amount=order.price|floatformat:0 digits=order.txn_last_digits %}Open <b>your own</b> payment app and check you received <b>₹{{ amount }}</b> with a transaction ID ending in <b>{{ digits }}</b>. Don't trust the screenshot alone.{% endblocktranslate %}</p>
     {% if order.payment_screenshot %}
-      <a href="{% url 'printing:download' order.pk 'screenshot' %}" target="_blank" rel="noopener">
-        <img class="shot" src="{% url 'printing:download' order.pk 'screenshot' %}" alt="Payment screenshot for order {{ order.pk }}">
-      </a>
+      <a href="{% url 'printing:download' order.pk 'screenshot' %}" target="_blank" rel="noopener"><img class="shot" src="{% url 'printing:download' order.pk 'screenshot' %}" alt="{% translate 'Payment screenshot' %}"></a>
     {% endif %}
   </div>
 {% endif %}
 
 {% if order.next_status %}
-  <form method="post" action="{% url 'printing:shop_advance' order.pk %}">
+  <form method="post" action="{% url 'printing:shop_advance' order.pk %}" class="btn-row">
     {% csrf_token %}
-    <button class="btn btn-primary btn-block btn-lg">
-      {% if order.status == 'placed' %}✓ Payment received — verify
-      {% elif order.status == 'verified' %}Start printing
-      {% elif order.status == 'printing' %}Out for delivery → {{ order.get_delivery_point_display }}
-      {% else %}Mark delivered{% endif %}
+    <button class="btn btn-hue btn-block btn-lg">
+      {% if order.status == 'placed' %}{% icon "check" %} {% translate "Payment received — verify" %}
+      {% elif order.status == 'verified' %}{% icon "print" %} {% translate "Start printing" %}
+      {% elif order.status == 'printing' %}{% blocktranslate with place=order.get_delivery_point_display %}Out for delivery → {{ place }}{% endblocktranslate %}
+      {% else %}{% icon "check" %} {% translate "Mark delivered" %}{% endif %}
     </button>
   </form>
-  {% if order.status == 'out' %}<small class="hint center">The print file is deleted once the order is delivered.</small>{% endif %}
-  {% if order.file and order.status in 'verified printing' %}
-    <a class="btn btn-ghost btn-block" href="{% url 'printing:download' order.pk 'file' %}?dl=1">⬇ Download file to print</a>
+  {% if order.file and order.status == 'verified' or order.file and order.status == 'printing' %}
+    <a class="btn btn-ghost btn-block form-end" href="{% url 'printing:download' order.pk 'file' %}?dl=1">{% icon "download" %} {% translate "Download file to print" %}</a>
   {% endif %}
+  {% if order.status == 'out' %}<p class="hint">{% translate "The print file is deleted once the order is delivered." %}</p>{% endif %}
 {% endif %}
 
 {% if order.status == 'placed' %}
-  <form method="post" action="{% url 'printing:shop_reject' order.pk %}" class="card reject">
+  <form method="post" action="{% url 'printing:shop_reject' order.pk %}" class="panel form-end">
     {% csrf_token %}
-    <b>Payment not received?</b>
-    <div class="reject-row">
-      {{ reject_form.reason }}
-      <button class="btn btn-danger">Reject</button>
-    </div>
+    <b>{% translate "Payment not received?" %}</b>
+    <div class="reject-row">{{ reject_form.reason }}<button class="btn btn-danger">{% translate "Reject" %}</button></div>
   </form>
 {% endif %}
 
-<h2>Timeline</h2>
+<h2>{% translate "History" %}</h2>
 {% include 'printing/_timeline.html' %}
 {% endblock %}

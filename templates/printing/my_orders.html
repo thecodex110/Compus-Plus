@@ -1,26 +1,27 @@
 {% extends 'base.html' %}
-{% block title %}My print orders{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "My orders" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>My print orders</h1>
-  <a class="btn btn-primary" href="{% url 'printing:shops' %}">+ New</a>
+<a class="back" href="{% url 'printing:shops' %}">{% icon "back" "i-sm" %} {% translate "Print & stationery" %}</a>
+<div class="ph">
+  <h1>{% translate "My orders" %}</h1>
+  <div class="ph-actions"><a class="btn btn-hue" href="{% url 'printing:shops' %}">{% icon "plus" %} {% translate "New order" %}</a></div>
 </div>
 {% if orders %}
-  <ul class="list">
+  <ul class="rows">
     {% for o in orders %}
-      <li>
-        <a class="row" href="{% url 'printing:order' o.pk %}">
-          <div class="row-main">
-            <div class="row-title">#{{ o.pk }} · {{ o.shop.name }}</div>
-            <div class="row-sub">📄 {{ o.file_name|truncatechars:32 }}</div>
-            <div class="row-sub muted">₹{{ o.price|floatformat:0 }} · {{ o.get_delivery_point_display }} · {{ o.placed_at|date:"j M, g:i A" }}</div>
-          </div>
-          <span class="status pstatus-{{ o.status }}">{{ o.get_status_display }}</span>
-        </a>
-      </li>
+      <li><a class="rec" href="{% url 'printing:order' o.pk %}">
+        <span class="rec-no">{{ o|sheet_no:'ORD' }}</span>
+        <div class="rec-main">
+          <div class="rec-title">{{ o.shop.name }}</div>
+          <div class="rec-sub">{{ o.summary }}</div>
+          <div class="rec-meta">{% segs %}₹{{ o.price|floatformat:0 }}&nbsp;· {{ o.get_delivery_point_display }}&nbsp;· {{ o.placed_at|date:"j M, g:i A" }}{% endsegs %}</div>
+        </div>
+        <span class="rec-side"><span class="stamp {{ o.status|stamp }}">{{ o.get_status_display }}</span></span>
+      </a></li>
     {% endfor %}
   </ul>
 {% else %}
-  <p class="empty">No orders yet.</p>
+  <div class="empty">{% icon "print" %}<p>{% translate "No orders yet." %}</p></div>
 {% endif %}
 {% endblock %}

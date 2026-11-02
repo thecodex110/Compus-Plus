@@ -5,6 +5,8 @@ from django.db.models import Prefetch, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _l
 
 from accounts.decorators import role_required
 from accounts.models import User
@@ -15,9 +17,9 @@ from .models import Listing, ListingPhoto
 R = User.Role
 USERS = (R.STUDENT, R.ADMIN)
 SORTS = {
-    'new': ('Newest', ['-created_at']),
-    'low': ('Price: low to high', ['price', '-created_at']),
-    'high': ('Price: high to low', ['-price', '-created_at']),
+    'new': (_l('Newest'), ['-created_at']),
+    'low': (_l('Price: low to high'), ['price', '-created_at']),
+    'high': (_l('Price: high to low'), ['-price', '-created_at']),
 }
 
 
@@ -79,7 +81,7 @@ def sell(request):
     form = ListingForm(request.POST or None, request.FILES or None, instance=Listing(seller=request.user))
     if request.method == 'POST' and form.is_valid():
         listing = form.save()
-        messages.success(request, 'Your item is live on COEP Market.')
+        messages.success(request, _('Your item is live on COEP Market.'))
         return redirect('market:detail', pk=listing.pk)
     return render(request, 'market/form.html', {'form': form})
 
@@ -90,7 +92,7 @@ def edit(request, pk):
     form = ListingForm(request.POST or None, request.FILES or None, instance=listing)
     if request.method == 'POST' and form.is_valid():
         form.save()
-        messages.success(request, 'Listing updated.')
+        messages.success(request, _('Listing updated.'))
         return redirect('market:detail', pk=pk)
     return render(request, 'market/form.html', {'form': form, 'listing': listing})
 
@@ -108,7 +110,7 @@ def mark_sold(request, pk):
     listing.status = Listing.Status.SOLD
     listing.sold_at = timezone.now()
     listing.save(update_fields=['status', 'sold_at', 'updated_at'])
-    messages.success(request, 'Marked as sold. 🎉')
+    messages.success(request, _('Marked as sold. 🎉'))
     return redirect('market:mine')
 
 
@@ -119,7 +121,7 @@ def delete(request, pk):
     for photo in listing.photos.all():
         photo.delete()
     listing.delete()
-    messages.success(request, 'Listing deleted.')
+    messages.success(request, _('Listing deleted.'))
     return redirect('market:mine')
 
 
@@ -129,5 +131,5 @@ def remove(request, pk):
     listing = get_object_or_404(Listing, pk=pk)
     listing.status = Listing.Status.REMOVED
     listing.save(update_fields=['status', 'updated_at'])
-    messages.success(request, 'Listing removed from the market.')
+    messages.success(request, _('Listing removed from the market.'))
     return redirect('market:browse')

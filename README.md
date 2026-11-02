@@ -1,6 +1,8 @@
-# COEP Campus Portal
+# Campus Plus
 
-Django + PostgreSQL web portal for COEP Technological University. Spec: see the project brief (roles, modules, data model, rules).
+A web portal for everyday campus life at COEP Technological University, Pune: help requests to the BVG team, Lost & Found, COEP Market, printouts and stationery delivered to the gate, blood donors and hospitals. Django + PostgreSQL, mobile-first, in **English and हिंदी**.
+
+Campus Plus is a student project; it is not an official COEP product.
 
 ## Status
 
@@ -8,10 +10,11 @@ Django + PostgreSQL web portal for COEP Technological University. Spec: see the 
 |---|--------|-------|
 | 1 | Auth & roles + Service Requests (BVG) | ✅ done |
 | 2 | Lost & Found | ✅ done |
-| 3 | Photocopy ordering | ✅ done |
+| 3 | Photocopy + stationery ordering | ✅ done |
 | 4 | COEP Market | ✅ done |
 | 5 | Blood directory & hospitals | ✅ done |
 | 6 | Notifications, admin dashboard, polish | ✅ done |
+| 7 | Redesign, Hindi, stationery, remaining gaps | ✅ done |
 
 ## Run locally
 
@@ -123,13 +126,29 @@ On `/notifications/` a user can tap **Turn on alerts** to get browser pop-ups wh
 The spec suggested Vercel, but Vercel runs serverless functions with no persistent disk, which doesn't fit Django + uploaded files. Use a normal app host such as **Render, Railway, Fly.io** or a small VPS, with managed PostgreSQL.
 
 1. Set environment variables: `DEBUG=0`, a long random `SECRET_KEY`, `ALLOWED_HOSTS=portal.example.com`, `CSRF_TRUSTED_ORIGINS=https://portal.example.com`, the `DB_*` values, `ALLOWED_EMAIL_DOMAINS`, and SMTP settings (`EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend`, `EMAIL_HOST`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`). OTPs and password resets need real email.
-2. Build: `pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate`
+2. Build: `pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate` (the compiled Hindi file `locale/hi/LC_MESSAGES/django.mo` is committed, so the server needs no gettext)
 3. Start: `gunicorn config.wsgi --bind 0.0.0.0:$PORT`
 4. Put `media/` and `private_media/` on a persistent disk (or move them to S3-compatible storage). `private_media/` must never be served publicly.
 5. Daily cron: `python manage.py purge_print_files`
 6. Create the first admin: `python manage.py createsuperuser` (then log in, open the dashboard and add staff, shops, classrooms and hospitals). Don't run `seed_demo` in production.
 
 With `DEBUG=0` the app turns on HTTPS redirect, secure cookies, HSTS and serves static files itself (WhiteNoise).
+
+## Module 7 — Redesign, Hindi, and the remaining gaps
+
+**New look ("Drawing Sheet").** Every screen borrows from the Engineering Graphics sheet every COEP student draws in first year: a ruled **title block** on every record (sheet number like `REQ-0042`, `ORD-0017`, `LF-0103`, `MKT-0007`, location, who raised it, who checked it, status), square corners, condensed technical lettering, and one colour per module: Requests vermilion, Lost & Found teal, Market ultramarine, Print ochre, Blood crimson. Red is kept for emergencies and errors. Icons are a hand-made SVG line set (`templates/_icons.html`, used as `{% icon "name" %}`), not emoji. Phones get a bottom tab bar; desktops get a side rail. The font is Anek Devanagari (Ek Type, SIL OFL), self-hosted in `static/fonts/`; one family covers Hindi and English.
+
+**English / हिंदी.** The EN | हिं switch in the top bar saves the choice on the user's account (cookie for signed-out visitors). Notifications are written in each *recipient's* language, so a Hindi-speaking guard gets Hindi alerts even when an English user raised the request. Translations live in `locale/hi/LC_MESSAGES/django.po`. After changing any user-facing text:
+
+```bash
+.venv/bin/python manage.py makemessages -l hi --ignore=.venv
+# translate the new entries in django.po, then
+.venv/bin/python manage.py compilemessages --ignore=.venv
+```
+
+**Stationery.** Shops list stationery (name, price, in stock) on their Stationery page. Students add stationery to a print order, or order stationery alone; it's priced together with printing and delivered the same way.
+
+**Gaps closed.** Admins manage shops from the admin panel (`/admin-panel/shops/`: name, location, phone, open/closed, live order counts). A student or teacher can cancel a request until BVG staff accept it. The owner of a Lost & Found post can delete it.
 
 ## Tests
 

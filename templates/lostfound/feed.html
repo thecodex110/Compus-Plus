@@ -1,35 +1,35 @@
 {% extends 'base.html' %}
-{% block title %}Lost & Found · COEP Campus Portal{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "Lost & Found" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>Lost & Found</h1>
-  <a class="btn btn-primary" href="{% url 'lostfound:new' %}">+ Post</a>
+<div class="ph">
+  <h1>{% translate "Lost & Found" %}</h1>
+  <div class="ph-actions"><a class="btn btn-hue" href="{% url 'lostfound:new' %}">{% icon "plus" %} {% translate "Post" %}</a></div>
 </div>
 
-<form method="get" class="search">
+<form method="get" class="search" role="search">
   {% if kind %}<input type="hidden" name="type" value="{{ kind }}">{% endif %}
-  <input type="search" name="q" value="{{ q }}" placeholder="Search item or place" aria-label="Search">
+  {% icon "search" %}
+  <input type="search" name="q" value="{{ q }}" placeholder="{% translate 'Search an item or a place' %}" aria-label="{% translate 'Search' %}">
 </form>
 
-<div class="filters">
-  <a class="chip {% if not kind %}active{% endif %}" href="?{% if q %}q={{ q|urlencode }}{% endif %}">All</a>
+<nav class="chips" aria-label="{% translate 'Filter' %}">
+  <a class="chip" href="?{% if q %}q={{ q|urlencode }}{% endif %}" {% if not kind %}aria-current="true"{% endif %}>{% translate "All" %}</a>
   {% for value, label in types %}
-    <a class="chip {% if kind == value %}active{% endif %}" href="?type={{ value }}{% if q %}&q={{ q|urlencode }}{% endif %}">{{ label }}</a>
+    <a class="chip" href="?type={{ value }}{% if q %}&q={{ q|urlencode }}{% endif %}" {% if kind == value %}aria-current="true"{% endif %}>{{ label }}</a>
   {% endfor %}
-  <a class="chip chip-right" href="{% url 'lostfound:mine' %}">My posts</a>
-</div>
+  <a class="chip chip-end" href="{% url 'lostfound:mine' %}">{% translate "My posts" %}</a>
+</nav>
 
 {% if page.object_list %}
-  <div class="feed">
-    {% for post in page.object_list %}{% include 'lostfound/_card.html' %}{% endfor %}
-  </div>
+  <div class="feed">{% for post in page.object_list %}{% include 'lostfound/_card.html' %}{% endfor %}</div>
   {% if page.has_other_pages %}
     <nav class="pager">
-      {% if page.has_previous %}<a class="btn btn-ghost" href="?page={{ page.previous_page_number }}{% if kind %}&type={{ kind }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">← Newer</a>{% endif %}
-      {% if page.has_next %}<a class="btn btn-ghost" href="?page={{ page.next_page_number }}{% if kind %}&type={{ kind }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">Older →</a>{% endif %}
+      {% if page.has_previous %}<a class="btn btn-ghost" href="?page={{ page.previous_page_number }}{% if kind %}&type={{ kind }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">{% icon "back" %} {% translate "Newer" %}</a>{% else %}<span></span>{% endif %}
+      {% if page.has_next %}<a class="btn btn-ghost" href="?page={{ page.next_page_number }}{% if kind %}&type={{ kind }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">{% translate "Older" %} {% icon "chevron" %}</a>{% endif %}
     </nav>
   {% endif %}
 {% else %}
-  <p class="empty">{% if q or kind %}Nothing matches.{% else %}No posts yet. Lost something or found something? Post it.{% endif %}</p>
+  <div class="empty">{% icon "lostfound" %}<p>{% if q or kind %}{% translate "Nothing matches. Try another word." %}{% else %}{% translate "Nothing posted yet. Lost something, or found something? Post it." %}{% endif %}</p></div>
 {% endif %}
 {% endblock %}

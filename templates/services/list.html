@@ -1,30 +1,40 @@
 {% extends 'base.html' %}
-{% block title %}{{ title }} · COEP Campus Portal{% endblock %}
+{% load i18n ui %}
+{% block title %}{{ title }}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<div class="page-head">
+<div class="ph">
   <h1>{{ title }}</h1>
-  {% if poll == 'mine' %}<a class="btn btn-primary" href="{% url 'services:new' %}">+ New</a>{% endif %}
+  {% if poll == 'mine' %}<div class="ph-actions"><a class="btn btn-hue" href="{% url 'services:new' %}">{% icon "plus" %} {% translate "New request" %}</a></div>{% endif %}
 </div>
 
 {% if statuses %}
-  <div class="filters">
-    <a class="chip {% if not current_status %}active{% endif %}" href="?">All</a>
+  <nav class="chips" aria-label="{% translate 'Filter by status' %}">
+    <a class="chip" href="?" {% if not current_status %}aria-current="true"{% endif %}>{% translate "All" %}</a>
     {% for value, label in statuses %}
-      <a class="chip {% if current_status == value %}active{% endif %}" href="?status={{ value }}">{{ label }}</a>
+      <a class="chip" href="?status={{ value }}" {% if current_status == value %}aria-current="true"{% endif %}>{{ label }}</a>
     {% endfor %}
-  </div>
+  </nav>
 {% endif %}
 
 {% if requests %}
-  <ul class="list">
+  <ul class="rows">
     {% for sr in requests %}
       {% if staff_view and sr.next_status and poll %}
-        <li class="row-with-action">
-          <ul class="list">{% include 'services/_row.html' %}</ul>
-          <form method="post" action="{% url 'services:advance' sr.pk %}">
+        <li>
+          <a class="rec{% if sr.is_high %} is-urgent{% endif %}" href="{% url 'services:detail' sr.pk %}">
+            <span class="rec-no">{{ sr|sheet_no:'REQ' }}</span>
+            <div class="rec-main">
+              <div class="rec-title">{{ sr.get_category_display }}{% if sr.is_high %} <span class="stamp st-urgent">{% translate "Urgent" %}</span>{% endif %}</div>
+              <div class="rec-sub">{% segs %}{{ sr.location }}{% endsegs %}</div>
+              {% if sr.note %}<div class="rec-note">“{{ sr.note }}”</div>{% endif %}
+              <div class="rec-meta">{% segs %}{{ sr.user.name }}&nbsp;· {% blocktranslate with t=sr.created_at|timesince %}{{ t }} ago{% endblocktranslate %}{% endsegs %}</div>
+            </div>
+            <span class="rec-side"><span class="stamp {{ sr.status|stamp }}">{{ sr.get_status_display }}</span></span>
+          </a>
+          <form class="rec-action" method="post" action="{% url 'services:advance' sr.pk %}">
             {% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}">
-            <button class="btn btn-primary btn-block">
-              {% if sr.status == 'pending' %}Accept{% elif sr.status == 'accepted' %}Start work{% else %}Mark done{% endif %}
+            <button class="btn btn-block {% if sr.status == 'pending' and sr.is_high %}btn-urgent{% endif %}">
+              {% if sr.status == 'pending' %}{% icon "check" %} {% translate "Accept" %}{% elif sr.status == 'accepted' %}{% translate "Start work" %}{% else %}{% translate "Mark done" %}{% endif %}
             </button>
           </form>
         </li>
@@ -34,6 +44,6 @@
     {% endfor %}
   </ul>
 {% else %}
-  <p class="empty">{{ empty|default:"No requests yet." }}</p>
+  <div class="empty">{% icon "requests" %}<p>{{ empty|default:_("No requests yet.") }}</p></div>
 {% endif %}
 {% endblock %}

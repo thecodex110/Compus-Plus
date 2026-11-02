@@ -3,6 +3,7 @@ import uuid
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 def photo_path(instance, filename):
@@ -11,21 +12,21 @@ def photo_path(instance, filename):
 
 class Post(models.Model):
     class Type(models.TextChoices):
-        LOST = 'lost', 'Lost'
-        FOUND = 'found', 'Found'
+        LOST = 'lost', _('Lost')
+        FOUND = 'found', _('Found')
 
     class Status(models.TextChoices):
-        OPEN = 'open', 'Open'
-        RETURNED = 'returned', 'Returned'
-        REMOVED = 'removed', 'Removed by admin'
+        OPEN = 'open', _('Open')
+        RETURNED = 'returned', _('Returned')
+        REMOVED = 'removed', _('Removed by admin')
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='lostfound_posts')
     type = models.CharField(max_length=5, choices=Type.choices)
     title = models.CharField(max_length=80)
     description = models.TextField(max_length=600, blank=True)
     photo = models.ImageField(upload_to=photo_path, blank=True)
-    place = models.CharField(max_length=80, help_text='Where it was lost or found')
-    date = models.DateField(default=timezone.localdate, help_text='When it was lost or found')
+    place = models.CharField(max_length=80, help_text=_('Where it was lost or found'))
+    date = models.DateField(default=timezone.localdate, help_text=_('When it was lost or found'))
     # Phone is personal data, so it is shown only if the uploader ticks this.
     show_phone = models.BooleanField(default=False)
     status = models.CharField(max_length=8, choices=Status.choices, default=Status.OPEN)

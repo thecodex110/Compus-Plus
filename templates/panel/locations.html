@@ -1,29 +1,29 @@
 {% extends 'base.html' %}
-{% block title %}Buildings & classrooms · Admin{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "Buildings & classrooms" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<h1>Buildings & classrooms</h1>
-<form method="post" novalidate class="card">
+<div class="ph"><h1>{% translate "Buildings & classrooms" %}</h1></div>
+<form method="post" novalidate class="panel form">
   {% csrf_token %}
-  <h2>Add classrooms</h2>
+  <h2>{% translate "Add classrooms" %}</h2>
   <div class="row2">
     {% include '_field.html' with field=form.building %}
     {% include '_field.html' with field=form.floor %}
   </div>
   {% include '_field.html' with field=form.classrooms %}
-  <button class="btn btn-primary">Add</button>
+  <div><button class="btn">{% icon "plus" %} {% translate "Add" %}</button></div>
 </form>
-
 {% for building, floors in tree.items %}
-  <div class="card">
+  <div class="panel">
     <h2>{{ building }}</h2>
     {% for floor, rooms in floors.items %}
       <div class="floor">
-        <div class="label">Floor {{ floor }}</div>
-        <div class="room-chips">
+        <span class="label">{% blocktranslate %}Floor {{ floor }}{% endblocktranslate %}</span>
+        <div class="rooms">
           {% for loc in rooms %}
-            <form method="post" action="{% url 'panel:delete_location' loc.pk %}" class="room-chip" onsubmit="return confirm('Remove {{ loc.classroom|escapejs }}?')">
+            <form method="post" action="{% url 'panel:delete_location' loc.pk %}" class="room" onsubmit="return confirm('{% filter escapejs %}{% translate "Remove this classroom?" %}{% endfilter %}')">
               {% csrf_token %}<span>{{ loc.classroom }}{% if loc.n %} <span class="muted small">({{ loc.n }})</span>{% endif %}</span>
-              <button aria-label="Remove {{ loc.classroom }}" title="Remove">×</button>
+              <button aria-label="{% blocktranslate with r=loc.classroom %}Remove {{ r }}{% endblocktranslate %}">{% icon "x" "i-sm" %}</button>
             </form>
           {% endfor %}
         </div>
@@ -31,7 +31,7 @@
     {% endfor %}
   </div>
 {% empty %}
-  <p class="empty">No buildings yet. Add the first classrooms above.</p>
+  <div class="empty">{% icon "campus" %}<p>{% translate "No buildings yet. Add the first classrooms above." %}</p></div>
 {% endfor %}
-<p class="muted small">The number in brackets is how many service requests came from that room. Rooms with requests can't be removed, so history stays intact.</p>
+<p class="hint">{% translate "The number in brackets is how many requests came from that room. Rooms with requests can't be removed, so history stays intact." %}</p>
 {% endblock %}

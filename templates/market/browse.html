@@ -1,58 +1,45 @@
 {% extends 'base.html' %}
-{% block title %}COEP Market{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "COEP Market" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>COEP Market</h1>
-  {% if user.role == 'student' %}<a class="btn btn-primary" href="{% url 'market:sell' %}">+ Sell</a>{% endif %}
+<div class="ph">
+  <h1>{% translate "COEP Market" %}</h1>
+  {% if user.role == 'student' %}<div class="ph-actions"><a class="btn btn-hue" href="{% url 'market:sell' %}">{% icon "plus" %} {% translate "Sell" %}</a></div>{% endif %}
 </div>
 
-<form method="get" class="market-search">
-  <input type="search" name="q" value="{{ q }}" placeholder="Search books, cycles, drafters…" aria-label="Search">
+<form method="get" role="search">
+  <div class="search">{% icon "search" %}<input type="search" name="q" value="{{ q }}" placeholder="{% translate 'Search books, cycles, drafters…' %}" aria-label="{% translate 'Search' %}"></div>
   {% if category %}<input type="hidden" name="category" value="{{ category }}">{% endif %}
   <details class="filter-box" {% if filtered %}open{% endif %}>
-    <summary>Filters{% if filtered %} · on{% endif %}</summary>
+    <summary>{% icon "filter" %} {% translate "Filters" %}{% if filtered %} <span class="badge badge-open">{% translate "On" %}</span>{% endif %}</summary>
     <div class="filter-grid">
-      <label class="field"><span class="label">Condition</span>
-        <select name="condition">
-          <option value="">Any</option>
-          {% for v, l in conditions %}<option value="{{ v }}" {% if condition == v %}selected{% endif %}>{{ l }}</option>{% endfor %}
-        </select>
-      </label>
-      <label class="field"><span class="label">Sort</span>
-        <select name="sort">
-          {% for v, l in sorts %}<option value="{{ v }}" {% if sort == v %}selected{% endif %}>{{ l }}</option>{% endfor %}
-        </select>
-      </label>
-      <label class="field"><span class="label">Min ₹</span><input type="number" name="min" min="0" value="{{ pmin|default_if_none:'' }}" inputmode="numeric"></label>
-      <label class="field"><span class="label">Max ₹</span><input type="number" name="max" min="0" value="{{ pmax|default_if_none:'' }}" inputmode="numeric"></label>
+      <label class="field"><span class="label">{% translate "Condition" %}</span>
+        <select name="condition"><option value="">{% translate "Any" %}</option>{% for v, l in conditions %}<option value="{{ v }}" {% if condition == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></label>
+      <label class="field"><span class="label">{% translate "Sort" %}</span>
+        <select name="sort">{% for v, l in sorts %}<option value="{{ v }}" {% if sort == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></label>
+      <label class="field"><span class="label">{% translate "Min ₹" %}</span><input type="number" name="min" min="0" value="{{ pmin|default_if_none:'' }}" inputmode="numeric"></label>
+      <label class="field"><span class="label">{% translate "Max ₹" %}</span><input type="number" name="max" min="0" value="{{ pmax|default_if_none:'' }}" inputmode="numeric"></label>
     </div>
-    <div class="filter-actions">
-      <button class="btn btn-primary">Apply</button>
-      <a class="btn btn-ghost" href="{% url 'market:browse' %}">Clear all</a>
-    </div>
+    <div class="filter-actions"><button class="btn btn-sm">{% translate "Apply" %}</button><a class="btn btn-ghost btn-sm" href="{% url 'market:browse' %}">{% translate "Clear all" %}</a></div>
   </details>
 </form>
 
-<div class="filters">
-  <a class="chip {% if not category %}active{% endif %}" href="?{% if q %}q={{ q|urlencode }}{% endif %}">All</a>
-  {% for v, l in categories %}
-    <a class="chip {% if category == v %}active{% endif %}" href="?category={{ v }}{% if q %}&q={{ q|urlencode }}{% endif %}">{{ l }}</a>
-  {% endfor %}
-</div>
-{% if user.role == 'student' %}<p class="small"><a href="{% url 'market:mine' %}">My listings →</a></p>{% endif %}
+<nav class="chips" aria-label="{% translate 'Category' %}">
+  <a class="chip" href="?{% if q %}q={{ q|urlencode }}{% endif %}" {% if not category %}aria-current="true"{% endif %}>{% translate "All" %}</a>
+  {% for v, l in categories %}<a class="chip" href="?category={{ v }}{% if q %}&q={{ q|urlencode }}{% endif %}" {% if category == v %}aria-current="true"{% endif %}>{{ l }}</a>{% endfor %}
+  {% if user.role == 'student' %}<a class="chip chip-end" href="{% url 'market:mine' %}">{% translate "My listings" %}</a>{% endif %}
+</nav>
 
 {% if page.object_list %}
-  <div class="tiles">
-    {% for listing in page.object_list %}{% include 'market/_tile.html' %}{% endfor %}
-  </div>
+  <div class="tiles">{% for listing in page.object_list %}{% include 'market/_tile.html' %}{% endfor %}</div>
   {% if page.has_other_pages %}
     <nav class="pager">
-      {% if page.has_previous %}<a class="btn btn-ghost" href="?{{ params }}{% if params %}&{% endif %}page={{ page.previous_page_number }}">← Previous</a>{% else %}<span></span>{% endif %}
-      {% if page.has_next %}<a class="btn btn-ghost" href="?{{ params }}{% if params %}&{% endif %}page={{ page.next_page_number }}">Next →</a>{% endif %}
+      {% if page.has_previous %}<a class="btn btn-ghost" href="?{{ params }}{% if params %}&{% endif %}page={{ page.previous_page_number }}">{% icon "back" %} {% translate "Previous" %}</a>{% else %}<span></span>{% endif %}
+      {% if page.has_next %}<a class="btn btn-ghost" href="?{{ params }}{% if params %}&{% endif %}page={{ page.next_page_number }}">{% translate "Next" %} {% icon "chevron" %}</a>{% endif %}
     </nav>
   {% endif %}
 {% else %}
-  <p class="empty">{% if q or category or filtered %}Nothing matches. Try fewer filters.{% else %}Nothing for sale yet. Be the first to sell something!{% endif %}</p>
+  <div class="empty">{% icon "market" %}<p>{% if q or category or filtered %}{% translate "Nothing matches. Try fewer filters." %}{% else %}{% translate "Nothing for sale yet. Be the first to sell something." %}{% endif %}</p></div>
 {% endif %}
-<p class="muted small center">Pay the seller directly when you meet. The portal never handles money.</p>
+<p class="hint center form-end">{% translate "Pay the seller directly when you meet. Campus Plus never handles money." %}</p>
 {% endblock %}

@@ -1,50 +1,52 @@
 {% extends 'base.html' %}
-{% block title %}{{ post.title }} · Lost & Found{% endblock %}
+{% load i18n ui %}
+{% block title %}{{ post.title }}&nbsp;· {% translate "Lost & Found" %}{% endblock %}
 {% block content %}
-<a class="muted" href="{% url 'lostfound:feed' %}">← Lost & Found</a>
+<a class="back" href="{% url 'lostfound:feed' %}">{% icon "back" "i-sm" %} {% translate "Lost & Found" %}</a>
 <article class="post post-full">
   <header class="post-head">
-    <span class="avatar">{{ post.user.name|slice:":1"|upper }}</span>
+    <span class="avatar" aria-hidden="true">{{ post.user.name|slice:":1"|upper }}</span>
     <div>
-      <div class="post-user">{{ post.user.name }}</div>
-      <div class="muted small">{{ post.user.get_role_display }}{% if post.user.department %} · {{ post.user.department }}{% endif %}{% if post.user.year %} · Year {{ post.user.year }}{% endif %}</div>
+      <div class="who-name">{{ post.user.name }}</div>
+      <div class="who-meta">{% segs %}{{ post.user.get_role_display }}{% if post.user.department %}&nbsp;· {{ post.user.department }}{% endif %}{% if post.user.year %}&nbsp;· {% blocktranslate with y=post.user.year %}Year {{ y }}{% endblocktranslate %}{% endif %}{% endsegs %}</div>
     </div>
     <span class="tag tag-{{ post.type }}">{{ post.get_type_display }}</span>
   </header>
   {% if post.photo %}<div class="post-media"><img src="{{ post.photo.url }}" alt="{{ post.title }}"></div>{% endif %}
   <div class="post-body">
-    {% if post.status != 'open' %}<div class="flash flash-info">{{ post.get_status_display }}</div>{% endif %}
-    <h1 class="post-h1">{{ post.title }}</h1>
-    <dl class="facts">
-      <dt>Place</dt><dd>{{ post.place }}</dd>
-      <dt>Date</dt><dd>{{ post.date|date:"j M Y" }}</dd>
-      <dt>Posted</dt><dd>{{ post.created_at|date:"j M, g:i A" }}</dd>
-    </dl>
+    <h1>{{ post.title }}</h1>
     {% if post.description %}<p class="post-desc">{{ post.description|linebreaksbr }}</p>{% endif %}
-
-    {% if is_owner %}
-      {% if post.status == 'open' %}
-        <form method="post" action="{% url 'lostfound:returned' post.pk %}">
-          {% csrf_token %}
-          <button class="btn btn-primary btn-block">Mark as returned</button>
-        </form>
-        <small class="hint center">This removes it from the main feed.</small>
-      {% endif %}
-    {% else %}
-      <h2>Contact {{ post.user.get_short_name }}</h2>
-      <div class="contact">
-        <a class="btn btn-primary" href="mailto:{{ post.user.email }}?subject={{ 'Lost & Found: '|add:post.title|urlencode }}">Email</a>
-        {% if post.show_phone and post.user.phone %}
-          <a class="btn btn-ghost" href="tel:{{ post.user.phone }}">Call {{ post.user.phone }}</a>
-        {% endif %}
-      </div>
-    {% endif %}
-
-    {% if user.is_admin_role and post.status == 'open' %}
-      <form method="post" action="{% url 'lostfound:remove' post.pk %}" onsubmit="return confirm('Remove this post from the feed?')">
-        {% csrf_token %}<button class="btn btn-danger btn-block">Remove post (admin)</button>
-      </form>
-    {% endif %}
   </div>
 </article>
+
+<dl class="tb tb-hero" data-module="lf">
+  <div class="tb-no"><dt>{% translate "Sheet" %}</dt><dd><b>{{ post|sheet_no:'LF' }}</b></dd></div>
+  <div class="tb-wide"><dt>{% translate "Place" %}</dt><dd>{{ post.place }}</dd></div>
+  <div><dt>{% translate "Date" %}</dt><dd>{{ post.date|date:"j M Y" }}</dd></div>
+  <div><dt>{% translate "Status" %}</dt><dd><span class="stamp {{ post.status|stamp }}">{{ post.get_status_display }}</span></dd></div>
+</dl>
+
+{% if is_owner %}
+  {% if post.status == 'open' %}
+    <form method="post" action="{% url 'lostfound:returned' post.pk %}" class="btn-row">
+      {% csrf_token %}<button class="btn btn-hue btn-block btn-lg">{% icon "check" %} {% translate "Mark as returned" %}</button>
+    </form>
+    <p class="hint">{% translate "This takes it off the main feed." %}</p>
+  {% endif %}
+  <form method="post" action="{% url 'lostfound:delete' post.pk %}" class="btn-row" onsubmit="return confirm('{% filter escapejs %}{% translate "Delete this post for good?" %}{% endfilter %}')">
+    {% csrf_token %}<button class="link link-danger">{% translate "Delete post" %}</button>
+  </form>
+{% else %}
+  <h2>{% blocktranslate with name=post.user.get_short_name %}Contact {{ name }}{% endblocktranslate %}</h2>
+  <div class="btn-row">
+    <a class="btn btn-hue" href="mailto:{{ post.user.email }}?subject={{ post.title|urlencode }}">{% icon "mail" %} {% translate "Email" %}</a>
+    {% if post.show_phone and post.user.phone %}<a class="btn btn-ghost" href="tel:{{ post.user.phone }}">{% icon "phone" %} {{ post.user.phone }}</a>{% endif %}
+  </div>
+{% endif %}
+
+{% if user.is_admin_role and post.status == 'open' %}
+  <form method="post" action="{% url 'lostfound:remove' post.pk %}" class="btn-row" onsubmit="return confirm('{% filter escapejs %}{% translate "Remove this post from the feed?" %}{% endfilter %}')">
+    {% csrf_token %}<button class="btn btn-danger btn-block">{% translate "Remove post (admin)" %}</button>
+  </form>
+{% endif %}
 {% endblock %}

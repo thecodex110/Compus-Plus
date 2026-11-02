@@ -1,0 +1,20 @@
+{% load i18n ui %}
+<dl class="tb tb-hero">
+  <div class="tb-no"><dt>{% translate "Sheet" %}</dt><dd><b>{{ order|sheet_no:'ORD' }}</b></dd></div>
+  <div class="tb-wide"><dt>{% translate "Shop" %}</dt><dd>{% segs %}{{ order.shop.name }}{% if order.shop.phone and not shop_view %}&nbsp;· <a href="tel:{{ order.shop.phone }}">{{ order.shop.phone }}</a>{% endif %}{% endsegs %}</dd></div>
+  <div><dt>{% translate "Deliver to" %}</dt><dd><b>{{ order.get_delivery_point_display }}</b></dd></div>
+  <div><dt>{% translate "Status" %}</dt><dd><span class="stamp {{ order.status|stamp }}">{{ order.get_status_display }}</span></dd></div>
+  <div><dt>{% translate "Checked by" %}</dt><dd>{% if order.status == 'placed' or order.status == 'rejected' %}—{% else %}{{ order.shop.name }}{% endif %}</dd></div>
+  <div><dt>{% translate "Amount" %}</dt><dd><b>₹{{ order.price|floatformat:0 }}</b> <span class="nowrap">…{{ order.txn_last_digits }}</span></dd></div>
+  {% if order.has_print %}
+    <div class="tb-full"><dt>{% translate "Print" %}</dt><dd>{% segs %}
+      {% if order.file %}<a href="{% url 'printing:download' order.pk 'file' %}" target="_blank" rel="noopener">{{ order.file_name }}</a>
+      {% else %}{{ order.file_name }} <span class="muted small">({% translate "file deleted" %})</span>{% endif %}<br>
+      {% blocktranslate count n=order.pages_to_print %}{{ n }} page{% plural %}{{ n }} pages{% endblocktranslate %}{% if order.page_range %} ({{ order.page_range }}){% endif %} × {{ order.copies }}&nbsp;· {{ order.get_color_display }}&nbsp;· {{ order.get_sides_display }}&nbsp;· {{ order.paper_size }}{% if order.binding != 'none' %}&nbsp;· {{ order.get_binding_display }}{% endif %}
+    {% endsegs %}</dd></div>
+  {% endif %}
+  {% with lines=order.lines.all %}{% if lines %}
+    <div class="tb-full"><dt>{% translate "Stationery" %}</dt><dd>{% for l in lines %}{{ l.name }} × {{ l.quantity }}{% if not forloop.last %}, {% endif %}{% endfor %}</dd></div>
+  {% endif %}{% endwith %}
+  {% if order.note %}<div class="tb-full"><dt>{% translate "Note" %}</dt><dd>{{ order.note }}</dd></div>{% endif %}
+</dl>

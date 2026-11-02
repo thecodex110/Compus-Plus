@@ -1,33 +1,32 @@
 {% extends 'base.html' %}
-{% block title %}My profile · COEP Campus Portal{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "My profile" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<h1>My profile</h1>
-<div class="card">
-  <dl class="facts">
-    <dt>Email</dt><dd>{{ user.email }}</dd>
-    <dt>Role</dt><dd>{{ user.get_role_display }}</dd>
-  </dl>
-</div>
+<div class="ph"><div><h1>{{ user.name }}</h1><div class="ph-sub">{% segs %}{{ user.get_role_display }}&nbsp;· {{ user.email }}{% endsegs %}</div></div></div>
 
-<form method="post" novalidate class="card">
+<form method="post" novalidate class="panel form">
   {% csrf_token %}<input type="hidden" name="form" value="details">
-  <h2>Details</h2>
+  <h2>{% translate "Details" %}</h2>
   {% for field in details %}{% include '_field.html' %}{% endfor %}
-  <button class="btn btn-primary">Save details</button>
+  <div><button class="btn">{% translate "Save details" %}</button></div>
 </form>
 
-<form method="post" novalidate class="card">
+<form method="post" novalidate class="panel form">
   {% csrf_token %}<input type="hidden" name="form" value="password">
-  <h2>Change password</h2>
+  <h2>{% translate "Change password" %}</h2>
   {% for field in password %}{% include '_field.html' %}{% endfor %}
-  <button class="btn btn-primary">Change password</button>
+  <div><button class="btn">{% translate "Change password" %}</button></div>
 </form>
 
 {% if user.role == 'student' %}
-  <div class="card">
-    <h2>Privacy</h2>
-    <p class="small">Your phone number is only shown where you choose: on a Lost & Found post or market listing when you tick “Show my phone”, in the blood directory if you opt in, and to a photocopy shop for an order you place.</p>
-    <a class="btn btn-ghost" href="{% url 'health:me' %}">Blood directory settings</a>
+  <div class="panel panel-tint">
+    <h2>{% translate "Who can see your phone number" %}</h2>
+    <p class="small">{% translate "Only where you choose: on a Lost & Found post or market listing when you tick “Show my phone”, in the blood directory if you opt in, and to a photocopy shop for an order you place." %}</p>
+    <a class="btn btn-ghost btn-sm" href="{% url 'health:me' %}">{% icon "blood" "i-sm" %} {% translate "Blood directory settings" %}</a>
   </div>
 {% endif %}
+
+<form method="post" action="{% url 'accounts:logout' %}">
+  {% csrf_token %}<button class="btn btn-ghost btn-block">{% icon "logout" %} {% translate "Log out" %}</button>
+</form>
 {% endblock %}

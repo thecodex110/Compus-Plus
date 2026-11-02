@@ -1,30 +1,29 @@
 {% extends 'base.html' %}
-{% block title %}Notifications · COEP Campus Portal{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "Notifications" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>Notifications</h1>
-  <button type="button" class="btn btn-ghost" id="enable-alerts" hidden>Turn on alerts</button>
+<div class="ph">
+  <h1>{% translate "Notifications" %}</h1>
+  <div class="ph-actions"><button type="button" class="btn btn-ghost btn-sm" id="enable-alerts" hidden>{% icon "bell" "i-sm" %} {% translate "Turn on alerts" %}</button></div>
 </div>
-<p class="muted small" id="alerts-hint" hidden>Alerts pop up on this device while the portal is open in a tab.</p>
+<p class="hint" id="alerts-hint" hidden>{% translate "Alerts pop up on this device while Campus Plus is open in a tab." %}</p>
 {% if items %}
-  <ul class="list">
+  <ul class="rows">
     {% for n in items %}
-      <li>
-        <a class="row notif {% if not n.read %}is-unread{% endif %} {% if n.urgent %}is-urgent{% endif %}" href="{% url 'notify:open' n.pk %}">
-          <div class="row-main">
-            <div class="row-title">{% if n.urgent %}<span class="pill pill-high">Urgent</span> {% endif %}{{ n.title }}</div>
-            {% if n.body %}<div class="row-sub">{{ n.body }}</div>{% endif %}
-            <div class="row-sub muted">{{ n.created_at|timesince }} ago</div>
-          </div>
-        </a>
-      </li>
+      <li><a class="rec{% if not n.read %} is-unread{% endif %}{% if n.urgent %} is-urgent{% endif %}" href="{% url 'notify:open' n.pk %}">
+        <span class="rec-thumb">{% if n.urgent %}{% icon "alert" %}{% else %}{% icon "bell" %}{% endif %}</span>
+        <div class="rec-main">
+          <div class="rec-title">{{ n.title }}{% if n.urgent %} <span class="stamp st-urgent">{% translate "Urgent" %}</span>{% endif %}</div>
+          {% if n.body %}<div class="rec-sub">{{ n.body }}</div>{% endif %}
+          <div class="rec-meta">{% blocktranslate with t=n.created_at|timesince %}{{ t }} ago{% endblocktranslate %}</div>
+        </div>
+      </a></li>
     {% endfor %}
   </ul>
 {% else %}
-  <p class="empty">You're all caught up.</p>
+  <div class="empty">{% icon "bell" %}<p>{% translate "You're all caught up." %}</p></div>
 {% endif %}
 {% endblock %}
-
 {% block scripts %}
 <script>
 (function () {

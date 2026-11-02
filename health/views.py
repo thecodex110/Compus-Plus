@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.utils.translation import gettext as _
 
 from accounts.decorators import role_required
 from accounts.models import User
@@ -55,13 +56,13 @@ def reveal(request, pk):
                                            at__gte=timezone.now() - timedelta(days=1)).exists()
     if not already:
         if _reveals_today(request.user) >= REVEALS_PER_DAY:
-            messages.error(request, f'You can view at most {REVEALS_PER_DAY} numbers a day. '
-                                    'For a real emergency call 108 or the hospital blood bank.')
+            messages.error(request, _('You can view at most %(limit)s numbers a day. For a real emergency '
+                                      'call 108 or the hospital blood bank.') % {'limit': REVEALS_PER_DAY})
             return redirect(back)
         ContactReveal.objects.create(viewer=request.user, donor=donor)
-        notify(donor.user, f'{request.user.name} viewed your number',
-               f'They searched the blood directory ({request.user.get_role_display()}). '
-               'You can hide yourself any time.', reverse('health:me'))
+        notify(donor.user, lambda: _('%(name)s viewed your number') % {'name': request.user.name},
+               lambda: _('They searched the blood directory (%(role)s). You can hide yourself any time.') % {
+                   'role': request.user.get_role_display()}, reverse('health:me'))
     return redirect(f'{back}#donor-{donor.pk}')
 
 
@@ -71,8 +72,8 @@ def my_entry(request):
     form = DonorForm(request.POST or None, instance=donor or Donor(user=request.user))
     if request.method == 'POST' and form.is_valid():
         form.save()
-        messages.success(request, 'Saved. You are listed in the blood directory.' if form.instance.visible
-                         else 'Saved. You are hidden from the directory.')
+        messages.success(request, _('Saved. You are listed in the blood directory.') if form.instance.visible
+                         else _('Saved. You are hidden from the directory.'))
         return redirect('health:me')
     recent = donor.reveals.select_related('viewer')[:20] if donor else []
     return render(request, 'health/me.html', {'form': form, 'donor': donor, 'recent': recent})
@@ -84,8 +85,8 @@ def toggle_visible(request):
     donor = get_object_or_404(Donor, user=request.user)
     donor.visible = not donor.visible
     donor.save(update_fields=['visible', 'updated_at'])
-    messages.success(request, 'You are now listed in the directory.' if donor.visible
-                     else 'You are now hidden. Nobody can see your blood group or number.')
+    messages.success(request, _('You are now listed in the directory.') if donor.visible
+                     else _('You are now hidden. Nobody can see your blood group or number.'))
     return redirect('health:me')
 
 
@@ -93,7 +94,7 @@ def toggle_visible(request):
 @role_required(R.STUDENT)
 def delete_entry(request):
     Donor.objects.filter(user=request.user).delete()
-    messages.success(request, 'Your blood group entry has been deleted.')
+    messages.success(request, _('Your blood group entry has been deleted.'))
     return redirect('health:me')
 
 

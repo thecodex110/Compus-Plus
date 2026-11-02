@@ -1,56 +1,53 @@
 {% extends 'base.html' %}
-{% block title %}Pay · Order #{{ order.pk }}{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "Pay" %}&nbsp;· {{ order|sheet_no:'ORD' }}{% endblock %}
 {% block content %}
-<h1>Pay {{ shop.name }}</h1>
-<ol class="steps"><li class="done">Document & options</li><li class="on">Price & pay</li><li class="on">Delivery</li></ol>
+<div class="ph"><div><h1>{% blocktranslate with shop=shop.name %}Pay {{ shop }}{% endblocktranslate %}</h1><div class="ph-sub">{{ order|sheet_no:'ORD' }}</div></div></div>
+<ol class="steps"><li class="done">{% translate "What you need" %}</li><li class="on">{% translate "Pay" %}</li><li class="on">{% translate "Delivery" %}</li></ol>
 
-<div class="card">
+<div class="panel">
   <div class="price-big">₹{{ order.price|floatformat:0 }}</div>
-  <div class="muted center small">to pay {{ shop.name }}</div>
+  <p class="muted small">{% translate "to pay, rounded up to the nearest rupee" %}</p>
   {% with b=order.price_breakdown %}
-  <table class="breakdown">
-    <tr><td>📄 {{ order.file_name|truncatechars:34 }}</td><td></td></tr>
-    <tr><td>{{ b.pages }} page{{ b.pages|pluralize }}{% if order.page_range %} ({{ order.page_range }}){% endif %} × ₹{{ b.rate }}</td><td>₹{{ b.printing }}</td></tr>
-    <tr><td class="muted">{{ order.get_color_display }} · {{ order.get_sides_display }} · {{ order.paper_size }}</td><td></td></tr>
-    {% if order.binding != 'none' %}<tr><td>{{ order.get_binding_display }}</td><td>₹{{ b.binding }}</td></tr>{% endif %}
-    <tr><td>× {{ b.copies }} cop{{ b.copies|pluralize:"y,ies" }}</td><td>₹{{ b.subtotal }}</td></tr>
-    {% if b.delivery != '0.00' %}<tr><td>Delivery</td><td>₹{{ b.delivery }}</td></tr>{% endif %}
-    <tr class="total"><td>Total (rounded up)</td><td>₹{{ order.price|floatformat:0 }}</td></tr>
+  <table class="ledger">
+    {% if order.has_print %}
+      <tr><td>{{ order.file_name|truncatechars:34 }}<br><span class="muted small">{{ order.get_color_display }}&nbsp;· {{ order.get_sides_display }}&nbsp;· {{ order.paper_size }}{% if order.binding != 'none' %}&nbsp;· {{ order.get_binding_display }}{% endif %}</span></td><td></td></tr>
+      <tr><td>{% blocktranslate count n=b.pages %}{{ n }} page{% plural %}{{ n }} pages{% endblocktranslate %}{% if order.page_range %} ({{ order.page_range }}){% endif %} × ₹{{ b.rate }}</td><td>₹{{ b.printing }}</td></tr>
+      {% if order.binding != 'none' %}<tr><td>{{ order.get_binding_display }}</td><td>₹{{ b.binding }}</td></tr>{% endif %}
+      <tr><td>× {% blocktranslate count n=b.copies %}{{ n }} copy{% plural %}{{ n }} copies{% endblocktranslate %}</td><td>₹{{ b.subtotal }}</td></tr>
+    {% endif %}
+    {% for line in order.lines.all %}<tr><td>{{ line.name }} × {{ line.quantity }}</td><td>₹{{ line.total }}</td></tr>{% endfor %}
+    {% if b.delivery != '0.00' %}<tr><td>{% translate "Delivery" %}</td><td>₹{{ b.delivery }}</td></tr>{% endif %}
+    <tr class="total"><td>{% translate "Total" %}</td><td>₹{{ order.price|floatformat:0 }}</td></tr>
   </table>
   {% endwith %}
-  <a class="link small" href="{% url 'printing:edit_options' order.pk %}">Change options</a>
+  <div class="btn-row"><a class="link" href="{% url 'printing:edit_options' order.pk %}">{% icon "edit" "i-sm" %} {% translate "Change the order" %}</a></div>
 </div>
 
-<div class="card qr-card">
-  <h2>4 · Scan & pay with any UPI app</h2>
-  {% if shop.qr_image %}<img class="qr" src="{{ shop.qr_image.url }}" alt="{{ shop.name }} payment QR code">
-  {% else %}<p class="flash flash-error">This shop has not added a QR code. Pick another shop.</p>{% endif %}
-  {% if shop.upi_id %}<div class="muted small">UPI ID: <b>{{ shop.upi_id }}</b></div>{% endif %}
-  <p class="small">Pay exactly <b>₹{{ order.price|floatformat:0 }}</b>. The money goes straight to the shop — the portal never handles payments.</p>
+<div class="panel center">
+  <h2>{% translate "Scan and pay with any UPI app" %}</h2>
+  {% if shop.qr_image %}<img class="qr" src="{{ shop.qr_image.url }}" alt="{% blocktranslate with shop=shop.name %}{{ shop }} payment QR code{% endblocktranslate %}">
+  {% else %}<div class="flash flash-error"><span>{% translate "This shop has not added a QR code. Pick another shop." %}</span></div>{% endif %}
+  {% if shop.upi_id %}<p class="small">UPI ID: <b>{{ shop.upi_id }}</b></p>{% endif %}
+  <p class="small">{% blocktranslate with amount=order.price|floatformat:0 %}Pay exactly <b>₹{{ amount }}</b>. The money goes straight to the shop.{% endblocktranslate %}</p>
 </div>
 
-<form method="post" enctype="multipart/form-data" novalidate class="card">
+<form method="post" enctype="multipart/form-data" novalidate class="panel form">
   {% csrf_token %}
-  <h2>5 · Proof of payment</h2>
-  <div class="field">
+  <h2>{% translate "Proof of payment" %}</h2>
+  <div class="field{% if form.payment_screenshot.errors %} has-error{% endif %}">
     <span class="label">{{ form.payment_screenshot.label }}</span>
-    <div class="file-drop">
-      <span id="shot-name">🖼️ Tap to upload the screenshot</span>
-      {{ form.payment_screenshot }}
-    </div>
+    <div class="drop">{% icon "upload" %}<span id="shot-name">{% translate "Tap to upload the screenshot" %}</span>{{ form.payment_screenshot }}</div>
     {% for e in form.payment_screenshot.errors %}<small class="err">{{ e }}</small>{% endfor %}
   </div>
   {% include '_field.html' with field=form.txn_last_digits %}
-
-  <h2>6 · Delivery point</h2>
-  {% include 'printing/_radios.html' with field=form.delivery_point %}
-
-  <small class="hint">By placing the order you share your name, department and phone with {{ shop.name }} so they can deliver it.</small>
-  <button class="btn btn-primary btn-block btn-lg">Place order</button>
+  {% include 'printing/_opts.html' with field=form.delivery_point %}
+  <p class="hint">{% blocktranslate with shop=shop.name %}Placing the order shares your name, department and phone with {{ shop }} so they can deliver it.{% endblocktranslate %}</p>
+  <button class="btn btn-hue btn-block btn-lg">{% translate "Place order" %}</button>
 </form>
 
-<form method="post" action="{% url 'printing:discard' order.pk %}" class="center" onsubmit="return confirm('Discard this order?')">
-  {% csrf_token %}<button class="link muted">Discard order</button>
+<form method="post" action="{% url 'printing:discard' order.pk %}" class="center" onsubmit="return confirm('{% filter escapejs %}{% translate "Discard this order?" %}{% endfilter %}')">
+  {% csrf_token %}<button class="link link-danger">{% translate "Discard order" %}</button>
 </form>
 {% endblock %}
 
@@ -58,7 +55,7 @@
 <script>
 document.getElementById('id_payment_screenshot').addEventListener('change', function (e) {
   var f = e.target.files[0];
-  if (f) document.getElementById('shot-name').textContent = '🖼️ ' + f.name;
+  if (f) document.getElementById('shot-name').textContent = f.name;
 });
 </script>
 {% endblock %}

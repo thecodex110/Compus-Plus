@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
-{% block title %}Add user · Admin{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "Add an account" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<a class="muted" href="{% url 'panel:users' %}">← Users</a>
-<h1>Add an account</h1>
-<p class="muted small">Use this for BVG staff, photocopy shops and admins. Students and teachers normally sign up themselves with their COEP email. Share the password with the person privately and ask them to change it from their profile.</p>
-<form method="post" novalidate class="card">
+<a class="back" href="{% url 'panel:users' %}">{% icon "back" "i-sm" %} {% translate "Users" %}</a>
+<div class="ph"><div><h1>{% translate "Add an account" %}</h1><div class="ph-sub">{% translate "For BVG staff, photocopy shops and admins. Students and teachers sign up themselves." %}</div></div></div>
+<form method="post" novalidate class="panel form">
   {% csrf_token %}
   {% include '_field.html' with field=form.role %}
   {% include '_field.html' with field=form.name %}
@@ -16,6 +16,7 @@
   </div>
   {% include '_field.html' with field=form.password1 %}
   {% include '_field.html' with field=form.password2 %}
-  <button class="btn btn-primary btn-block">Create account</button>
+  <p class="hint">{% translate "Share the password privately and ask them to change it from their profile." %}</p>
+  <button class="btn btn-block btn-lg">{% translate "Create account" %}</button>
 </form>
 {% endblock %}

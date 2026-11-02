@@ -1,27 +1,27 @@
 {% extends 'base.html' %}
-{% block title %}Hospitals · Admin{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "Hospitals" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>Hospitals</h1>
-  <a class="btn btn-primary" href="{% url 'panel:hospital_new' %}">+ Add</a>
+<div class="ph">
+  <h1>{% translate "Hospitals" %}</h1>
+  <div class="ph-actions"><a class="btn" href="{% url 'panel:hospital_new' %}">{% icon "plus" %} {% translate "Add" %}</a></div>
 </div>
-<ul class="list">
-  {% for h in hospitals %}
-    <li>
-      <a class="row" href="{% url 'panel:hospital_edit' h.pk %}">
-        <div class="row-main">
-          <div class="row-title">{{ h.name }}</div>
-          <div class="row-sub muted">{{ h.distance_km }} km · {{ h.address }}</div>
-          <div class="row-sub {% if not h.phone and not h.emergency_phone %}warn{% else %}muted{% endif %}">
-            {% if h.emergency_phone %}Emergency {{ h.emergency_phone }}{% elif h.phone %}{{ h.phone }}{% else %}No phone number yet{% endif %}
-          </div>
+{% if hospitals %}
+  <ul class="rows">
+    {% for h in hospitals %}
+      <li><a class="rec" href="{% url 'panel:hospital_edit' h.pk %}">
+        <span class="rec-no">{{ h.distance_km }} km</span>
+        <div class="rec-main">
+          <div class="rec-title">{{ h.name }}</div>
+          <div class="rec-sub">{{ h.address }}</div>
+          <div class="rec-meta {% if not h.phone and not h.emergency_phone %}warn{% endif %}">{% if h.emergency_phone %}{% translate "Emergency" %} {{ h.emergency_phone }}{% elif h.phone %}{{ h.phone }}{% else %}{% translate "No phone number yet" %}{% endif %}</div>
         </div>
-        <span class="muted">Edit</span>
-      </a>
-    </li>
-  {% empty %}
-    <p class="empty">No hospitals yet.</p>
-  {% endfor %}
-</ul>
-<p class="small center"><a href="{% url 'health:hospitals' %}">See the public page →</a></p>
+        <span class="rec-side">{% icon "edit" %}</span>
+      </a></li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div class="empty">{% icon "hospital" %}<p>{% translate "No hospitals yet." %}</p></div>
+{% endif %}
+<p class="small center form-end"><a href="{% url 'health:hospitals' %}">{% translate "See the public page" %}</a></p>
 {% endblock %}

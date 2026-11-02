@@ -21,4 +21,6 @@ urlpatterns = [
     path('shop/orders/<int:pk>/reject/', views.shop_reject, name='shop_reject'),
     path('shop/toggle/', views.toggle_open, name='toggle_open'),
     path('shop/settings/', views.shop_settings, name='shop_settings'),
+    path('shop/stationery/', views.shop_stationery, name='shop_stationery'),
+    path('shop/stationery/<int:pk>/', views.stationery_update, name='stationery_update'),
 ]

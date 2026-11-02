@@ -3,6 +3,7 @@ import uuid
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 MAX_PHOTOS = 5
 
@@ -13,29 +14,29 @@ def photo_path(instance, filename):
 
 class Listing(models.Model):
     class Category(models.TextChoices):
-        BOOKS = 'books', 'Books & Notes'
-        ELECTRONICS = 'electronics', 'Electronics'
-        INSTRUMENTS = 'instruments', 'Calculators & Instruments'
-        LAB = 'lab', 'Lab & Drawing gear'
-        CYCLES = 'cycles', 'Cycles'
-        HOSTEL = 'hostel', 'Hostel & Room'
-        CLOTHING = 'clothing', 'Clothing'
-        OTHER = 'other', 'Other'
+        BOOKS = 'books', _('Books & Notes')
+        ELECTRONICS = 'electronics', _('Electronics')
+        INSTRUMENTS = 'instruments', _('Calculators & Instruments')
+        LAB = 'lab', _('Lab & Drawing gear')
+        CYCLES = 'cycles', _('Cycles')
+        HOSTEL = 'hostel', _('Hostel & Room')
+        CLOTHING = 'clothing', _('Clothing')
+        OTHER = 'other', _('Other')
 
     class Condition(models.TextChoices):
-        NEW = 'new', 'New'
-        LIKE_NEW = 'like_new', 'Like new'
-        GOOD = 'good', 'Good'
-        FAIR = 'fair', 'Fair'
+        NEW = 'new', _('New')
+        LIKE_NEW = 'like_new', _('Like new')
+        GOOD = 'good', _('Good')
+        FAIR = 'fair', _('Fair')
 
     class Status(models.TextChoices):
-        AVAILABLE = 'available', 'Available'
-        SOLD = 'sold', 'Sold'
-        REMOVED = 'removed', 'Removed by admin'
+        AVAILABLE = 'available', _('Available')
+        SOLD = 'sold', _('Sold')
+        REMOVED = 'removed', _('Removed by admin')
 
     seller = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='listings')
     title = models.CharField(max_length=80)
-    price = models.PositiveIntegerField(help_text='In rupees. 0 = free')
+    price = models.PositiveIntegerField(help_text=_('In rupees. 0 = free'))
     category = models.CharField(max_length=12, choices=Category.choices)
     condition = models.CharField(max_length=9, choices=Condition.choices)
     description = models.TextField(max_length=1000, blank=True)

@@ -1,26 +1,28 @@
 {% extends 'base.html' %}
-{% block title %}My posts · Lost & Found{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "My posts" %}&nbsp;· {% translate "Lost & Found" %}{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>My posts</h1>
-  <a class="btn btn-primary" href="{% url 'lostfound:new' %}">+ Post</a>
+<a class="back" href="{% url 'lostfound:feed' %}">{% icon "back" "i-sm" %} {% translate "Lost & Found" %}</a>
+<div class="ph">
+  <h1>{% translate "My posts" %}</h1>
+  <div class="ph-actions"><a class="btn btn-hue" href="{% url 'lostfound:new' %}">{% icon "plus" %} {% translate "Post" %}</a></div>
 </div>
 {% if posts %}
-  <ul class="list">
+  <ul class="rows">
     {% for post in posts %}
       <li>
-        <a class="row" href="{% url 'lostfound:detail' post.pk %}">
-          {% if post.photo %}<img class="thumb" src="{{ post.photo.url }}" alt="">{% else %}<span class="thumb"></span>{% endif %}
-          <div class="row-main">
-            <div class="row-title"><span class="tag tag-{{ post.type }}">{{ post.get_type_display }}</span> {{ post.title }}</div>
-            <div class="row-sub muted">📍 {{ post.place }} · {{ post.date|date:"j M" }}</div>
+        <a class="rec" href="{% url 'lostfound:detail' post.pk %}">
+          {% if post.photo %}<img class="rec-thumb" src="{{ post.photo.url }}" alt="">{% else %}<span class="rec-thumb">{% icon "lostfound" %}</span>{% endif %}
+          <div class="rec-main">
+            <div class="rec-title"><span class="tag tag-{{ post.type }}">{{ post.get_type_display }}</span> {{ post.title }}</div>
+            <div class="rec-meta">{% segs %}{{ post|sheet_no:'LF' }}&nbsp;· {{ post.place }}&nbsp;· {{ post.date|date:"j M" }}{% endsegs %}</div>
           </div>
-          <span class="status {% if post.status == 'open' %}status-pending{% else %}status-done{% endif %}">{{ post.get_status_display }}</span>
+          <span class="rec-side"><span class="stamp {{ post.status|stamp }}">{{ post.get_status_display }}</span></span>
         </a>
       </li>
     {% endfor %}
   </ul>
 {% else %}
-  <p class="empty">You haven't posted anything yet.</p>
+  <div class="empty">{% icon "lostfound" %}<p>{% translate "You haven't posted anything yet." %}</p></div>
 {% endif %}
 {% endblock %}

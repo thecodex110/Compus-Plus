@@ -15,6 +15,8 @@ urlpatterns = [
     path('hospitals/new/', views.hospital_form, name='hospital_new'),
     path('hospitals/<int:pk>/', views.hospital_form, name='hospital_edit'),
     path('hospitals/<int:pk>/delete/', views.delete_hospital, name='hospital_delete'),
+    path('shops/', views.shops, name='shops'),
+    path('shops/<int:pk>/', views.shop_edit, name='shop_edit'),
     path('moderate/', views.moderate, name='moderate'),
     path('moderate/<str:kind>/<int:pk>/remove/', views.remove_item, name='remove_item'),
 ]

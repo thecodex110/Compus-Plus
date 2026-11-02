@@ -1,0 +1,5 @@
+<div class="field">
+  <span class="label">{{ field.label }}</span>
+  <div class="opts">{% for radio in field %}<label class="opt">{{ radio.tag }}<span>{{ radio.choice_label }}</span></label>{% endfor %}</div>
+  {% for e in field.errors %}<small class="err">{{ e }}</small>{% endfor %}
+</div>

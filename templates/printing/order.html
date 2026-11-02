@@ -1,24 +1,15 @@
 {% extends 'base.html' %}
-{% block title %}Order #{{ order.pk }} · Print{% endblock %}
+{% load i18n ui %}
+{% block title %}{{ order|sheet_no:'ORD' }}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<a class="muted" href="{% url 'printing:mine' %}">← My orders</a>
-<div class="card">
-  <div class="detail-head">
-    <h1>Order #{{ order.pk }}</h1>
-    <span class="status pstatus-{{ order.status }}">{{ order.get_status_display }}</span>
-  </div>
-  <div class="muted">{{ order.shop.name }}{% if order.shop.phone %} · <a href="tel:{{ order.shop.phone }}">{{ order.shop.phone }}</a>{% endif %}</div>
-
-  {% if order.status == 'rejected' %}
-    <div class="flash flash-error">Rejected by the shop: {{ order.reject_reason }}</div>
-  {% else %}
-    <ol class="tracker">
-      {% for label, on in steps %}<li class="{% if on %}on{% endif %}"><span></span>{{ label }}</li>{% endfor %}
-    </ol>
-  {% endif %}
-  {% include 'printing/_order_facts.html' %}
-</div>
-
-<h2>Timeline</h2>
+<a class="back" href="{% url 'printing:mine' %}">{% icon "back" "i-sm" %} {% translate "My orders" %}</a>
+<div class="ph"><h1>{{ order.summary|default:_("Order") }}</h1></div>
+{% if order.status == 'rejected' %}
+  <div class="flash flash-error">{% icon "alert" %}<span>{% blocktranslate with reason=order.reject_reason %}Rejected by the shop: {{ reason }}{% endblocktranslate %}</span></div>
+{% else %}
+  <ol class="stages">{% for label, on, now in steps %}<li class="{% if now %}now{% elif on %}on{% endif %}">{{ label }}</li>{% endfor %}</ol>
+{% endif %}
+{% include 'printing/_order_tb.html' %}
+<h2>{% translate "History" %}</h2>
 {% include 'printing/_timeline.html' %}
 {% endblock %}

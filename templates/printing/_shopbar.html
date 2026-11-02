@@ -1,0 +1,12 @@
+{% load i18n %}
+<form method="post" action="{% url 'printing:toggle_open' %}" class="shopbar {% if shop.is_open %}is-open{% endif %}">
+  {% csrf_token %}
+  <div>
+    <div class="shopbar-name">{{ shop.name }}</div>
+    <div class="shopbar-state">{% if shop.is_open %}{% translate "Open — students can order" %}{% else %}{% translate "Closed — students can't order" %}{% endif %}</div>
+  </div>
+  <button class="switch" role="switch" aria-checked="{{ shop.is_open|yesno:'true,false' }}" aria-label="{% translate 'Shop open' %}"><span></span></button>
+</form>
+{% if not shop.qr_image %}
+  <div class="flash flash-error"><span>{% url 'printing:shop_settings' as settings_url %}{% blocktranslate %}Add your payment QR code in <a href="{{ settings_url }}">Settings</a> before opening.{% endblocktranslate %}</span></div>
+{% endif %}

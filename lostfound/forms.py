@@ -3,6 +3,7 @@ from io import BytesIO
 from django import forms
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from PIL import Image, ImageOps, UnidentifiedImageError
 
 from .models import Post
@@ -17,7 +18,7 @@ def compress_image(upload):
         img = Image.open(upload)
         img = ImageOps.exif_transpose(img).convert('RGB')
     except (UnidentifiedImageError, OSError):
-        raise forms.ValidationError('That file is not a valid image.')
+        raise forms.ValidationError(_('That file is not a valid image.'))
     img.thumbnail((MAX_SIDE, MAX_SIDE))
     buf = BytesIO()
     img.save(buf, 'JPEG', quality=82, optimize=True)
@@ -31,12 +32,12 @@ class PostForm(forms.ModelForm):
         widgets = {
             'type': forms.RadioSelect,
             'photo': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
-            'title': forms.TextInput(attrs={'placeholder': 'e.g. Black HP laptop charger'}),
-            'description': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Colour, brand, stickers, anything that helps identify it'}),
-            'place': forms.TextInput(attrs={'placeholder': 'e.g. Library reading hall'}),
+            'title': forms.TextInput(attrs={'placeholder': _('e.g. Black HP laptop charger')}),
+            'description': forms.Textarea(attrs={'rows': 3, 'placeholder': _('Colour, brand, stickers, anything that helps identify it')}),
+            'place': forms.TextInput(attrs={'placeholder': _('e.g. Library reading hall')}),
             'date': forms.DateInput(attrs={'type': 'date'}),
         }
-        labels = {'show_phone': 'Show my phone number on this post'}
+        labels = {'show_phone': _('Show my phone number on this post')}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -48,17 +49,17 @@ class PostForm(forms.ModelForm):
         if not photo or not hasattr(photo, 'content_type'):
             return photo
         if photo.size > MAX_UPLOAD_MB * 1024 * 1024:
-            raise forms.ValidationError(f'Photo must be under {MAX_UPLOAD_MB} MB.')
+            raise forms.ValidationError(_('Photo must be under %(MAX_UPLOAD_MB)s MB.') % {'MAX_UPLOAD_MB': MAX_UPLOAD_MB})
         return compress_image(photo)
 
     def clean_date(self):
         date = self.cleaned_data['date']
         if date > timezone.localdate():
-            raise forms.ValidationError('Date cannot be in the future.')
+            raise forms.ValidationError(_('Date cannot be in the future.'))
         return date
 
     def clean(self):
         data = super().clean()
         if data.get('type') == Post.Type.FOUND and not data.get('photo'):
-            self.add_error('photo', 'Add a photo so the owner can recognise their item.')
+            self.add_error('photo', _('Add a photo so the owner can recognise their item.'))
         return data

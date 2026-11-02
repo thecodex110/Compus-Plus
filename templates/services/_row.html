@@ -1,15 +1,13 @@
+{% load i18n ui %}
 <li>
-  <a class="row {% if sr.is_high %}row-high{% endif %}" href="{% url 'services:detail' sr.pk %}">
-    <div class="row-main">
-      <div class="row-title">
-        {% if sr.is_high %}<span class="pill pill-high">High</span>{% endif %}
-        {{ sr.get_category_display }} <span class="muted">#{{ sr.pk }}</span>
-      </div>
-      <div class="row-sub">{{ sr.location }}</div>
-      {% if sr.note %}<div class="row-note">“{{ sr.note }}”</div>{% endif %}
-      {% if staff_view %}<div class="row-sub muted">by {{ sr.user.name }} · {{ sr.created_at|timesince }} ago</div>
-      {% else %}<div class="row-sub muted">{{ sr.created_at|date:"j M, g:i A" }}</div>{% endif %}
+  <a class="rec{% if sr.is_high and sr.is_open %} is-urgent{% endif %}" href="{% url 'services:detail' sr.pk %}">
+    <span class="rec-no">{{ sr|sheet_no:'REQ' }}</span>
+    <div class="rec-main">
+      <div class="rec-title">{{ sr.get_category_display }}{% if sr.is_high and sr.is_open %} <span class="stamp st-urgent">{% translate "Urgent" %}</span>{% endif %}</div>
+      <div class="rec-sub">{% segs %}{{ sr.location }}{% endsegs %}</div>
+      {% if sr.note %}<div class="rec-note">“{{ sr.note }}”</div>{% endif %}
+      <div class="rec-meta">{% segs %}{% if staff_view %}{{ sr.user.name }}&nbsp;· {% blocktranslate with t=sr.created_at|timesince %}{{ t }} ago{% endblocktranslate %}{% else %}{{ sr.created_at|date:"j M, g:i A" }}{% endif %}{% endsegs %}</div>
     </div>
-    <span class="status status-{{ sr.status }}">{{ sr.get_status_display }}</span>
+    <span class="rec-side"><span class="stamp {{ sr.status|stamp }}">{{ sr.get_status_display }}</span></span>
   </a>
 </li>

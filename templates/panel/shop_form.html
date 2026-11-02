@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load i18n ui %}
+{% block title %}{{ shop.name }}&nbsp;· Campus Plus{% endblock %}
+{% block content %}
+<a class="back" href="{% url 'panel:shops' %}">{% icon "back" "i-sm" %} {% translate "Shops" %}</a>
+<div class="ph"><div><h1>{{ shop.name }}</h1><div class="ph-sub">{{ shop.owner.email }}</div></div></div>
+<form method="post" novalidate class="panel form">
+  {% csrf_token %}
+  {% include '_field.html' with field=form.name %}
+  {% include '_field.html' with field=form.location %}
+  {% include '_field.html' with field=form.phone %}
+  <label class="check">{{ form.is_open }} <span>{{ form.is_open.label }}</span></label>
+  {% for e in form.is_open.errors %}<small class="err">{{ e }}</small>{% endfor %}
+  <p class="hint">{% translate "Prices, the QR code and stationery are managed by the shop itself. To stop a shop from logging in, deactivate its account under Users." %}</p>
+  <button class="btn btn-block btn-lg">{% translate "Save" %}</button>
+</form>
+{% endblock %}

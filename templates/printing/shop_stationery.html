@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load i18n ui %}
+{% block title %}{% translate "Stationery" %}&nbsp;· {{ shop.name }}{% endblock %}
+{% block content %}
+<div class="ph"><div><h1>{% translate "Stationery" %}</h1><div class="ph-sub">{% translate "What students can order besides printing." %}</div></div></div>
+
+<form method="post" novalidate class="panel form">
+  {% csrf_token %}
+  <h2>{% translate "Add an item" %}</h2>
+  {% include '_field.html' with field=form.name %}
+  <div class="row2">
+    {% include '_field.html' with field=form.price %}
+    <label class="check check-end">{{ form.in_stock }} <span>{% translate "In stock" %}</span></label>
+  </div>
+  <div><button class="btn btn-hue">{% icon "plus" %} {% translate "Add item" %}</button></div>
+</form>
+
+{% if items %}
+  <ul class="rows">
+    {% for item in items %}
+      <li class="rec{% if not item.in_stock %} is-off{% endif %}">
+        <span class="rec-thumb">{% icon "pencil" %}</span>
+        <div class="rec-main">
+          <div class="rec-title">{{ item.name }}</div>
+          <form method="post" action="{% url 'printing:stationery_update' item.pk %}" class="qty form-end-sm">
+            {% csrf_token %}<input type="hidden" name="action" value="price">
+            <label class="sr" for="price-{{ item.pk }}">{% translate "Price" %}</label>
+            ₹<input id="price-{{ item.pk }}" type="number" name="price" min="0" step="0.5" value="{{ item.price }}">
+            <button class="btn btn-ghost btn-sm">{% translate "Save" %}</button>
+          </form>
+        </div>
+        <div class="rec-side">
+          <form method="post" action="{% url 'printing:stationery_update' item.pk %}">{% csrf_token %}<input type="hidden" name="action" value="toggle">
+            <button class="stamp {% if item.in_stock %}st-done{% else %}st-void{% endif %}" title="{% translate 'Tap to switch' %}">{% if item.in_stock %}{% translate "In stock" %}{% else %}{% translate "Out of stock" %}{% endif %}</button></form>
+          <form method="post" action="{% url 'printing:stationery_update' item.pk %}" onsubmit="return confirm('{% filter escapejs %}{% translate "Remove this item?" %}{% endfilter %}')">{% csrf_token %}<input type="hidden" name="action" value="delete">
+            <button class="link link-danger small">{% translate "Remove" %}</button></form>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <div class="empty">{% icon "pencil" %}<p>{% translate "No stationery yet. Add pens, notebooks, files, lab journals…" %}</p></div>
+{% endif %}
+{% endblock %}

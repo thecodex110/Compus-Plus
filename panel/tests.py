@@ -113,6 +113,18 @@ class PanelTests(TestCase):
         self.client.post(reverse('panel:hospital_delete', args=[h.pk]))
         self.assertFalse(Hospital.objects.exists())
 
+    def test_shop_counts_are_not_multiplied_by_stationery(self):
+        from printing.models import PrintOrder, StationeryItem
+        owner = make_user('sh@coeptech.ac.in', role=User.Role.SHOP)
+        shop = Shop.objects.create(owner=owner, name='Gate')
+        for i in range(3):
+            StationeryItem.objects.create(shop=shop, name=f'Item {i}', price=5)
+        student = make_user('st@coeptech.ac.in')
+        for status in ('placed', 'verified', 'delivered'):
+            PrintOrder.objects.create(student=student, shop=shop, price=10, status=status)
+        row = self.client.get(reverse('panel:shops')).context['shops'][0]
+        self.assertEqual((row.active, row.delivered, row.items), (2, 1, 3))
+
     def test_moderate_remove(self):
         p = Post.objects.create(user=make_user('s@coeptech.ac.in'), type='lost', title='Bag', place='Gate')
         self.client.post(reverse('panel:remove_item', args=['post', p.pk]))

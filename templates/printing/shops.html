@@ -1,44 +1,44 @@
 {% extends 'base.html' %}
-{% block title %}Print · COEP Campus Portal{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "Print & stationery" %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>Print & Photocopy</h1>
-  <a class="btn btn-ghost" href="{% url 'printing:mine' %}">My orders</a>
+<div class="ph">
+  <h1>{% translate "Print & stationery" %}</h1>
+  <div class="ph-actions"><a class="btn btn-ghost" href="{% url 'printing:mine' %}">{% translate "My orders" %}</a></div>
 </div>
 
 {% if active %}
-  <div class="card card-tint">
-    <b>Active orders</b>
-    <ul class="mini-list">
-      {% for o in active %}
-        <li><a href="{% url 'printing:order' o.pk %}">#{{ o.pk }} · {{ o.shop.name }}</a> <span class="status pstatus-{{ o.status }}">{{ o.get_status_display }}</span></li>
-      {% endfor %}
-    </ul>
-  </div>
+  <h2>{% translate "On the way" %}</h2>
+  <ul class="rows">
+    {% for o in active %}
+      <li><a class="rec" href="{% url 'printing:order' o.pk %}">
+        <span class="rec-no">{{ o|sheet_no:'ORD' }}</span>
+        <div class="rec-main"><div class="rec-title">{{ o.shop.name }}</div><div class="rec-meta">{% segs %}{{ o.summary }}&nbsp;· {{ o.get_delivery_point_display }}{% endsegs %}</div></div>
+        <span class="rec-side"><span class="stamp {{ o.status|stamp }}">{{ o.get_status_display }}</span></span>
+      </a></li>
+    {% endfor %}
+  </ul>
 {% endif %}
 
-<h2>1 · Choose a shop</h2>
+<h2>{% translate "Choose a shop" %}</h2>
 {% if shops %}
-  <ul class="list">
+  <ul class="rows">
     {% for shop in shops %}
       <li>
-        {% if shop.accepts_orders %}
-          <a class="row shop-row" href="{% url 'printing:new' shop.pk %}">
-        {% else %}
-          <div class="row shop-row is-closed">
-        {% endif %}
-          <div class="row-main">
-            <div class="row-title">{{ shop.name }}</div>
-            {% if shop.location %}<div class="row-sub muted">📍 {{ shop.location }}</div>{% endif %}
-            <div class="row-sub muted">B/W ₹{{ shop.bw_single }}/page · Colour ₹{{ shop.color_single }}/page</div>
+        {% if shop.accepts_orders %}<a class="rec" href="{% url 'printing:new' shop.pk %}">{% else %}<div class="rec is-off">{% endif %}
+          <span class="rec-thumb">{% icon "store" %}</span>
+          <div class="rec-main">
+            <div class="rec-title">{{ shop.name }}</div>
+            {% if shop.location %}<div class="rec-sub">{% segs %}{{ shop.location }}{% endsegs %}</div>{% endif %}
+            <div class="rec-meta">{% segs %}{% blocktranslate with bw=shop.bw_single c=shop.color_single %}B/W ₹{{ bw }}&nbsp;· Colour ₹{{ c }} per page{% endblocktranslate %}{% if shop.stationery.exists %}&nbsp;· {% translate "Stationery" %}{% endif %}{% endsegs %}</div>
           </div>
-          <span class="open-badge {% if shop.accepts_orders %}is-open{% endif %}">{% if shop.accepts_orders %}Open{% else %}Closed{% endif %}</span>
+          <span class="rec-side"><span class="badge {% if shop.accepts_orders %}badge-open{% else %}badge-closed{% endif %}">{% if shop.accepts_orders %}{% translate "Open" %}{% else %}{% translate "Closed" %}{% endif %}</span></span>
         {% if shop.accepts_orders %}</a>{% else %}</div>{% endif %}
       </li>
     {% endfor %}
   </ul>
 {% else %}
-  <p class="empty">No shops have joined yet.</p>
+  <div class="empty">{% icon "store" %}<p>{% translate "No shops have joined yet." %}</p></div>
 {% endif %}
-<p class="muted small center">You pay the shop directly with their QR code. The portal never takes your money.</p>
+<p class="hint center form-end">{% translate "You pay the shop directly with its own QR code. Campus Plus never takes your money." %}</p>
 {% endblock %}

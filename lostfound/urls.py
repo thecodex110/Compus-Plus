@@ -11,4 +11,5 @@ urlpatterns = [
     path('<int:pk>/', views.detail, name='detail'),
     path('<int:pk>/returned/', views.mark_returned, name='returned'),
     path('<int:pk>/remove/', views.remove, name='remove'),
+    path('<int:pk>/delete/', views.delete_post, name='delete'),
 ]

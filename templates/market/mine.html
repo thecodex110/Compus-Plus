@@ -1,26 +1,28 @@
 {% extends 'base.html' %}
-{% block title %}My listings · COEP Market{% endblock %}
+{% load i18n ui %}
+{% block title %}{% translate "My listings" %}&nbsp;· {% translate "COEP Market" %}{% endblock %}
 {% block content %}
-<div class="page-head">
-  <h1>My listings</h1>
-  <a class="btn btn-primary" href="{% url 'market:sell' %}">+ Sell</a>
+<a class="back" href="{% url 'market:browse' %}">{% icon "back" "i-sm" %} {% translate "COEP Market" %}</a>
+<div class="ph">
+  <h1>{% translate "My listings" %}</h1>
+  <div class="ph-actions"><a class="btn btn-hue" href="{% url 'market:sell' %}">{% icon "plus" %} {% translate "Sell" %}</a></div>
 </div>
 {% if listings %}
-  <ul class="list">
+  <ul class="rows">
     {% for l in listings %}
       <li>
-        <a class="row" href="{% url 'market:detail' l.pk %}">
-          {% with photo=l.cover %}{% if photo %}<img class="thumb" src="{{ photo.image.url }}" alt="">{% else %}<span class="thumb"></span>{% endif %}{% endwith %}
-          <div class="row-main">
-            <div class="row-title">{{ l.title }}</div>
-            <div class="row-sub muted">{% if l.price %}₹{{ l.price }}{% else %}Free{% endif %} · {{ l.get_category_display }}</div>
+        <a class="rec" href="{% url 'market:detail' l.pk %}">
+          {% with photo=l.cover %}{% if photo %}<img class="rec-thumb" src="{{ photo.image.url }}" alt="">{% else %}<span class="rec-thumb">{% icon "market" %}</span>{% endif %}{% endwith %}
+          <div class="rec-main">
+            <div class="rec-title">{{ l.title }}</div>
+            <div class="rec-meta">{% segs %}{{ l|sheet_no:'MKT' }}&nbsp;· {% if l.price %}₹{{ l.price }}{% else %}{% translate "Free" %}{% endif %}&nbsp;· {{ l.get_category_display }}{% endsegs %}</div>
           </div>
-          <span class="status {% if l.status == 'available' %}status-accepted{% else %}status-done{% endif %}">{{ l.get_status_display }}</span>
+          <span class="rec-side"><span class="stamp {{ l.status|stamp }}">{{ l.get_status_display }}</span></span>
         </a>
       </li>
     {% endfor %}
   </ul>
 {% else %}
-  <p class="empty">You haven't listed anything yet.</p>
+  <div class="empty">{% icon "market" %}<p>{% translate "You haven't listed anything yet." %}</p></div>
 {% endif %}
 {% endblock %}

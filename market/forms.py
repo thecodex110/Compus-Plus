@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from lostfound.forms import MAX_UPLOAD_MB, compress_image
 
@@ -18,13 +19,13 @@ class MultipleImageField(forms.FileField):
         for f in files:
             f = super().clean(f, initial)
             if f.size > MAX_UPLOAD_MB * 1024 * 1024:
-                raise forms.ValidationError(f'Each photo must be under {MAX_UPLOAD_MB} MB.')
+                raise forms.ValidationError(_('Each photo must be under %(MAX_UPLOAD_MB)s MB.') % {'MAX_UPLOAD_MB': MAX_UPLOAD_MB})
             out.append(compress_image(f))
         return out
 
 
 class ListingForm(forms.ModelForm):
-    new_photos = MultipleImageField(required=False, label='Photos',
+    new_photos = MultipleImageField(required=False, label=_('Photos'),
                                     widget=MultipleFileInput(attrs={'accept': 'image/*', 'multiple': True}))
     remove_photos = forms.ModelMultipleChoiceField(queryset=None, required=False,
                                                    widget=forms.CheckboxSelectMultiple)
@@ -33,11 +34,11 @@ class ListingForm(forms.ModelForm):
         model = Listing
         fields = ['title', 'price', 'category', 'condition', 'description', 'show_phone']
         widgets = {
-            'title': forms.TextInput(attrs={'placeholder': 'e.g. Engineering Graphics drafter'}),
-            'price': forms.NumberInput(attrs={'min': 0, 'inputmode': 'numeric', 'placeholder': '₹'}),
-            'description': forms.Textarea(attrs={'rows': 4, 'placeholder': 'How old, any defects, edition, where to meet…'}),
+            'title': forms.TextInput(attrs={'placeholder': _('e.g. Engineering Graphics drafter')}),
+            'price': forms.NumberInput(attrs={'min': 0, 'inputmode': 'numeric', 'placeholder': _('₹')}),
+            'description': forms.Textarea(attrs={'rows': 4, 'placeholder': _('How old, any defects, edition, where to meet…')}),
         }
-        labels = {'price': 'Price (₹)', 'show_phone': 'Show my phone number to buyers'}
+        labels = {'price': _('Price (₹)'), 'show_phone': _('Show my phone number to buyers')}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -50,7 +51,7 @@ class ListingForm(forms.ModelForm):
     def clean_price(self):
         price = self.cleaned_data['price']
         if price > 500000:
-            raise forms.ValidationError('That price looks too high.')
+            raise forms.ValidationError(_('That price looks too high.'))
         return price
 
     def clean(self):
@@ -58,7 +59,7 @@ class ListingForm(forms.ModelForm):
         kept = len(self.existing) - len(data.get('remove_photos') or [])
         total = kept + len(data.get('new_photos') or [])
         if total == 0:
-            self.add_error('new_photos', 'Add at least one photo.')
+            self.add_error('new_photos', _('Add at least one photo.'))
         elif total > MAX_PHOTOS:
             self.add_error('new_photos', f'At most {MAX_PHOTOS} photos per listing.')
         return data

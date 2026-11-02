@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.utils.translation import gettext as _
 
 from accounts.decorators import role_required
 from accounts.models import User
@@ -39,7 +40,7 @@ def new_post(request):
         post = form.save(commit=False)
         post.user = request.user
         post.save()
-        messages.success(request, 'Posted to Lost & Found.')
+        messages.success(request, _('Posted to Lost & Found.'))
         return redirect('lostfound:detail', pk=post.pk)
     return render(request, 'lostfound/form.html', {'form': form})
 
@@ -66,7 +67,7 @@ def mark_returned(request, pk):
     post.status = Post.Status.RETURNED
     post.returned_at = timezone.now()
     post.save(update_fields=['status', 'returned_at'])
-    messages.success(request, 'Marked as returned and removed from the feed. 🎉')
+    messages.success(request, _('Marked as returned and removed from the feed. 🎉'))
     return redirect('lostfound:mine')
 
 
@@ -76,5 +77,16 @@ def remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.status = Post.Status.REMOVED
     post.save(update_fields=['status'])
-    messages.success(request, 'Post removed from the feed.')
+    messages.success(request, _('Post removed from the feed.'))
     return redirect('lostfound:feed')
+
+
+@require_POST
+@role_required(*USERS)
+def delete_post(request, pk):
+    post = get_object_or_404(Post, pk=pk, user=request.user)
+    if post.photo:
+        post.photo.delete(save=False)
+    post.delete()
+    messages.success(request, _('Post deleted.'))
+    return redirect('lostfound:mine')

@@ -1,45 +1,57 @@
 {% extends 'base.html' %}
-{% block title %}Print at {{ shop.name }}{% endblock %}
+{% load i18n ui %}
+{% block title %}{{ shop.name }}&nbsp;· {% translate "Print & stationery" %}{% endblock %}
 {% block content %}
-<a class="muted" href="{% url 'printing:shops' %}">← Shops</a>
-<h1>Print at {{ shop.name }}</h1>
-<ol class="steps"><li class="on">Document & options</li><li>Price & pay</li><li>Delivery</li></ol>
+<a class="back" href="{% url 'printing:shops' %}">{% icon "back" "i-sm" %} {% translate "Shops" %}</a>
+<div class="ph"><div><h1>{{ shop.name }}</h1>{% if shop.location %}<div class="ph-sub">{% segs %}{{ shop.location }}{% endsegs %}</div>{% endif %}</div></div>
+<ol class="steps"><li class="on">{% translate "What you need" %}</li><li>{% translate "Pay" %}</li><li>{% translate "Delivery" %}</li></ol>
 
-<form method="post" enctype="multipart/form-data" novalidate class="card">
+<form method="post" enctype="multipart/form-data" novalidate class="form">
   {% csrf_token %}
-  <div class="field">
-    <span class="label">2 · Upload your document</span>
-    <div class="file-drop">
-      <span id="file-name">{% if order.file_name %}📄 {{ order.file_name }} · {{ order.page_count }} page{{ order.page_count|pluralize }} <small class="muted">(tap to replace)</small>{% else %}📄 Tap to choose a PDF or image{% endif %}</span>
-      {{ form.upload }}
+  <div class="panel form">
+    <h2>{% translate "Document to print" %}</h2>
+    <div class="field{% if form.upload.errors %} has-error{% endif %}">
+      <div class="drop">{% icon "file" %}<span id="file-name">{% if order.file_name %}{{ order.file_name }}&nbsp;· {% blocktranslate count n=order.page_count %}{{ n }} page{% plural %}{{ n }} pages{% endblocktranslate %}{% else %}{% translate "Tap to choose a PDF or photo" %}{% endif %}</span>{{ form.upload }}</div>
+      <small class="hint">{% translate "PDF, JPG or PNG, up to 25 MB. Pages are counted for you. Convert Word/PPT to PDF first." %}{% if form.items %} {% translate "Skip this if you only want stationery." %}{% endif %}</small>
+      {% for e in form.upload.errors %}<small class="err">{{ e }}</small>{% endfor %}
     </div>
-    <small class="hint">PDF, JPG or PNG, up to 25 MB. Convert Word/PPT to PDF first.</small>
-    {% for e in form.upload.errors %}<small class="err">{{ e }}</small>{% endfor %}
+    {% include 'printing/_opts.html' with field=form.color %}
+    {% include 'printing/_opts.html' with field=form.sides %}
+    {% include 'printing/_opts.html' with field=form.paper_size %}
+    {% include 'printing/_opts.html' with field=form.binding %}
+    <div class="row2">
+      {% include '_field.html' with field=form.copies %}
+      {% include '_field.html' with field=form.page_range %}
+    </div>
+    <details class="prices">
+      <summary>{% translate "Price list" %}</summary>
+      <table class="ledger">
+        <tr><td>{% translate "B/W single / double side" %}</td><td>₹{{ shop.bw_single }} / ₹{{ shop.bw_double }}</td></tr>
+        <tr><td>{% translate "Colour single / double side" %}</td><td>₹{{ shop.color_single }} / ₹{{ shop.color_double }}</td></tr>
+        <tr><td>A3</td><td>× {{ shop.a3_multiplier }}</td></tr>
+        <tr><td>{% translate "Staple / Spiral / Hard binding" %}</td><td>₹{{ shop.staple_price }} / ₹{{ shop.spiral_price }} / ₹{{ shop.hard_binding_price }}</td></tr>
+        <tr><td>{% translate "Delivery" %}</td><td>₹{{ shop.delivery_charge }}</td></tr>
+      </table>
+    </details>
   </div>
 
-  <h2 class="step">3 · Options</h2>
-  {% include 'printing/_radios.html' with field=form.color %}
-  {% include 'printing/_radios.html' with field=form.sides %}
-  {% include 'printing/_radios.html' with field=form.paper_size %}
-  {% include 'printing/_radios.html' with field=form.binding %}
-  <div class="row2">
-    {% include '_field.html' with field=form.copies %}
-    {% include '_field.html' with field=form.page_range %}
-  </div>
+  {% with items=form.stationery_fields %}
+    {% if items %}
+      <div class="panel">
+        <h2>{% translate "Stationery" %}</h2>
+        {% for item, field in items %}
+          <div class="stat-row">
+            <label for="{{ field.id_for_label }}"><b>{{ item.name }}</b><br><span class="muted small">₹{{ item.price }}</span></label>
+            <span class="qty">{{ field }}</span>
+          </div>
+          {% for e in field.errors %}<small class="err">{{ e }}</small>{% endfor %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
   {% include '_field.html' with field=form.note %}
-
-  <details class="prices">
-    <summary>{{ shop.name }} price list</summary>
-    <table>
-      <tr><td>B/W single / double side</td><td>₹{{ shop.bw_single }} / ₹{{ shop.bw_double }} per page</td></tr>
-      <tr><td>Colour single / double side</td><td>₹{{ shop.color_single }} / ₹{{ shop.color_double }} per page</td></tr>
-      <tr><td>A3</td><td>× {{ shop.a3_multiplier }}</td></tr>
-      <tr><td>Staple / Spiral / Hard binding</td><td>₹{{ shop.staple_price }} / ₹{{ shop.spiral_price }} / ₹{{ shop.hard_binding_price }} per copy</td></tr>
-      <tr><td>Delivery</td><td>₹{{ shop.delivery_charge }}</td></tr>
-    </table>
-  </details>
-
-  <button class="btn btn-primary btn-block btn-lg">See price →</button>
+  <button class="btn btn-hue btn-block btn-lg">{% translate "See the price" %} {% icon "chevron" %}</button>
 </form>
 {% endblock %}
 
@@ -47,7 +59,7 @@
 <script>
 document.getElementById('id_upload').addEventListener('change', function (e) {
   var f = e.target.files[0];
-  if (f) document.getElementById('file-name').textContent = '📄 ' + f.name;
+  if (f) document.getElementById('file-name').textContent = f.name;
 });
 </script>
 {% endblock %}

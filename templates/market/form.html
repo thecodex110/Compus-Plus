@@ -1,26 +1,22 @@
 {% extends 'base.html' %}
-{% block title %}{% if listing %}Edit listing{% else %}Sell on COEP Market{% endif %}{% endblock %}
+{% load i18n ui %}
+{% block title %}{% if listing %}{% translate "Edit listing" %}{% else %}{% translate "Sell something" %}{% endif %}&nbsp;· Campus Plus{% endblock %}
 {% block content %}
-<h1>{% if listing %}Edit listing{% else %}Sell something{% endif %}</h1>
-<form method="post" enctype="multipart/form-data" novalidate class="card">
+<a class="back" href="{% url 'market:browse' %}">{% icon "back" "i-sm" %} {% translate "COEP Market" %}</a>
+<div class="ph"><h1>{% if listing %}{% translate "Edit listing" %}{% else %}{% translate "Sell something" %}{% endif %}</h1></div>
+<form method="post" enctype="multipart/form-data" novalidate class="form">
   {% csrf_token %}
-  <div class="field">
-    <span class="label">Photos <span class="muted">(up to 5)</span></span>
+  <div class="field{% if form.new_photos.errors %} has-error{% endif %}">
+    <span class="label">{% translate "Photos (up to 5)" %}</span>
     {% if form.existing %}
-      <div class="photo-strip">
+      <div class="drop-strip">
         {% for p in form.existing %}
-          <label class="photo-keep">
-            <img src="{{ p.image.url }}" alt="Listing photo {{ forloop.counter }}">
-            <span><input type="checkbox" name="remove_photos" value="{{ p.pk }}"> Remove</span>
-          </label>
+          <label class="photo-keep"><img src="{{ p.image.url }}" alt=""><span class="check"><input type="checkbox" name="remove_photos" value="{{ p.pk }}"> {% translate "Remove" %}</span></label>
         {% endfor %}
       </div>
     {% endif %}
-    <div class="file-drop">
-      <span id="photos-name">📷 Tap to add photos</span>
-      {{ form.new_photos }}
-    </div>
-    <div class="photo-strip" id="photo-previews"></div>
+    <div class="drop">{% icon "camera" %}<span id="photos-name">{% translate "Tap to add photos" %}</span>{{ form.new_photos }}</div>
+    <div class="drop-strip" id="photo-previews"></div>
     {% for e in form.new_photos.errors %}<small class="err">{{ e }}</small>{% endfor %}
   </div>
   {% include '_field.html' with field=form.title %}
@@ -30,14 +26,12 @@
   </div>
   {% include '_field.html' with field=form.category %}
   {% include '_field.html' with field=form.description %}
-  <label class="check">{{ form.show_phone }} <span>{{ form.show_phone.label }}</span></label>
-  <small class="hint">Otherwise buyers can reach you by your college email.</small>
-  <button class="btn btn-primary btn-block btn-lg">{% if listing %}Save changes{% else %}Post listing{% endif %}</button>
+  <label class="check">{{ form.show_phone }} <span>{{ form.show_phone.label }}<br><small class="hint">{% translate "Otherwise buyers reach you by your college email." %}</small></span></label>
+  <button class="btn btn-hue btn-block btn-lg">{% if listing %}{% translate "Save changes" %}{% else %}{% translate "Post listing" %}{% endif %}</button>
 </form>
-
 {% if listing %}
-  <form method="post" action="{% url 'market:delete' listing.pk %}" class="center" onsubmit="return confirm('Delete this listing for good?')">
-    {% csrf_token %}<button class="link muted">Delete listing</button>
+  <form method="post" action="{% url 'market:delete' listing.pk %}" class="btn-row" onsubmit="return confirm('{% filter escapejs %}{% translate "Delete this listing for good?" %}{% endfilter %}')">
+    {% csrf_token %}<button class="link link-danger">{% translate "Delete listing" %}</button>
   </form>
 {% endif %}
 {% endblock %}
@@ -46,6 +40,7 @@
 <script>
 (function () {
   var input = document.getElementById('id_new_photos'), strip = document.getElementById('photo-previews');
+  var one = "{% translate '1 photo selected'|escapejs %}", many = "{% translate 'photos selected'|escapejs %}";
   input.addEventListener('change', function () {
     strip.innerHTML = '';
     Array.prototype.forEach.call(input.files, function (f) {
@@ -53,7 +48,7 @@
       img.alt = f.name; img.src = URL.createObjectURL(f);
       strip.appendChild(img);
     });
-    document.getElementById('photos-name').textContent = input.files.length + ' photo' + (input.files.length === 1 ? '' : 's') + ' selected';
+    document.getElementById('photos-name').textContent = input.files.length === 1 ? one : input.files.length + ' ' + many;
   });
 })();
 </script>

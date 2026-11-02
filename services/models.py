@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 def floor_key(floor):
@@ -25,27 +26,29 @@ class Location(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.building} · Floor {self.floor} · {self.classroom}'
+        return _('%(building)s\u00a0· Floor %(floor)s\u00a0· %(room)s') % {
+            'building': self.building, 'floor': self.floor, 'room': self.classroom}
 
 
 class ServiceRequest(models.Model):
     class Category(models.TextChoices):
-        MEDICAL = 'medical', 'Medical'
-        SECURITY = 'security', 'Security'
-        CLEANING = 'cleaning', 'Cleaning'
-        ITEM = 'item', 'Item Request'
-        OTHER = 'other', 'Other'
+        MEDICAL = 'medical', _('Medical')
+        SECURITY = 'security', _('Security')
+        CLEANING = 'cleaning', _('Cleaning')
+        ITEM = 'item', _('Item Request')
+        OTHER = 'other', _('Other')
 
     class Priority(models.IntegerChoices):
         # Lower value sorts first.
-        HIGH = 0, 'High'
-        NORMAL = 1, 'Normal'
+        HIGH = 0, _('High')
+        NORMAL = 1, _('Normal')
 
     class Status(models.TextChoices):
-        PENDING = 'pending', 'Pending'
-        ACCEPTED = 'accepted', 'Accepted'
-        IN_PROGRESS = 'in_progress', 'In Progress'
-        DONE = 'done', 'Done'
+        PENDING = 'pending', _('Pending')
+        ACCEPTED = 'accepted', _('Accepted')
+        IN_PROGRESS = 'in_progress', _('In Progress')
+        DONE = 'done', _('Done')
+        CANCELLED = 'cancelled', _('Cancelled')
 
     HIGH_PRIORITY_CATEGORIES = (Category.MEDICAL, Category.SECURITY)
     # Status → the only status it may move to next.

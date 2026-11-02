@@ -7,20 +7,21 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_POST
+from django.utils.translation import gettext as _
 
 from accounts.decorators import role_required
 from accounts.models import User
 from notify.models import notify
 
-from .forms import OrderOptionsForm, PaymentForm, RejectForm, ShopSettingsForm
-from .models import PrintOrder, Shop
+from .forms import OrderOptionsForm, PaymentForm, RejectForm, ShopSettingsForm, StationeryItemForm
+from .models import PrintOrder, Shop, StationeryItem
 
 R = User.Role
 S = PrintOrder.Status
 
 
 def shop_for(user):
-    shop, _ = Shop.objects.get_or_create(owner=user, defaults={'name': user.name, 'phone': user.phone})
+    shop, _created = Shop.objects.get_or_create(owner=user, defaults={'name': user.name, 'phone': user.phone})
     return shop
 
 
@@ -42,7 +43,7 @@ def shops(request):
 def new_order(request, shop_id):
     shop = get_object_or_404(Shop, pk=shop_id)
     if not shop.accepts_orders:
-        messages.error(request, f'{shop.name} is closed right now.')
+        messages.error(request, _('%(name)s is closed right now.') % {'name': shop.name})
         return redirect('printing:shops')
     order = PrintOrder(student=request.user, shop=shop)
     form = OrderOptionsForm(request.POST or None, request.FILES or None, instance=order)
@@ -73,7 +74,7 @@ def pay(request, pk):
     form = PaymentForm(request.POST or None, request.FILES or None, instance=order)
     if request.method == 'POST':
         if not shop.accepts_orders:
-            messages.error(request, f'{shop.name} closed before you finished. Pick another shop.')
+            messages.error(request, _('%(name)s closed before you finished. Pick another shop.') % {'name': shop.name})
             return redirect('printing:shops')
         if form.is_valid():
             order = form.save(commit=False)
@@ -81,10 +82,12 @@ def pay(request, pk):
             order.placed_at = timezone.now()
             order.save()
             order.log(S.PLACED, request.user)
-            notify(shop.owner, f'New order #{order.pk} — ₹{order.price:.0f}',
-                   f'{request.user.name} · txn …{order.txn_last_digits} · verify the payment',
+            notify(shop.owner, lambda: _('New order %(number)s — ₹%(amount)s') % {
+                       'number': f'ORD-{order.pk:04d}', 'amount': f'{order.price:.0f}'},
+                   lambda: _('%(name)s · txn …%(digits)s · verify the payment') % {
+                       'name': request.user.name, 'digits': order.txn_last_digits},
                    reverse('printing:shop_order', args=[order.pk]), urgent=True)
-            messages.success(request, f'Order #{order.pk} placed. {shop.name} will verify your payment.')
+            messages.success(request, _('Order %(number)s placed. %(name)s will verify your payment.') % {'number': f'ORD-{order.pk:04d}', 'name': shop.name})
             return redirect('printing:order', pk=order.pk)
     return render(request, 'printing/pay.html', {'form': form, 'order': order, 'shop': shop})
 
@@ -96,13 +99,14 @@ def cancel_draft(request, pk):
     if order.file:
         order.file.delete(save=False)
     order.delete()
-    messages.info(request, 'Order discarded.')
+    messages.info(request, _('Order discarded.'))
     return redirect('printing:shops')
 
 
 @role_required(R.STUDENT)
 def my_orders(request):
-    qs = PrintOrder.objects.filter(student=request.user).exclude(status=S.DRAFT).select_related('shop')
+    qs = (PrintOrder.objects.filter(student=request.user).exclude(status=S.DRAFT)
+          .select_related('shop').prefetch_related('lines'))
     return render(request, 'printing/my_orders.html', {'orders': qs, 'poll_url': poll_url('mine')})
 
 
@@ -114,7 +118,7 @@ def order_detail(request, pk):
     idx = PrintOrder.TRACKED.index(order.status) if order.status in PrintOrder.TRACKED else -1
     return render(request, 'printing/order.html', {
         'order': order, 'events': order.events.select_related('by'),
-        'steps': [(s.label, i <= idx) for i, s in enumerate(PrintOrder.TRACKED)],
+        'steps': [(s.label, i <= idx, i == idx and s != S.DELIVERED) for i, s in enumerate(PrintOrder.TRACKED)],
         'poll_url': poll_url(f'one:{pk}'),
     })
 
@@ -124,12 +128,12 @@ def order_detail(request, pk):
 @role_required(R.SHOP)
 def shop_dashboard(request):
     shop = shop_for(request.user)
-    orders = shop.orders.exclude(status=S.DRAFT).select_related('student')
+    orders = shop.orders.exclude(status=S.DRAFT).select_related('student').prefetch_related('lines')
     tab = request.GET.get('tab', 'new')
     tabs = {
-        'new': ('To verify', orders.filter(status=S.PLACED).order_by('placed_at')),
-        'active': ('In progress', orders.filter(status__in=[S.VERIFIED, S.PRINTING, S.OUT]).order_by('placed_at')),
-        'done': ('Done', orders.filter(status__in=[S.DELIVERED, S.REJECTED]).order_by('-updated_at')[:100]),
+        'new': (_('To verify'), orders.filter(status=S.PLACED).order_by('placed_at')),
+        'active': (_('In progress'), orders.filter(status__in=[S.VERIFIED, S.PRINTING, S.OUT]).order_by('placed_at')),
+        'done': (_('Done'), orders.filter(status__in=[S.DELIVERED, S.REJECTED]).order_by('-updated_at')[:100]),
     }
     if tab not in tabs:
         tab = 'new'
@@ -162,18 +166,19 @@ def shop_advance(request, pk):
         order = get_object_or_404(PrintOrder.objects.select_for_update(), pk=pk, shop__owner=request.user)
         nxt = order.next_status
         if nxt is None:
-            messages.error(request, 'This order cannot move further.')
+            messages.error(request, _('This order cannot move further.'))
             return redirect('printing:shop_order', pk=pk)
         order.status = nxt
         order.save(update_fields=['status', 'updated_at'])
         order.log(nxt, request.user)
-        body = (f'Collect it at the {order.get_delivery_point_display()}.' if nxt == S.OUT
-                else f'{order.shop.name} · {order.file_name}')
-        notify(order.student, f'Print order #{order.pk}: {order.get_status_display()}', body,
+        body = ((lambda: _('Collect it at the %(place)s.') % {'place': order.get_delivery_point_display()})
+                if nxt == S.OUT else f'{order.shop.name} · {order.summary}')
+        notify(order.student, lambda: _('Order %(number)s: %(status)s') % {
+                   'number': f'ORD-{order.pk:04d}', 'status': order.get_status_display()}, body,
                reverse('printing:order', args=[order.pk]), urgent=nxt == S.OUT)
     if nxt == S.DELIVERED:
         order.delete_print_file()
-    messages.success(request, f'Order #{pk}: {order.get_status_display()}.')
+    messages.success(request, _('Order %(number)s: %(get_status_display)s.') % {'number': f'ORD-{pk:04d}', 'get_status_display': order.get_status_display()})
     return redirect('printing:shop_order', pk=pk)
 
 
@@ -183,16 +188,17 @@ def shop_reject(request, pk):
     order = _shop_order(request, pk)
     form = RejectForm(request.POST)
     if order.status != S.PLACED or not form.is_valid():
-        messages.error(request, 'Only new orders can be rejected, with a reason.')
+        messages.error(request, _('Only new orders can be rejected, with a reason.'))
         return redirect('printing:shop_order', pk=pk)
     order.status = S.REJECTED
     order.reject_reason = form.cleaned_data['reason']
     order.save(update_fields=['status', 'reject_reason', 'updated_at'])
     order.log(S.REJECTED, request.user, order.reject_reason)
-    notify(order.student, f'Print order #{order.pk} was rejected', order.reject_reason,
+    notify(order.student, lambda: _('Order %(number)s was rejected') % {'number': f'ORD-{order.pk:04d}'},
+           order.reject_reason,
            reverse('printing:order', args=[order.pk]), urgent=True)
     order.delete_print_file()
-    messages.success(request, f'Order #{pk} rejected.')
+    messages.success(request, _('Order %(number)s rejected.') % {'number': f'ORD-{pk:04d}'})
     return redirect('printing:shop_dashboard')
 
 
@@ -201,11 +207,11 @@ def shop_reject(request, pk):
 def toggle_open(request):
     shop = shop_for(request.user)
     if not shop.is_open and not shop.qr_image:
-        messages.error(request, 'Upload your payment QR code in Settings before opening.')
+        messages.error(request, _('Upload your payment QR code in Settings before opening.'))
         return redirect('printing:shop_settings')
     shop.is_open = not shop.is_open
     shop.save(update_fields=['is_open'])
-    messages.success(request, f"Shop is now {'OPEN' if shop.is_open else 'CLOSED'}.")
+    messages.success(request, _('Shop is now open.') if shop.is_open else _('Shop is now closed.'))
     return redirect('printing:shop_dashboard')
 
 
@@ -215,9 +221,46 @@ def shop_settings(request):
     form = ShopSettingsForm(request.POST or None, request.FILES or None, instance=shop)
     if request.method == 'POST' and form.is_valid():
         form.save()
-        messages.success(request, 'Settings saved.')
+        messages.success(request, _('Settings saved.'))
         return redirect('printing:shop_settings')
     return render(request, 'printing/shop_settings.html', {'form': form, 'shop': shop})
+
+
+@role_required(R.SHOP)
+def shop_stationery(request):
+    shop = shop_for(request.user)
+    form = StationeryItemForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        item = form.save(commit=False)
+        item.shop = shop
+        item.save()
+        messages.success(request, _('Added %(name)s.') % {'name': item.name})
+        return redirect('printing:shop_stationery')
+    return render(request, 'printing/shop_stationery.html', {
+        'shop': shop, 'form': form, 'items': shop.stationery.all(),
+    })
+
+
+@require_POST
+@role_required(R.SHOP)
+def stationery_update(request, pk):
+    item = get_object_or_404(StationeryItem, pk=pk, shop__owner=request.user)
+    action = request.POST.get('action')
+    if action == 'toggle':
+        item.in_stock = not item.in_stock
+        item.save(update_fields=['in_stock'])
+    elif action == 'delete':
+        item.delete()
+        messages.success(request, _('Removed %(name)s.') % {'name': item.name})
+    elif action == 'price':
+        form = StationeryItemForm({'name': item.name, 'price': request.POST.get('price'),
+                                   'in_stock': item.in_stock}, instance=item)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('%(name)s: ₹%(price)s.') % {'name': item.name, 'price': item.price})
+        else:
+            messages.error(request, _('Enter a valid price.'))
+    return redirect('printing:shop_stationery')
 
 
 # ---------- Shared ----------
