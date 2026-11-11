@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-02 18:33+0530\n"
+"POT-Creation-Date: 2026-11-11 07:57+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,12 +31,12 @@ msgstr "अनुरोध"
 msgid "Market"
 msgstr "मार्केट"
 
-#: accounts/context_processors.py:13 templates/accounts/home.html:26
-#: templates/lostfound/detail.html:3 templates/lostfound/detail.html:5
-#: templates/lostfound/feed.html:3 templates/lostfound/feed.html:6
-#: templates/lostfound/form.html:3 templates/lostfound/form.html:5
-#: templates/lostfound/mine.html:3 templates/lostfound/mine.html:5
-#: templates/panel/moderate.html:6
+#: accounts/context_processors.py:13 templates/accounts/home.html:28
+#: templates/accounts/welcome.html:99 templates/lostfound/detail.html:3
+#: templates/lostfound/detail.html:5 templates/lostfound/feed.html:3
+#: templates/lostfound/feed.html:6 templates/lostfound/form.html:3
+#: templates/lostfound/form.html:5 templates/lostfound/mine.html:3
+#: templates/lostfound/mine.html:5 templates/panel/moderate.html:6
 msgid "Lost & Found"
 msgstr "खोया-पाया"
 
@@ -57,11 +57,11 @@ msgid "My jobs"
 msgstr "मेरे काम"
 
 #: accounts/context_processors.py:21 templates/printing/order.html:13
-#: templates/printing/shop_order.html:46 templates/services/detail.html:35
+#: templates/printing/shop_order.html:46 templates/services/detail.html:36
 msgid "History"
 msgstr "इतिहास"
 
-#: accounts/context_processors.py:21 templates/accounts/home.html:50
+#: accounts/context_processors.py:21 templates/accounts/home.html:52
 #: templates/health/directory.html:7 templates/panel/dashboard.html:42
 #: templates/panel/hospital_form.html:5 templates/panel/hospitals.html:3
 #: templates/panel/hospitals.html:6
@@ -140,15 +140,15 @@ msgstr "6 अंकों का कोड"
 msgid "Enter the 6-digit code."
 msgstr "6 अंकों का कोड डालें।"
 
-#: accounts/models.py:33
+#: accounts/models.py:33 accounts/roles.py:8
 msgid "Student"
 msgstr "छात्र"
 
-#: accounts/models.py:34
+#: accounts/models.py:34 accounts/roles.py:16
 msgid "Teacher"
 msgstr "शिक्षक"
 
-#: accounts/models.py:35
+#: accounts/models.py:35 accounts/roles.py:23
 msgid "BVG Staff"
 msgstr "BVG स्टाफ़"
 
@@ -156,7 +156,7 @@ msgstr "BVG स्टाफ़"
 msgid "Photocopy Shop"
 msgstr "फ़ोटोकॉपी दुकान"
 
-#: accounts/models.py:37
+#: accounts/models.py:37 accounts/roles.py:38
 msgid "Admin"
 msgstr "एडमिन"
 
@@ -186,37 +186,146 @@ msgstr "बहुत बार कोशिश हुई। नया कोड 
 msgid "Incorrect code."
 msgstr "कोड गलत है।"
 
+#: accounts/roles.py:9
+msgid "Hello, student."
+msgstr "नमस्ते, स्टूडेंट।"
+
+#: accounts/roles.py:10
+msgid "Raise help, post Lost & Found, buy and sell, order prints."
+msgstr "मदद बुलाएँ, खोया-पाया पोस्ट करें, खरीदें-बेचें, प्रिंट ऑर्डर करें।"
+
+#: accounts/roles.py:11
+msgid "Medical and Security in two taps"
+msgstr "मेडिकल और सिक्योरिटी दो टैप में"
+
+#: accounts/roles.py:11
+msgid "Sell old books to juniors"
+msgstr "पुरानी किताबें जूनियर्स को बेचें"
+
+#: accounts/roles.py:12
+msgid "Prints delivered to Main Gate or Library"
+msgstr "प्रिंट मेन गेट या लाइब्रेरी पर"
+
+#: accounts/roles.py:17
+msgid "Welcome, Professor."
+msgstr "स्वागत है, प्रोफ़ेसर।"
+
+#: accounts/roles.py:18
+msgid "Get a projector remote, cleaning or security sent to your classroom."
+msgstr "प्रोजेक्टर रिमोट, सफ़ाई या सिक्योरिटी सीधे अपनी क्लास में बुलाएँ।"
+
+#: accounts/roles.py:19
+msgid "Requests go straight to BVG staff"
+msgstr "अनुरोध सीधे बीवीजी स्टाफ़ तक"
+
+#: accounts/roles.py:19
+msgid "See every step live"
+msgstr "हर कदम लाइव देखें"
+
+#: accounts/roles.py:19
+msgid "Search blood donors fast"
+msgstr "रक्तदाता जल्दी खोजें"
+
+#: accounts/roles.py:24
+msgid "Your queue is ready."
+msgstr "आपकी कतार तैयार है।"
+
+#: accounts/roles.py:25
+msgid "See the queue, accept a request, mark it done."
+msgstr "कतार देखें, अनुरोध स्वीकार करें, पूरा होने पर मार्क करें।"
+
+#: accounts/roles.py:26
+msgid "Urgent requests always on top"
+msgstr "ज़रूरी अनुरोध हमेशा सबसे ऊपर"
+
+#: accounts/roles.py:26
+msgid "Big buttons, works in Hindi"
+msgstr "बड़े बटन, हिंदी में भी"
+
+#: accounts/roles.py:26
+msgid "Room and floor on every job"
+msgstr "हर काम पर कमरा और फ़्लोर"
+
+#: accounts/roles.py:30
+msgid "Print Shop"
+msgstr "प्रिंट दुकान"
+
+#: accounts/roles.py:31
+msgid "Orders are waiting."
+msgstr "ऑर्डर इंतज़ार कर रहे हैं।"
+
+#: accounts/roles.py:32
+msgid "Check payment proof, print, send to the gate."
+msgstr "पेमेंट का सबूत देखें, प्रिंट करें, गेट पर भेजें।"
+
+#: accounts/roles.py:33
+msgid "Payment screenshot and last digits"
+msgstr "पेमेंट स्क्रीनशॉट और आख़िरी अंक"
+
+#: accounts/roles.py:33
+msgid "Open or close your shop in one tap"
+msgstr "एक टैप में दुकान खोलें या बंद करें"
+
+#: accounts/roles.py:34
+msgid "Files delete after delivery"
+msgstr "डिलीवरी के बाद फ़ाइलें हट जाती हैं"
+
+#: accounts/roles.py:39
+msgid "Run the campus."
+msgstr "कैंपस चलाइए।"
+
+#: accounts/roles.py:40
+msgid "Manage people, rooms, shops and hospitals."
+msgstr "लोग, कमरे, दुकानें और अस्पताल संभालें।"
+
+#: accounts/roles.py:41
+msgid "Add staff, shops and admins"
+msgstr "स्टाफ़, दुकानें और एडमिन जोड़ें"
+
+#: accounts/roles.py:41
+msgid "Edit buildings, floors and rooms"
+msgstr "बिल्डिंग, फ़्लोर और कमरे बदलें"
+
+#: accounts/roles.py:42
+msgid "Moderate Lost & Found and Market"
+msgstr "खोया-पाया और मार्केट की निगरानी"
+
 #: accounts/tests.py:37 services/models.py:47
-#: templates/services/detail.html:37
+#: templates/services/detail.html:38
 msgid "Pending"
 msgstr "बाकी"
 
-#: accounts/views.py:61
+#: accounts/views.py:62
 msgid "This email is already registered. Please log in."
 msgstr "यह ईमेल पहले से रजिस्टर है। कृपया लॉग इन करें।"
 
-#: accounts/views.py:72
+#: accounts/views.py:73
 #, python-format
 msgid "Welcome, %(get_short_name)s!"
 msgstr "स्वागत है, %(get_short_name)s!"
 
-#: accounts/views.py:83
+#: accounts/views.py:84
 msgid "A new code has been sent."
 msgstr "नया कोड भेज दिया गया है।"
 
-#: accounts/views.py:95
+#: accounts/views.py:104
 msgid "Too many wrong attempts. Wait 15 minutes or reset your password."
 msgstr "बहुत बार गलत कोशिश हुई। 15 मिनट रुकें या पासवर्ड रीसेट करें।"
 
-#: accounts/views.py:100
+#: accounts/views.py:109
 msgid "Wrong email or password."
 msgstr "ईमेल या पासवर्ड गलत है।"
 
-#: accounts/views.py:154
+#: accounts/views.py:113
+#, python-format
+msgid "This is a %(role)s account. Choose “%(role)s” above and log in there."
+msgstr "यह %(role)s का अकाउंट है। ऊपर “%(role)s” चुनें और वहाँ लॉग इन करें।"
+
+#: accounts/views.py:170
 msgid "Profile updated."
 msgstr "प्रोफ़ाइल अपडेट हो गई।"
 
-#: accounts/views.py:159
+#: accounts/views.py:175
 msgid "Password changed."
 msgstr "पासवर्ड बदल गया।"
 
@@ -795,11 +904,11 @@ msgstr "स्पाइरल"
 msgid "Hard binding"
 msgstr "हार्ड बाइंडिंग"
 
-#: printing/models.py:153
+#: printing/models.py:153 templates/accounts/welcome.html:61
 msgid "Main Gate"
 msgstr "मेन गेट"
 
-#: printing/models.py:154
+#: printing/models.py:154 templates/accounts/welcome.html:60
 msgid "Library"
 msgstr "लाइब्रेरी"
 
@@ -835,12 +944,12 @@ msgstr "रद्द किया"
 msgid "e.g. 1-5, 8, 10-12. Empty = all pages"
 msgstr "जैसे: 1-5, 8, 10-12। खाली = सभी पेज"
 
-#: printing/models.py:243
+#: printing/models.py:249
 #, python-format
 msgid "%(pages)s pg × %(copies)s · %(color)s"
 msgstr "%(pages)s पेज × %(copies)s · %(color)s"
 
-#: printing/models.py:247
+#: printing/models.py:253
 #, python-format
 msgid "%(n)s stationery item"
 msgid_plural "%(n)s stationery items"
@@ -876,83 +985,84 @@ msgstr "ऑर्डर %(number)s हो गया। %(name)s आपका प
 msgid "Order discarded."
 msgstr "ऑर्डर हटा दिया गया।"
 
-#: printing/views.py:134
+#: printing/views.py:133
 msgid "To verify"
 msgstr "जाँचना है"
 
-#: printing/views.py:135
+#: printing/views.py:134
 msgid "In progress"
 msgstr "चल रहे"
 
-#: printing/views.py:136 services/models.py:50
+#: printing/views.py:135 services/models.py:50
+#: templates/accounts/welcome.html:116
 msgid "Done"
 msgstr "पूरे"
 
-#: printing/views.py:169
+#: printing/views.py:168
 msgid "This order cannot move further."
 msgstr "यह ऑर्डर आगे नहीं बढ़ सकता।"
 
-#: printing/views.py:174
+#: printing/views.py:173
 #, python-format
 msgid "Collect it at the %(place)s."
 msgstr "%(place)s पर ले लें।"
 
-#: printing/views.py:176
+#: printing/views.py:175
 #, python-format
 msgid "Order %(number)s: %(status)s"
 msgstr "ऑर्डर %(number)s: %(status)s"
 
-#: printing/views.py:181
+#: printing/views.py:180
 #, python-format
 msgid "Order %(number)s: %(get_status_display)s."
 msgstr "ऑर्डर %(number)s: %(get_status_display)s।"
 
-#: printing/views.py:191
+#: printing/views.py:190
 msgid "Only new orders can be rejected, with a reason."
 msgstr "सिर्फ़ नए ऑर्डर ही कारण बताकर रद्द किए जा सकते हैं।"
 
-#: printing/views.py:197
+#: printing/views.py:196
 #, python-format
 msgid "Order %(number)s was rejected"
 msgstr "ऑर्डर %(number)s रद्द कर दिया गया"
 
-#: printing/views.py:201
+#: printing/views.py:200
 #, python-format
 msgid "Order %(number)s rejected."
 msgstr "ऑर्डर %(number)s रद्द हो गया।"
 
-#: printing/views.py:210
+#: printing/views.py:209
 msgid "Upload your payment QR code in Settings before opening."
 msgstr "दुकान खोलने से पहले सेटिंग्स में अपना पेमेंट QR कोड डालें।"
 
-#: printing/views.py:214
+#: printing/views.py:213
 msgid "Shop is now open."
 msgstr "दुकान अब खुली है।"
 
-#: printing/views.py:214
+#: printing/views.py:213
 msgid "Shop is now closed."
 msgstr "दुकान अब बंद है।"
 
-#: printing/views.py:224
+#: printing/views.py:223
 msgid "Settings saved."
 msgstr "सेटिंग्स सेव हो गईं।"
 
-#: printing/views.py:237
+#: printing/views.py:236
 #, python-format
 msgid "Added %(name)s."
 msgstr "%(name)s जोड़ दिया गया।"
 
-#: printing/views.py:254
+#: printing/views.py:253
 #, python-format
 msgid "Removed %(name)s."
 msgstr "%(name)s हटा दिया गया।"
 
-#: printing/views.py:260
+#: printing/views.py:259
 #, python-format
 msgid "%(name)s: ₹%(price)s."
 msgstr "%(name)s: ₹%(price)s।"
 
-#: printing/views.py:262
+#: printing/views.py:261
 msgid "Enter a valid price."
 msgstr "सही कीमत डालें।"
 
@@ -970,15 +1080,14 @@ msgstr "वैकल्पिक — जैसे: \"प्रोजेक्ट
 
 #: services/models.py:29
 #, python-format
-#| msgid "%(building)s · Floor %(floor)s · %(room)s"
 msgid "%(building)s · Floor %(floor)s · %(room)s"
 msgstr "%(building)s · फ़्लोर %(floor)s · %(room)s"
 
-#: services/models.py:35 templates/accounts/home.html:13
+#: services/models.py:35 templates/accounts/home.html:15
 msgid "Medical"
 msgstr "मेडिकल"
 
-#: services/models.py:36 templates/accounts/home.html:17
+#: services/models.py:36 templates/accounts/home.html:19
 msgid "Security"
 msgstr "सिक्योरिटी"
 
@@ -1083,119 +1192,123 @@ msgstr "अनुरोध %(number)s रद्द हो गया।"
 msgid "Hello, %(name)s"
 msgstr "नमस्ते, %(name)s"
 
-#: templates/accounts/home.html:13
+#: templates/accounts/home.html:15
 msgid "Get first aid to your classroom"
 msgstr "क्लासरूम में फ़र्स्ट एड बुलाएँ"
 
-#: templates/accounts/home.html:17
+#: templates/accounts/home.html:19
 msgid "Fight, theft or a stranger on campus"
 msgstr "झगड़ा, चोरी या कैंपस में अनजान व्यक्ति"
 
-#: templates/accounts/home.html:21
+#: templates/accounts/home.html:23
 msgid "Cleaning, bring an item, or something else"
 msgstr "सफ़ाई, कोई सामान मँगाना, या कुछ और"
 
-#: templates/accounts/home.html:27
+#: templates/accounts/home.html:29
 #, python-format
 msgid "%(n)s new today"
 msgid_plural "%(n)s new today"
 msgstr[0] "आज %(n)s नई"
 msgstr[1] "आज %(n)s नई"
 
-#: templates/accounts/home.html:27
+#: templates/accounts/home.html:29
 msgid "Nothing posted yet"
 msgstr "अभी कुछ पोस्ट नहीं हुआ"
 
-#: templates/accounts/home.html:31 templates/printing/my_orders.html:5
+#: templates/accounts/home.html:33 templates/printing/my_orders.html:5
 #: templates/printing/options.html:3 templates/printing/shops.html:3
 #: templates/printing/shops.html:6
 msgid "Print & stationery"
 msgstr "प्रिंट और स्टेशनरी"
 
-#: templates/accounts/home.html:32
+#: templates/accounts/home.html:34
 #, python-format
 msgid "%(n)s shop open"
 msgid_plural "%(n)s shops open"
 msgstr[0] "%(n)s दुकान खुली"
 msgstr[1] "%(n)s दुकानें खुली"
 
-#: templates/accounts/home.html:35 templates/market/browse.html:3
-#: templates/market/browse.html:6 templates/market/detail.html:3
-#: templates/market/detail.html:5 templates/market/form.html:5
-#: templates/market/mine.html:3 templates/market/mine.html:5
-#: templates/panel/moderate.html:24
+#: templates/accounts/home.html:37 templates/accounts/welcome.html:100
+#: templates/market/browse.html:3 templates/market/browse.html:6
+#: templates/market/detail.html:3 templates/market/detail.html:5
+#: templates/market/form.html:5 templates/market/mine.html:3
+#: templates/market/mine.html:5 templates/panel/moderate.html:24
 msgid "COEP Market"
 msgstr "COEP मार्केट"
 
-#: templates/accounts/home.html:36
+#: templates/accounts/home.html:38
 msgid "Sell your old books"
 msgstr "अपनी पुरानी किताबें बेचें"
 
-#: templates/accounts/home.html:39 templates/accounts/home.html:47
+#: templates/accounts/home.html:41 templates/accounts/home.html:49
 #: templates/health/directory.html:3 templates/health/directory.html:6
 #: templates/health/me.html:5
 msgid "Blood donors"
 msgstr "रक्तदाता"
 
-#: templates/accounts/home.html:40
+#: templates/accounts/home.html:42
 #, python-format
 msgid "You're listed&nbsp;· %(g)s"
 msgstr "आप लिस्टेड हैं&nbsp;· %(g)s"
 
-#: templates/accounts/home.html:40
+#: templates/accounts/home.html:42
 msgid "Find a donor fast"
 msgstr "जल्दी रक्तदाता खोजें"
 
-#: templates/accounts/home.html:44
+#: templates/accounts/home.html:46
 msgid "Post an item"
 msgstr "चीज़ पोस्ट करें"
 
-#: templates/accounts/home.html:44
+#: templates/accounts/home.html:46
 msgid "Lost or found something?"
 msgstr "कुछ खोया या मिला?"
 
-#: templates/accounts/home.html:47
+#: templates/accounts/home.html:49
 msgid "Search by blood group"
 msgstr "ब्लड ग्रुप से खोजें"
 
-#: templates/accounts/home.html:50
+#: templates/accounts/home.html:52
 msgid "Nearest first, with 108"
 msgstr "सबसे पास वाले पहले, 108 के साथ"
 
-#: templates/accounts/home.html:55
+#: templates/accounts/home.html:60
+msgid "On the move"
+msgstr "चल रहा है"
+
+#: templates/accounts/home.html:78 templates/accounts/home.html:92
+msgid "All my requests"
+msgstr "मेरे सभी अनुरोध"
+
+#: templates/accounts/home.html:80
 msgid "Your latest request"
 msgstr "आपका पिछला अनुरोध"
 
-#: templates/accounts/home.html:60 templates/lostfound/detail.html:23
+#: templates/accounts/home.html:85 templates/lostfound/detail.html:23
 #: templates/market/detail.html:21 templates/printing/_order_tb.html:3
 #: templates/services/detail.html:11
 msgid "Sheet"
 msgstr "शीट"
 
-#: templates/accounts/home.html:61 templates/services/detail.html:12
+#: templates/accounts/home.html:86 templates/services/detail.html:12
 msgid "Location"
 msgstr "जगह"
 
-#: templates/accounts/home.html:62
+#: templates/accounts/home.html:87
 msgid "Type"
 msgstr "प्रकार"
 
-#: templates/accounts/home.html:63 templates/printing/_order_tb.html:7
+#: templates/accounts/home.html:88 templates/printing/_order_tb.html:7
 #: templates/services/detail.html:16
 msgid "Checked by"
 msgstr "जाँचने वाले"
 
-#: templates/accounts/home.html:64 templates/lostfound/detail.html:26
+#: templates/accounts/home.html:89 templates/lostfound/detail.html:26
 #: templates/market/detail.html:25 templates/printing/_order_tb.html:6
 #: templates/services/detail.html:17
 msgid "Status"
 msgstr "स्थिति"
 
-#: templates/accounts/home.html:67
-msgid "All my requests"
-msgstr "मेरे सभी अनुरोध"
-
-#: templates/accounts/home.html:69
+#: templates/accounts/home.html:94
 msgid "No requests yet. When you raise one, its status shows up here."
 msgstr "अभी कोई अनुरोध नहीं। जब आप अनुरोध भेजेंगे, उसकी स्थिति यहाँ दिखेगी।"
 
@@ -1203,33 +1316,62 @@ msgstr "अभी कोई अनुरोध नहीं। जब आप अ
 msgid "There's nothing on this screen for your account yet."
 msgstr "आपके अकाउंट के लिए अभी इस स्क्रीन पर कुछ नहीं है।"
 
-#: templates/accounts/login.html:3 templates/accounts/login.html:8
-#: templates/accounts/login.html:16
+#: templates/accounts/login.html:3 templates/accounts/login.html:47
 #: templates/accounts/password_reset_complete.html:8
-#: templates/accounts/signup.html:26
+#: templates/accounts/signup.html:26 templates/accounts/welcome.html:21
+#: templates/accounts/welcome.html:167
 msgid "Log in"
 msgstr "लॉग इन"
 
-#: templates/accounts/login.html:9
-msgid "One login for students, teachers, BVG staff, shops and admins."
-msgstr "छात्र, शिक्षक, BVG स्टाफ़, दुकानें और एडमिन — सबके लिए एक लॉग इन।"
-
-#: templates/accounts/login.html:18 templates/accounts/password_reset.html:6
-msgid "Forgot password?"
-msgstr "पासवर्ड भूल गए?"
-
-#: templates/accounts/login.html:20
-msgid "New here?"
-msgstr "नए हैं?"
-
-#: templates/accounts/login.html:20
-msgid "Create an account with your COEP email"
-msgstr "अपने COEP ईमेल से अकाउंट बनाएँ"
-
-#: templates/accounts/login.html:21
+#: templates/accounts/login.html:24
 msgid "Campus Plus is a student project for COEP Technological University."
 msgstr ""
 "Campus Plus, COEP टेक्नोलॉजिकल यूनिवर्सिटी के लिए छात्रों का प्रोजेक्ट है।"
+
+#: templates/accounts/login.html:29
+msgid "Back to welcome"
+msgstr "वापस मुख्य पेज पर"
+
+#: templates/accounts/login.html:30 templates/accounts/welcome.html:16
+#: templates/base.html:33
+msgid "Language"
+msgstr "भाषा"
+
+#: templates/accounts/login.html:38
+msgid "I am a…"
+msgstr "मैं हूँ…"
+
+#: templates/accounts/login.html:48
+msgid "Use your COEP email."
+msgstr "अपना COEP ईमेल इस्तेमाल करें।"
+
+#: templates/accounts/login.html:48
+msgid "Use the login your admin gave you."
+msgstr "एडमिन का दिया लॉगिन इस्तेमाल करें।"
+
+#: templates/accounts/login.html:55 templates/accounts/password_reset.html:6
+msgid "Forgot password?"
+msgstr "पासवर्ड भूल गए?"
+
+#: templates/accounts/login.html:56 templates/accounts/welcome.html:84
+#, python-format
+msgid "Log in as %(role)s"
+msgstr "%(role)s के रूप में लॉग इन करें"
+
+#: templates/accounts/login.html:59
+msgid "New here?"
+msgstr "नए हैं?"
+
+#: templates/accounts/login.html:59 templates/accounts/welcome.html:88
+msgid "Create an account with your COEP email"
+msgstr "अपने COEP ईमेल से अकाउंट बनाएँ"
+
+#: templates/accounts/login.html:61
+#, python-format
+msgid ""
+"%(role)s accounts are created by the campus admin. Ask them if you can't log"
+" in."
+msgstr "%(role)s के अकाउंट कैंपस एडमिन बनाते हैं। लॉग इन न हो तो उनसे पूछें।"
 
 #: templates/accounts/password_reset.html:3
 msgid "Reset password"
@@ -1294,7 +1436,7 @@ msgid ""
 msgstr ""
 "अगर इस ईमेल से अकाउंट है, तो रीसेट लिंक आ रहा है। यह एक ही बार काम करेगा।"
 
-#: templates/accounts/profile.html:3 templates/base.html:32
+#: templates/accounts/profile.html:3 templates/base.html:43
 msgid "My profile"
 msgstr "मेरी प्रोफ़ाइल"
 
@@ -1375,22 +1517,374 @@ msgstr "कोड दोबारा भेजें"
 msgid "Use a different email"
 msgstr "दूसरा ईमेल इस्तेमाल करें"
 
+#: templates/accounts/welcome.html:3
+msgid "Your whole campus, one line away."
+msgstr "पूरा कैंपस, बस एक लाइन दूर।"
+
+#: templates/accounts/welcome.html:10
+msgid "Sections"
+msgstr "हिस्से"
+
+#: templates/accounts/welcome.html:11
+msgid "Who it's for"
+msgstr "किसके लिए"
+
+#: templates/accounts/welcome.html:12
+msgid "What you can do"
+msgstr "आप क्या कर सकते हैं"
+
+#: templates/accounts/welcome.html:13 templates/accounts/welcome.html:110
+#: templates/accounts/welcome.html:169
+msgid "How it works"
+msgstr "कैसे काम करता है"
+
+#: templates/accounts/welcome.html:14 templates/accounts/welcome.html:170
+msgid "Questions"
+msgstr "सवाल"
+
+#: templates/accounts/welcome.html:26
+msgid "Made for COEP Technological University, Pune"
+msgstr "COEP टेक्नोलॉजिकल यूनिवर्सिटी, पुणे के लिए"
+
+#: templates/accounts/welcome.html:27
+msgid "Your whole campus,"
+msgstr "पूरा कैंपस,"
+
+#: templates/accounts/welcome.html:27
+msgid "one line away."
+msgstr "बस एक लाइन दूर।"
+
+#: templates/accounts/welcome.html:28
+msgid ""
+"First aid to your classroom, lost things found, old books sold, printouts at"
+" the gate and blood donors when it matters. In English and हिंदी."
+msgstr ""
+"क्लासरूम में फ़र्स्ट एड, खोई चीज़ें वापस, पुरानी किताबें बिकें, गेट पर "
+"प्रिंटआउट और ज़रूरत पर रक्तदाता। English और हिंदी में।"
+
+#: templates/accounts/welcome.html:30
+msgid "Choose how you log in"
+msgstr "चुनें, कैसे लॉग इन करें"
+
+#: templates/accounts/welcome.html:31
+msgid "Emergency help"
+msgstr "आपातकालीन मदद"
+
+#: templates/accounts/welcome.html:34
+msgid "Medical & Security in 2 taps"
+msgstr "मेडिकल और सिक्योरिटी 2 टैप में"
+
+#: templates/accounts/welcome.html:35
+msgid "COEP email only"
+msgstr "सिर्फ़ COEP ईमेल"
+
+#: templates/accounts/welcome.html:36
+msgid "Never touches your money"
+msgstr "आपके पैसे को कभी नहीं छूता"
+
+#: templates/accounts/welcome.html:59
+msgid "Main Building"
+msgstr "मेन बिल्डिंग"
+
+#: templates/accounts/welcome.html:62
+msgid "Hostels"
+msgstr "हॉस्टल"
+
+#: templates/accounts/welcome.html:63
+msgid "Canteen"
+msgstr "कैंटीन"
+
+#: templates/accounts/welcome.html:64
+msgid "Boat Club"
+msgstr "बोट क्लब"
+
+#: templates/accounts/welcome.html:65
+msgid "Workshops"
+msgstr "वर्कशॉप"
+
+#: templates/accounts/welcome.html:66
+msgid "Print shop"
+msgstr "प्रिंट दुकान"
+
+#: templates/accounts/welcome.html:67
+msgid "Clinic"
+msgstr "क्लिनिक"
+
+#: templates/accounts/welcome.html:75
+msgid "Five lines, five logins"
+msgstr "पाँच लाइनें, पाँच लॉगिन"
+
+#: templates/accounts/welcome.html:76
+msgid "Pick your line."
+msgstr "अपनी लाइन चुनें।"
+
+#: templates/accounts/welcome.html:77
+msgid ""
+"Everyone on campus gets their own login and only the screens they need. Tap "
+"yours to log in."
+msgstr ""
+"कैंपस में हर किसी का अपना लॉगिन है और सिर्फ़ ज़रूरी स्क्रीन। लॉग इन के लिए "
+"अपनी लाइन चुनें।"
+
+#: templates/accounts/welcome.html:88
+msgid "New student or teacher?"
+msgstr "नए स्टूडेंट या टीचर?"
+
+#: templates/accounts/welcome.html:88
+msgid "Staff, shops and admins get their login from the campus admin."
+msgstr "स्टाफ़, दुकानों और एडमिन को लॉगिन कैंपस एडमिन से मिलता है।"
+
+#: templates/accounts/welcome.html:94
+msgid "Six lines, one portal"
+msgstr "छह लाइनें, एक पोर्टल"
+
+#: templates/accounts/welcome.html:95
+msgid "Everything campus needs, every day."
+msgstr "कैंपस की हर रोज़ की ज़रूरत, एक जगह।"
+
+#: templates/accounts/welcome.html:96
+msgid ""
+"Each part runs on its own coloured line, so you always know where you are."
+msgstr ""
+"हर हिस्सा अपनी रंगीन लाइन पर चलता है, ताकि आपको हमेशा पता रहे कि आप कहाँ "
+"हैं।"
+
+#: templates/accounts/welcome.html:98
+msgid "Help to your classroom"
+msgstr "क्लासरूम तक मदद"
+
+#: templates/accounts/welcome.html:98
+msgid ""
+"Medical, Security, cleaning or an item. Pick building, floor and room; BVG "
+"staff see it at once."
+msgstr ""
+"मेडिकल, सिक्योरिटी, सफ़ाई या कोई सामान। बिल्डिंग, फ़्लोर और कमरा चुनें; "
+"बीवीजी स्टाफ़ तुरंत देखता है।"
+
+#: templates/accounts/welcome.html:99
+msgid ""
+"A photo feed of lost and found things, so a calculator finds its way home."
+msgstr ""
+"खोई और मिली चीज़ों की फ़ोटो फ़ीड, ताकि कैलकुलेटर अपने मालिक तक पहुँचे।"
+
+#: templates/accounts/welcome.html:100
+msgid ""
+"Sell your drafter and old books to juniors. Meet on campus, pay each other "
+"directly."
+msgstr ""
+"ड्राफ़्टर और पुरानी किताबें जूनियर्स को बेचें। कैंपस में मिलें, सीधे पैसे "
+"दें।"
+
+#: templates/accounts/welcome.html:101
+msgid "Prints & stationery"
+msgstr "प्रिंट और स्टेशनरी"
+
+#: templates/accounts/welcome.html:101
+msgid ""
+"Upload a PDF, add pens or a file, pay the shop's own QR and collect at the "
+"gate or Library."
+msgstr ""
+"PDF अपलोड करें, पेन या फ़ाइल जोड़ें, दुकान के QR से पेमेंट करें और गेट या "
+"लाइब्रेरी से लें।"
+
+#: templates/accounts/welcome.html:102
+msgid "Blood donors & hospitals"
+msgstr "रक्तदाता और अस्पताल"
+
+#: templates/accounts/welcome.html:102
+msgid ""
+"Find a donor by blood group (only people who opted in) and the nearest "
+"hospital with 108."
+msgstr ""
+"ब्लड ग्रुप से रक्तदाता खोजें (सिर्फ़ जिन्होंने हामी भरी) और 108 के साथ "
+"नज़दीकी अस्पताल।"
+
+#: templates/accounts/welcome.html:103
+msgid "Live updates"
+msgstr "लाइव अपडेट"
+
+#: templates/accounts/welcome.html:103
+msgid ""
+"A bell tells you the moment your request is accepted or your print reaches "
+"the gate."
+msgstr "अनुरोध स्वीकार होते ही या प्रिंट गेट पहुँचते ही घंटी बताती है।"
+
+#: templates/accounts/welcome.html:111
+msgid "Watch your request travel."
+msgstr "अपना अनुरोध आगे बढ़ते देखें।"
+
+#: templates/accounts/welcome.html:113
+msgid "You raise it"
+msgstr "आप भेजते हैं"
+
+#: templates/accounts/welcome.html:113
+msgid "Medical · Main Building, Floor 1, 201"
+msgstr "मेडिकल · मेन बिल्डिंग, फ़्लोर 1, 201"
+
+#: templates/accounts/welcome.html:114
+msgid "Staff accept"
+msgstr "स्टाफ़ स्वीकार करता है"
+
+#: templates/accounts/welcome.html:114
+msgid "A BVG staff member takes it"
+msgstr "बीवीजी स्टाफ़ इसे लेता है"
+
+#: templates/accounts/welcome.html:115 templates/printing/shops.html:11
+msgid "On the way"
+msgstr "रास्ते में"
+
+#: templates/accounts/welcome.html:115
+msgid "Your bell rings the moment it moves"
+msgstr "आगे बढ़ते ही घंटी बजती है"
+
+#: templates/accounts/welcome.html:116
+msgid "Closed, full history kept"
+msgstr "बंद, पूरा रिकॉर्ड सुरक्षित"
+
+#: templates/accounts/welcome.html:120
+msgid "Getting a printout"
+msgstr "प्रिंटआउट कैसे लें"
+
+#: templates/accounts/welcome.html:122
+msgid "Choose an open shop and upload your PDF."
+msgstr "खुली दुकान चुनें और PDF अपलोड करें।"
+
+#: templates/accounts/welcome.html:123
+msgid "Scan the shop's own UPI QR, then add the screenshot and last digits."
+msgstr "दुकान का UPI QR स्कैन करें, फिर स्क्रीनशॉट और आख़िरी अंक जोड़ें।"
+
+#: templates/accounts/welcome.html:124
+msgid "Collect at the Main Gate or the Library. The file is deleted after."
+msgstr "मेन गेट या लाइब्रेरी से लें। उसके बाद फ़ाइल हट जाती है।"
+
+#: templates/accounts/welcome.html:128
+msgid "Found something?"
+msgstr "कुछ मिला?"
+
+#: templates/accounts/welcome.html:130
+msgid "Take a photo; location data is removed from it."
+msgstr "फ़ोटो लें; उससे लोकेशन डेटा हटा दिया जाता है।"
+
+#: templates/accounts/welcome.html:131
+msgid "Say where you found it and when."
+msgstr "बताएँ कि कहाँ और कब मिला।"
+
+#: templates/accounts/welcome.html:132
+msgid ""
+"The owner reaches you by college email, or by phone only if you allow it."
+msgstr "मालिक आपसे कॉलेज ईमेल से जुड़ता है, फ़ोन से सिर्फ़ आपकी इजाज़त पर।"
+
+#: templates/accounts/welcome.html:141
+msgid "Safe by design"
+msgstr "शुरू से सुरक्षित"
+
+#: templates/accounts/welcome.html:142
+msgid "Your details stay yours."
+msgstr "आपकी जानकारी आपकी रहती है।"
+
+#: templates/accounts/welcome.html:144
+msgid "Never touches money"
+msgstr "पैसे को नहीं छूता"
+
+#: templates/accounts/welcome.html:144
+msgid "You pay the shop's own QR. We keep only the proof."
+msgstr "आप दुकान के QR से पेमेंट करते हैं। हम सिर्फ़ सबूत रखते हैं।"
+
+#: templates/accounts/welcome.html:145
+msgid "Shown only with consent"
+msgstr "सिर्फ़ आपकी मर्ज़ी से दिखता है"
+
+#: templates/accounts/welcome.html:145
+msgid "Phone and blood group appear only if you turn them on."
+msgstr "फ़ोन और ब्लड ग्रुप तभी दिखते हैं जब आप चालू करें।"
+
+#: templates/accounts/welcome.html:146
+msgid "COEP emails only"
+msgstr "सिर्फ़ COEP ईमेल"
+
+#: templates/accounts/welcome.html:146
+msgid "Sign-up needs a code sent to your college email."
+msgstr "साइन-अप के लिए कॉलेज ईमेल पर आया कोड चाहिए।"
+
+#: templates/accounts/welcome.html:149
+msgid "Is Campus Plus official?"
+msgstr "क्या Campus Plus आधिकारिक है?"
+
+#: templates/accounts/welcome.html:149
+msgid ""
+"No. It is a student project made for COEP Technological University, not an "
+"official COEP product."
+msgstr ""
+"नहीं। यह COEP टेक्नोलॉजिकल यूनिवर्सिटी के लिए बना एक स्टूडेंट प्रोजेक्ट है, "
+"COEP का आधिकारिक प्रोडक्ट नहीं।"
+
+#: templates/accounts/welcome.html:150
+msgid "Who can create an account?"
+msgstr "अकाउंट कौन बना सकता है?"
+
+#: templates/accounts/welcome.html:150
+msgid ""
+"Students and teachers with a COEP email. BVG staff, shops and admins are "
+"added by the campus admin."
+msgstr ""
+"COEP ईमेल वाले स्टूडेंट और टीचर। बीवीजी स्टाफ़, दुकानें और एडमिन कैंपस एडमिन"
+" जोड़ते हैं।"
+
+#: templates/accounts/welcome.html:151
+msgid "Can I use it in Hindi?"
+msgstr "क्या मैं इसे हिंदी में इस्तेमाल कर सकता हूँ?"
+
+#: templates/accounts/welcome.html:151
+msgid "Yes. Tap हिं at the top of any page; your choice is remembered."
+msgstr "हाँ। किसी भी पेज पर ऊपर हिं दबाएँ; आपकी पसंद याद रहती है।"
+
+#: templates/accounts/welcome.html:152
+msgid "Does it work on a basic phone?"
+msgstr "क्या यह साधारण फ़ोन पर चलता है?"
+
+#: templates/accounts/welcome.html:152
+msgid ""
+"Yes. It is a light website, no app to install, and works on campus Wi-Fi or "
+"mobile data."
+msgstr ""
+"हाँ। यह हल्की वेबसाइट है, कोई ऐप इंस्टॉल नहीं करना, और कैंपस Wi-Fi या मोबाइल"
+" डेटा पर चलती है।"
+
+#: templates/accounts/welcome.html:165
+msgid ""
+"One portal for help, Lost & Found, the market, prints and blood donors at "
+"COEP."
+msgstr ""
+"COEP में मदद, खोया-पाया, मार्केट, प्रिंट और रक्तदाता के लिए एक पोर्टल।"
+
+#: templates/accounts/welcome.html:166
+msgid "Footer"
+msgstr "फ़ुटर"
+
+#: templates/accounts/welcome.html:168
+msgid "Features"
+msgstr "सुविधाएँ"
+
+#: templates/accounts/welcome.html:175
+msgid "Designed & built by"
+msgstr "डिज़ाइन और निर्माण"
+
+#: templates/accounts/welcome.html:177
+msgid "A student project, not an official COEP product."
+msgstr "एक स्टूडेंट प्रोजेक्ट, COEP का आधिकारिक प्रोडक्ट नहीं।"
+
 #: templates/base.html:16
 msgid "Skip to content"
 msgstr "सीधे सामग्री पर जाएँ"
 
-#: templates/base.html:22
-msgid "Language"
-msgstr "भाषा"
+#: templates/base.html:25
+msgid "Main"
+msgstr "मुख्य"
 
-#: templates/base.html:28 templates/notify/inbox.html:3
+#: templates/base.html:39 templates/notify/inbox.html:3
 #: templates/notify/inbox.html:6
 msgid "Notifications"
 msgstr "सूचनाएँ"
-
-#: templates/base.html:38
-msgid "Main"
-msgstr "मुख्य"
 
 #: templates/health/_sos.html:3
 msgid "108 Ambulance"
@@ -2422,10 +2916,6 @@ msgstr "यह आइटम हटाएँ?"
 msgid "No stationery yet. Add pens, notebooks, files, lab journals…"
 msgstr "अभी कोई स्टेशनरी नहीं। पेन, नोटबुक, फ़ाइल, लैब जर्नल जोड़ें…"
 
-#: templates/printing/shops.html:11
-msgid "On the way"
-msgstr "रास्ते में"
-
 #: templates/printing/shops.html:23
 msgid "Choose a shop"
 msgstr "दुकान चुनें"
@@ -2459,31 +2949,31 @@ msgstr "भेजने वाले"
 msgid "Raised"
 msgstr "भेजा गया"
 
-#: templates/services/detail.html:24
+#: templates/services/detail.html:25
 msgid "Accept request"
 msgstr "अनुरोध स्वीकार करें"
 
-#: templates/services/detail.html:24 templates/services/list.html:37
+#: templates/services/detail.html:25 templates/services/list.html:37
 msgid "Start work"
 msgstr "काम शुरू करें"
 
-#: templates/services/detail.html:24 templates/services/list.html:37
+#: templates/services/detail.html:25 templates/services/list.html:37
 msgid "Mark done"
 msgstr "पूरा मार्क करें"
 
-#: templates/services/detail.html:29
+#: templates/services/detail.html:30
 msgid "Cancel this request?"
 msgstr "यह अनुरोध रद्द करें?"
 
-#: templates/services/detail.html:30
+#: templates/services/detail.html:31
 msgid "Cancel request"
 msgstr "अनुरोध रद्द करें"
 
-#: templates/services/detail.html:32
+#: templates/services/detail.html:33
 msgid "You can cancel until a staff member accepts it."
 msgstr "स्टाफ़ के स्वीकार करने तक आप इसे रद्द कर सकते हैं।"
 
-#: templates/services/detail.html:41
+#: templates/services/detail.html:42
 msgid "waiting"
 msgstr "इंतज़ार में"
 
@@ -2531,3 +3021,6 @@ msgstr "वैकल्पिक"
 #: templates/services/new.html:38
 msgid "Send request"
 msgstr "अनुरोध भेजें"
+
+#~ msgid "One login for students, teachers, BVG staff, shops and admins."
+#~ msgstr "छात्र, शिक्षक, BVG स्टाफ़, दुकानें और एडमिन — सबके लिए एक लॉग इन।"

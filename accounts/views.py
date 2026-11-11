@@ -19,6 +19,7 @@ from printing.models import PrintOrder, Shop
 from services.models import ServiceRequest
 
 from .forms import LoginForm, OTPForm, ProfileForm, SignupForm
+from . import roles
 from .models import User
 from .otp import send_otp, verify_otp
 
@@ -87,17 +88,30 @@ def resend(request):
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('home')
+    role = request.POST.get('role') or request.GET.get('role') or roles.LINES[0]['id']
+    line = roles.line_for(role)
     form = LoginForm(request.POST or None)
+
+    def page():
+        return render(request, 'accounts/login.html', {
+            'form': form, 'line': line, 'lines': roles.LINES, 'next': request.GET.get('next', ''),
+        })
+
     if request.method == 'POST' and form.is_valid():
         email = form.cleaned_data['email'].lower()
         key = f"login-fail:{email}:{request.META.get('REMOTE_ADDR', '')}"
         if cache.get(key, 0) >= LOGIN_MAX_FAILS:
             form.add_error(None, _('Too many wrong attempts. Wait 15 minutes or reset your password.'))
-            return render(request, 'accounts/login.html', {'form': form})
+            return page()
         user = authenticate(request, username=email, password=form.cleaned_data['password'])
         if user is None:
             cache.set(key, cache.get(key, 0) + 1, LOGIN_LOCK_SECONDS)
             form.add_error(None, _('Wrong email or password.'))
+        elif not roles.matches(user, line['id']):
+            # Each role logs in on its own tab; point them to the right one.
+            cache.delete(key)
+            form.add_error(None, _('This is a %(role)s account. Choose “%(role)s” above and log in there.')
+                           % {'role': roles.line_for('admin' if user.is_admin_role else user.role)['label']})
         else:
             cache.delete(key)
             login(request, user)
@@ -106,18 +120,19 @@ def login_view(request):
                                                require_https=request.is_secure()):
                 return redirect(nxt)
             return redirect('home')
-    return render(request, 'accounts/login.html', {'form': form})
+    return page()
 
 
 @require_POST
 def logout_view(request):
     logout(request)
-    return redirect('accounts:login')
+    return redirect('home')
 
 
-@login_required
 def home(request):
     user = request.user
+    if not user.is_authenticated:
+        return render(request, 'accounts/welcome.html', {'lines': roles.LINES})
     if user.is_bvg:
         return redirect('services:queue')
     if user.role == User.Role.SHOP:
@@ -128,6 +143,7 @@ def home(request):
         today = timezone.localdate()
         ctx = {
             'recent': ServiceRequest.objects.filter(user=user).select_related('location', 'assigned_staff')[:3],
+            'moving': ServiceRequest.objects.filter(user=user, status__in=ServiceRequest.OPEN_STATUSES).select_related('location')[:3],
             'lf_today': Post.objects.filter(status=Post.Status.OPEN, created_at__date=today).count(),
             'lf_latest': Post.objects.filter(status=Post.Status.OPEN).first(),
         }
@@ -166,6 +182,8 @@ def switch_language(request):
     """EN / हिं switch in the top bar. Saves the choice on the account and in a cookie."""
     lang = request.POST.get('language')
     if lang not in dict(settings.LANGUAGES):
+        lang = 'en'
+    if request.user.is_authenticated and not request.user.can_use_hindi:
         lang = 'en'
     if request.user.is_authenticated and request.user.language != lang:
         request.user.language = lang

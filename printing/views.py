@@ -115,10 +115,9 @@ def order_detail(request, pk):
     order = _student_order(request, pk)
     if order.status == S.DRAFT:
         return redirect('printing:pay', pk=pk)
-    idx = PrintOrder.TRACKED.index(order.status) if order.status in PrintOrder.TRACKED else -1
     return render(request, 'printing/order.html', {
         'order': order, 'events': order.events.select_related('by'),
-        'steps': [(s.label, i <= idx, i == idx and s != S.DELIVERED) for i, s in enumerate(PrintOrder.TRACKED)],
+        'steps': order.stations,
         'poll_url': poll_url(f'one:{pk}'),
     })
 

@@ -74,6 +74,20 @@ class User(AbstractUser):
         return self.role == self.Role.BVG
 
     @property
+    def initials(self):
+        parts = self.name.split()
+        return ''.join(p[0] for p in parts[:2]).upper() or self.email[:1].upper()
+
+    @property
+    def can_use_hindi(self):
+        """Hindi is offered to BVG staff and print shops; everyone else works in English."""
+        return self.role in (self.Role.BVG, self.Role.SHOP)
+
+    @property
+    def ui_language(self):
+        return self.language if self.can_use_hindi else 'en'
+
+    @property
     def is_admin_role(self):
         return self.role == self.Role.ADMIN or self.is_superuser
 

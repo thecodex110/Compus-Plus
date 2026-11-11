@@ -31,7 +31,7 @@
 <div class="panel">
   <div class="panel-head"><h2>{% translate "Photocopy shops" %}</h2><a class="small" href="{% url 'panel:shops' %}">{% translate "Manage" %}</a></div>
   {% if shops %}
-    {% for s in shops %}<div class="stat-row"><span>{{ s.name }} <span class="muted small">· {{ s.owner.email }}</span></span><span class="badge {% if s.is_open %}badge-open{% else %}badge-closed{% endif %}">{% if s.is_open %}{% translate "Open" %}{% else %}{% translate "Closed" %}{% endif %}</span></div>{% endfor %}
+    {% for s in shops %}<div class="stat-row"><span><b>{{ s.name }}</b><br><span class="muted small">{{ s.owner.email }}</span></span><span class="badge {% if s.is_open %}badge-open{% else %}badge-closed{% endif %}">{% if s.is_open %}{% translate "Open" %}{% else %}{% translate "Closed" %}{% endif %}</span></div>{% endfor %}
   {% else %}<p class="muted">{% translate "No shops yet." %}</p>{% endif %}
 </div>
 

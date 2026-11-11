@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load i18n ui %}
+{% block title %}Campus Plus&nbsp;· {% translate "Your whole campus, one line away." %}{% endblock %}
+{% block body_class %}welcome{% endblock %}
+{% block chrome %}
+{% get_current_language as LANG %}
+<section class="w-stack w-hero" id="top">
+  <div class="w-wrap w-nav">
+    <a class="w-brand" href="#top"><span class="w-ring" aria-hidden="true"></span><span>Campus Plus</span></a>
+    <nav class="w-links" aria-label="{% translate 'Sections' %}">
+      <a href="#roles">{% translate "Who it's for" %}</a>
+      <a href="#modules">{% translate "What you can do" %}</a>
+      <a href="#how">{% translate "How it works" %}</a>
+      <a href="#faq">{% translate "Questions" %}</a>
+    </nav>
+    <form class="lang w-lang" method="post" action="{% url 'accounts:language' %}" aria-label="{% translate 'Language' %}">
+      {% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <button name="language" value="en" aria-pressed="{% if LANG == 'en' %}true{% else %}false{% endif %}" lang="en">EN</button>
+      <button name="language" value="hi" aria-pressed="{% if LANG == 'hi' %}true{% else %}false{% endif %}" lang="hi">हिं</button>
+    </form>
+    <a class="w-btn w-btn-white w-btn-sm" href="#roles">{% translate "Log in" %}</a>
+  </div>
+
+  <div class="w-wrap w-hero-grid">
+    <div class="w-hero-copy">
+      <span class="w-tag w-tag-dark"><i style="background: #2fb7a6"></i>{% translate "Made for COEP Technological University, Pune" %}</span>
+      <h1>{% translate "Your whole campus," %} <span>{% translate "one line away." %}</span></h1>
+      <p>{% translate "First aid to your classroom, lost things found, old books sold, printouts at the gate and blood donors when it matters. In English and हिंदी." %}</p>
+      <div class="w-ctas">
+        <a class="w-btn w-btn-white" href="#roles">{% translate "Choose how you log in" %} {% icon "arrow" %}</a>
+        <a class="w-btn w-btn-red" href="{% url 'accounts:login' %}?role=student&amp;next={% url 'services:new' %}">{% icon "plus" %} {% translate "Emergency help" %}</a>
+      </div>
+      <ul class="w-ticks">
+        <li><i style="background: #ff5a3c"></i>{% translate "Medical & Security in 2 taps" %}</li>
+        <li><i style="background: #2fb7a6"></i>{% translate "COEP email only" %}</li>
+        <li><i style="background: #f5b434"></i>{% translate "Never touches your money" %}</li>
+      </ul>
+    </div>
+
+    <div class="w-map" aria-hidden="true">
+      <svg viewBox="0 0 600 540">
+        <path class="w-ln" stroke="#ff5a3c" d="M 40 300 L 180 300 L 260 220 L 600 220"/>
+        <path class="w-ln w-l2" stroke="#2fb7a6" d="M 100 40 L 100 140 L 180 220 L 260 220 L 340 300 L 340 500"/>
+        <path class="w-ln w-l3" stroke="#5b7cff" d="M 20 460 L 200 460 L 340 320 L 340 300 L 420 220 L 480 160 L 600 160"/>
+        <path class="w-ln w-l4" stroke="#f5b434" d="M 260 520 L 260 400 L 340 320 L 340 300 L 340 120 L 420 40"/>
+        <path class="w-ln w-l5" stroke="#e2456a" d="M 500 20 L 500 100 L 560 160"/>
+        <circle class="w-hub" cx="260" cy="220" r="17"/>
+        <circle class="w-ping" cx="260" cy="220" r="17"/>
+        <circle class="w-hub" cx="340" cy="300" r="17"/>
+        <circle class="w-st" cx="180" cy="300" r="10"/>
+        <circle class="w-st" cx="100" cy="140" r="10"/>
+        <circle class="w-st" cx="200" cy="460" r="10"/>
+        <circle class="w-st" cx="480" cy="220" r="10"/>
+        <circle class="w-st" cx="340" cy="440" r="10"/>
+        <circle class="w-st" cx="340" cy="120" r="10"/>
+        <circle class="w-st" cx="500" cy="100" r="10"/>
+        <circle class="w-train" r="8"/>
+      </svg>
+      <span class="w-lbl w-lbl-big" style="left: 34%; top: 26%; --c: #ff5a3c; --d: .9s"><i></i>{% translate "Main Building" %}</span>
+      <span class="w-lbl w-lbl-big" style="left: 61%; top: 54%; --c: #5b7cff; --d: 1s"><i></i>{% translate "Library" %}</span>
+      <span class="w-lbl" style="left: 18%; top: 62%; --c: #ff5a3c; --d: 1.1s"><i></i>{% translate "Main Gate" %}</span>
+      <span class="w-lbl" style="left: 21%; top: 21%; --c: #2fb7a6; --d: 1.2s"><i></i>{% translate "Hostels" %}</span>
+      <span class="w-lbl" style="left: 37%; top: 88%; --c: #5b7cff; --d: 1.3s"><i></i>{% translate "Canteen" %}</span>
+      <span class="w-lbl" style="left: 81%; top: 44%; --c: #ff5a3c; --d: 1.4s"><i></i>{% translate "Boat Club" %}</span>
+      <span class="w-lbl" style="left: 61%; top: 79%; --c: #2fb7a6; --d: 1.5s"><i></i>{% translate "Workshops" %}</span>
+      <span class="w-lbl" style="left: 61%; top: 19%; --c: #f5b434; --d: 1.6s"><i></i>{% translate "Print shop" %}</span>
+      <span class="w-lbl" style="left: 87%; top: 15%; --c: #e2456a; --d: 1.7s"><i></i>{% translate "Clinic" %}</span>
+    </div>
+  </div>
+</section>
+
+<span id="main"></span>
+<section class="w-stack w-sky" id="roles">
+  <div class="w-wrap w-pad">
+    <span class="w-tag" style="color: #3b5bdb">{% translate "Five lines, five logins" %}</span>
+    <h2>{% translate "Pick your line." %}</h2>
+    <p class="w-lead">{% translate "Everyone on campus gets their own login and only the screens they need. Tap yours to log in." %}</p>
+    <div class="w-roles">
+      {% for l in lines %}
+        <a class="w-role" href="{% url 'accounts:login' %}?role={{ l.id }}" style="--h: {{ l.colour }}">
+          <span class="w-ico">{% icon l.icon %}</span>
+          <b>{{ l.label }}</b>
+          <span>{{ l.blurb }}</span>
+          <span class="w-go">{% blocktranslate with role=l.label %}Log in as {{ role }}{% endblocktranslate %} {% icon "arrow" "i-sm" %}</span>
+        </a>
+      {% endfor %}
+    </div>
+    <p class="w-note">{% translate "New student or teacher?" %} <a href="{% url 'accounts:signup' %}">{% translate "Create an account with your COEP email" %}</a>. {% translate "Staff, shops and admins get their login from the campus admin." %}</p>
+  </div>
+</section>
+
+<section class="w-stack w-butter" id="modules">
+  <div class="w-wrap w-pad">
+    <span class="w-tag" style="color: #8a5a00">{% translate "Six lines, one portal" %}</span>
+    <h2>{% translate "Everything campus needs, every day." %}</h2>
+    <p class="w-lead">{% translate "Each part runs on its own coloured line, so you always know where you are." %}</p>
+    <div class="w-mods">
+      <div class="w-mod" style="--bg: #c8371f"><span class="w-ico">{% icon "medical" %}</span><h3>{% translate "Help to your classroom" %}</h3><p>{% translate "Medical, Security, cleaning or an item. Pick building, floor and room; BVG staff see it at once." %}</p></div>
+      <div class="w-mod" style="--bg: #12857a"><span class="w-ico">{% icon "lostfound" %}</span><h3>{% translate "Lost & Found" %}</h3><p>{% translate "A photo feed of lost and found things, so a calculator finds its way home." %}</p></div>
+      <div class="w-mod" style="--bg: #3b5bdb"><span class="w-ico">{% icon "market" %}</span><h3>{% translate "COEP Market" %}</h3><p>{% translate "Sell your drafter and old books to juniors. Meet on campus, pay each other directly." %}</p></div>
+      <div class="w-mod" style="--bg: #8a5a00"><span class="w-ico">{% icon "print" %}</span><h3>{% translate "Prints & stationery" %}</h3><p>{% translate "Upload a PDF, add pens or a file, pay the shop's own QR and collect at the gate or Library." %}</p></div>
+      <div class="w-mod" style="--bg: #a3203a"><span class="w-ico">{% icon "blood" %}</span><h3>{% translate "Blood donors & hospitals" %}</h3><p>{% translate "Find a donor by blood group (only people who opted in) and the nearest hospital with 108." %}</p></div>
+      <div class="w-mod" style="--bg: #121630"><span class="w-ico">{% icon "bell" %}</span><h3>{% translate "Live updates" %}</h3><p>{% translate "A bell tells you the moment your request is accepted or your print reaches the gate." %}</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="w-stack w-mint" id="how">
+  <div class="w-wrap w-pad">
+    <span class="w-tag" style="color: #12857a">{% translate "How it works" %}</span>
+    <h2>{% translate "Watch your request travel." %}</h2>
+    <ol class="w-journey">
+      <li class="is-on"><span class="w-stop"></span><b>{% translate "You raise it" %}</b><span>{% translate "Medical · Main Building, Floor 1, 201" %}</span></li>
+      <li><span class="w-stop"></span><b>{% translate "Staff accept" %}</b><span>{% translate "A BVG staff member takes it" %}</span></li>
+      <li><span class="w-stop"></span><b>{% translate "On the way" %}</b><span>{% translate "Your bell rings the moment it moves" %}</span></li>
+      <li><span class="w-stop"></span><b>{% translate "Done" %}</b><span>{% translate "Closed, full history kept" %}</span></li>
+    </ol>
+    <div class="w-flows">
+      <div class="w-flow" style="--h: #8a5a00">
+        <b>{% translate "Getting a printout" %}</b>
+        <ol>
+          <li>{% translate "Choose an open shop and upload your PDF." %}</li>
+          <li>{% translate "Scan the shop's own UPI QR, then add the screenshot and last digits." %}</li>
+          <li>{% translate "Collect at the Main Gate or the Library. The file is deleted after." %}</li>
+        </ol>
+      </div>
+      <div class="w-flow" style="--h: #12857a">
+        <b>{% translate "Found something?" %}</b>
+        <ol>
+          <li>{% translate "Take a photo; location data is removed from it." %}</li>
+          <li>{% translate "Say where you found it and when." %}</li>
+          <li>{% translate "The owner reaches you by college email, or by phone only if you allow it." %}</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="w-stack w-night" id="faq">
+  <div class="w-wrap w-pad">
+    <span class="w-tag w-tag-dark" style="color: #f5b434">{% translate "Safe by design" %}</span>
+    <h2>{% translate "Your details stay yours." %}</h2>
+    <div class="w-trust">
+      <div><b>{% translate "Never touches money" %}</b><span>{% translate "You pay the shop's own QR. We keep only the proof." %}</span></div>
+      <div><b>{% translate "Shown only with consent" %}</b><span>{% translate "Phone and blood group appear only if you turn them on." %}</span></div>
+      <div><b>{% translate "COEP emails only" %}</b><span>{% translate "Sign-up needs a code sent to your college email." %}</span></div>
+    </div>
+    <div class="w-faq">
+      <details open><summary>{% translate "Is Campus Plus official?" %}</summary><p>{% translate "No. It is a student project made for COEP Technological University, not an official COEP product." %}</p></details>
+      <details><summary>{% translate "Who can create an account?" %}</summary><p>{% translate "Students and teachers with a COEP email. BVG staff, shops and admins are added by the campus admin." %}</p></details>
+      <details><summary>{% translate "Can I use it in Hindi?" %}</summary><p>{% translate "Yes. Tap हिं at the top of any page; your choice is remembered." %}</p></details>
+      <details><summary>{% translate "Does it work on a basic phone?" %}</summary><p>{% translate "Yes. It is a light website, no app to install, and works on campus Wi-Fi or mobile data." %}</p></details>
+    </div>
+  </div>
+</section>
+
+<footer class="w-foot">
+  <svg viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M 0 110 L 560 110 L 640 60 L 1440 60" stroke="#ff5a3c" opacity=".55"/>
+    <path d="M 0 150 L 600 150 L 680 110 L 1440 110" stroke="#2fb7a6" opacity=".45"/>
+    <path d="M 0 190 L 640 190 L 720 160 L 1440 160" stroke="#5b7cff" opacity=".4"/>
+  </svg>
+  <div class="w-wrap w-foot-in">
+    <span class="w-brand"><span class="w-ring" aria-hidden="true"></span><span>Campus Plus</span></span>
+    <p>{% translate "One portal for help, Lost & Found, the market, prints and blood donors at COEP." %}</p>
+    <nav aria-label="{% translate 'Footer' %}">
+      <a href="#roles">{% translate "Log in" %}</a>
+      <a href="#modules">{% translate "Features" %}</a>
+      <a href="#how">{% translate "How it works" %}</a>
+      <a href="#faq">{% translate "Questions" %}</a>
+      <a href="https://github.com/thecodex110/Compus-Plus" rel="noopener">GitHub</a>
+    </nav>
+    <div class="w-credit">
+      <span class="w-mono" aria-hidden="true"><span>MM</span></span>
+      <span><small>{% translate "Designed & built by" %}</small><b>Mohammad Mehndi</b></span>
+    </div>
+    <p class="w-fine">© {% now "Y" %} Campus Plus&nbsp;· {% translate "A student project, not an official COEP product." %}</p>
+  </div>
+</footer>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Stacked sections: a section taller than the screen sticks once its bottom is in view,
+  // so the next one slides over it without hiding anything.
+  (function () {
+    var secs = document.querySelectorAll('.w-stack');
+    function fit() {
+      for (var i = 0; i < secs.length; i++) secs[i].style.top = Math.min(0, innerHeight - secs[i].offsetHeight) + 'px';
+    }
+    fit();
+    addEventListener('resize', fit);
+  })();
+</script>
+{% endblock %}

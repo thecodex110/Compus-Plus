@@ -16,6 +16,7 @@
   <div class="tb-wide"><dt>{% translate "Checked by" %}</dt><dd>{{ sr.assigned_staff.name|default:"—" }}</dd></div>
   <div><dt>{% translate "Status" %}</dt><dd><span class="stamp {{ sr.status|stamp }}">{{ sr.get_status_display }}</span></dd></div>
 </dl>
+{% if sr.status != 'cancelled' %}<ol class="stages">{% for label, on, now in sr.stations %}<li class="{% if now %}now{% elif on %}on{% endif %}">{{ label }}</li>{% endfor %}</ol>{% endif %}
 
 {% if can_advance %}
   <form method="post" action="{% url 'services:advance' sr.pk %}" class="btn-row">

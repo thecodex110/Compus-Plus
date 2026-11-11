@@ -31,7 +31,7 @@ def notify(users, title, body='', url='', urgent=False):
         users = [users]
     items = []
     for u in users:
-        with translation.override(getattr(u, 'language', None) or settings.LANGUAGE_CODE):
+        with translation.override(getattr(u, 'ui_language', None) or settings.LANGUAGE_CODE):
             t = str(title() if callable(title) else title)
             b = str(body() if callable(body) else body)
         items.append(Notification(user=u, title=t[:120], body=b[:250], url=url, urgent=urgent))

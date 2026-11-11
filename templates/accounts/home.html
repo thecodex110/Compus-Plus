@@ -1,72 +1,99 @@
 {% extends 'base.html' %}
 {% load i18n ui %}
 {% block content %}
-{% get_current_language as LANG %}
 <div class="hello">
   <h1>{% blocktranslate with name=user.get_short_name %}Hello, {{ name }}{% endblocktranslate %}</h1>
   <p>{% now "l, j F" %}</p>
 </div>
 
-<div class="sos">
-  <a class="sos-med" href="{% url 'services:new' %}?category=medical">
-    {% icon "medical" %}
-    <span><b>{% translate "Medical" %}</b>{% if LANG == "hi" %}<span class="alt" lang="en">{% language "en" %}{% translate "Medical" %}{% endlanguage %}</span>{% else %}<span class="alt" lang="hi">{% language "hi" %}{% translate "Medical" %}{% endlanguage %}</span>{% endif %}<small>{% translate "Get first aid to your classroom" %}</small></span>
-  </a>
-  <a class="sos-sec" href="{% url 'services:new' %}?category=security">
-    {% icon "security" %}
-    <span><b>{% translate "Security" %}</b>{% if LANG == "hi" %}<span class="alt" lang="en">{% language "en" %}{% translate "Security" %}{% endlanguage %}</span>{% else %}<span class="alt" lang="hi">{% language "hi" %}{% translate "Security" %}{% endlanguage %}</span>{% endif %}<small>{% translate "Fight, theft or a stranger on campus" %}</small></span>
-  </a>
-</div>
-<a class="sos-other" href="{% url 'services:new' %}">
-  <span>{% translate "Cleaning, bring an item, or something else" %}</span>{% icon "chevron" %}
-</a>
+<div class="home-grid">
+  <section>
+    <div class="sos">
+      <a class="sos-med" href="{% url 'services:new' %}?category=medical">
+        {% icon "medical" %}
+        <span><b>{% translate "Medical" %}</b><small>{% translate "Get first aid to your classroom" %}</small></span>
+      </a>
+      <a class="sos-sec" href="{% url 'services:new' %}?category=security">
+        {% icon "security" %}
+        <span><b>{% translate "Security" %}</b><small>{% translate "Fight, theft or a stranger on campus" %}</small></span>
+      </a>
+    </div>
+    <a class="sos-other" href="{% url 'services:new' %}">
+      <span>{% translate "Cleaning, bring an item, or something else" %}</span>{% icon "chevron" %}
+    </a>
 
-<div class="modgrid">
-  <a class="mod" data-module="lf" href="{% url 'lostfound:feed' %}">
-    {% icon "lostfound" %}<b>{% translate "Lost & Found" %}</b>
-    <span>{% if lf_today %}{% blocktranslate count n=lf_today %}{{ n }} new today{% plural %}{{ n }} new today{% endblocktranslate %}{% elif lf_latest %}{{ lf_latest.title|truncatechars:26 }}{% else %}{% translate "Nothing posted yet" %}{% endif %}</span>
-  </a>
-  {% if user.role == 'student' %}
-    <a class="mod" data-module="print" href="{% if active_order %}{% url 'printing:order' active_order.pk %}{% else %}{% url 'printing:shops' %}{% endif %}">
-      {% icon "print" %}<b>{% translate "Print & stationery" %}</b>
-      <span>{% segs %}{% if active_order %}{{ active_order|sheet_no:'ORD' }}&nbsp;· {{ active_order.get_status_display }}{% else %}{% blocktranslate count n=open_shops %}{{ n }} shop open{% plural %}{{ n }} shops open{% endblocktranslate %}{% endif %}{% endsegs %}</span>
-    </a>
-    <a class="mod" data-module="mkt" href="{% url 'market:browse' %}">
-      {% icon "market" %}<b>{% translate "COEP Market" %}</b>
-      <span>{% segs %}{% if market_latest %}{{ market_latest.title|truncatechars:18 }}&nbsp;· ₹{{ market_latest.price }}{% else %}{% translate "Sell your old books" %}{% endif %}{% endsegs %}</span>
-    </a>
-    <a class="mod" data-module="blood" href="{% url 'health:directory' %}">
-      {% icon "blood" %}<b>{% translate "Blood donors" %}</b>
-      <span>{% if donor and donor.visible %}{% blocktranslate with g=donor.blood_group %}You're listed&nbsp;· {{ g }}{% endblocktranslate %}{% else %}{% translate "Find a donor fast" %}{% endif %}</span>
-    </a>
-  {% else %}
-    <a class="mod" data-module="lf" href="{% url 'lostfound:new' %}">
-      {% icon "plus" %}<b>{% translate "Post an item" %}</b><span>{% translate "Lost or found something?" %}</span>
-    </a>
-    <a class="mod" data-module="blood" href="{% url 'health:directory' %}">
-      {% icon "blood" %}<b>{% translate "Blood donors" %}</b><span>{% translate "Search by blood group" %}</span>
-    </a>
-    <a class="mod" data-module="blood" href="{% url 'health:hospitals' %}">
-      {% icon "hospital" %}<b>{% translate "Hospitals" %}</b><span>{% translate "Nearest first, with 108" %}</span>
-    </a>
-  {% endif %}
-</div>
+    <div class="modgrid">
+      <a class="mod" data-module="lf" href="{% url 'lostfound:feed' %}">
+        {% icon "lostfound" %}<b>{% translate "Lost & Found" %}</b>
+        <span>{% if lf_today %}{% blocktranslate count n=lf_today %}{{ n }} new today{% plural %}{{ n }} new today{% endblocktranslate %}{% elif lf_latest %}{{ lf_latest.title|truncatechars:26 }}{% else %}{% translate "Nothing posted yet" %}{% endif %}</span>
+      </a>
+      {% if user.role == 'student' %}
+        <a class="mod" data-module="print" href="{% if active_order %}{% url 'printing:order' active_order.pk %}{% else %}{% url 'printing:shops' %}{% endif %}">
+          {% icon "print" %}<b>{% translate "Print & stationery" %}</b>
+          <span>{% segs %}{% if active_order %}{{ active_order|sheet_no:'ORD' }}&nbsp;· {{ active_order.get_status_display }}{% else %}{% blocktranslate count n=open_shops %}{{ n }} shop open{% plural %}{{ n }} shops open{% endblocktranslate %}{% endif %}{% endsegs %}</span>
+        </a>
+        <a class="mod" data-module="mkt" href="{% url 'market:browse' %}">
+          {% icon "market" %}<b>{% translate "COEP Market" %}</b>
+          <span>{% segs %}{% if market_latest %}{{ market_latest.title|truncatechars:18 }}&nbsp;· ₹{{ market_latest.price }}{% else %}{% translate "Sell your old books" %}{% endif %}{% endsegs %}</span>
+        </a>
+        <a class="mod" data-module="blood" href="{% url 'health:directory' %}">
+          {% icon "blood" %}<b>{% translate "Blood donors" %}</b>
+          <span>{% if donor and donor.visible %}{% blocktranslate with g=donor.blood_group %}You're listed&nbsp;· {{ g }}{% endblocktranslate %}{% else %}{% translate "Find a donor fast" %}{% endif %}</span>
+        </a>
+      {% else %}
+        <a class="mod" data-module="lf" href="{% url 'lostfound:new' %}">
+          {% icon "plus" %}<b>{% translate "Post an item" %}</b><span>{% translate "Lost or found something?" %}</span>
+        </a>
+        <a class="mod" data-module="blood" href="{% url 'health:directory' %}">
+          {% icon "blood" %}<b>{% translate "Blood donors" %}</b><span>{% translate "Search by blood group" %}</span>
+        </a>
+        <a class="mod" data-module="blood" href="{% url 'health:hospitals' %}">
+          {% icon "hospital" %}<b>{% translate "Hospitals" %}</b><span>{% translate "Nearest first, with 108" %}</span>
+        </a>
+      {% endif %}
+    </div>
+  </section>
 
-<h2>{% translate "Your latest request" %}</h2>
-{% with sr=recent.0 %}
-  {% if sr %}
-    <a href="{% url 'services:detail' sr.pk %}" class="tb-link" data-module="req">
-      <dl class="tb">
-        <div class="tb-no"><dt>{% translate "Sheet" %}</dt><dd><b>{{ sr|sheet_no:'REQ' }}</b></dd></div>
-        <div class="tb-wide"><dt>{% translate "Location" %}</dt><dd>{% segs %}{{ sr.location }}{% endsegs %}</dd></div>
-        <div><dt>{% translate "Type" %}</dt><dd>{{ sr.get_category_display }}</dd></div>
-        <div><dt>{% translate "Checked by" %}</dt><dd>{{ sr.assigned_staff.name|default:"—" }}</dd></div>
-        <div class="tb-full"><dt>{% translate "Status" %}</dt><dd><span class="stamp {{ sr.status|stamp }}">{{ sr.get_status_display }}</span> <span class="muted small">{{ sr.created_at|date:"j M, g:i A" }}</span></dd></div>
-      </dl>
-    </a>
-    <p class="small after-tb"><a href="{% url 'services:mine' %}">{% translate "All my requests" %}</a></p>
-  {% else %}
-    <div class="empty">{% icon "requests" %}<p>{% translate "No requests yet. When you raise one, its status shows up here." %}</p></div>
-  {% endif %}
-{% endwith %}
+  <section>
+    {% if moving or active_order %}
+      <h2>{% translate "On the move" %}</h2>
+      <div class="moving">
+        {% for sr in moving %}
+          <a class="ride" data-module="req" href="{% url 'services:detail' sr.pk %}">
+            <div class="ride-head"><span class="rec-no">{{ sr|sheet_no:'REQ' }}</span><span class="ride-sub">{{ sr.created_at|date:"j M, g:i A" }}</span></div>
+            <div class="ride-title">{{ sr.get_category_display }}</div>
+            <div class="ride-sub">{% segs %}{{ sr.location }}{% endsegs %}</div>
+            <ol class="stages">{% for label, on, now in sr.stations %}<li class="{% if now %}now{% elif on %}on{% endif %}">{{ label }}</li>{% endfor %}</ol>
+          </a>
+        {% endfor %}
+        {% if active_order %}
+          <a class="ride" data-module="print" href="{% url 'printing:order' active_order.pk %}">
+            <div class="ride-head"><span class="rec-no">{{ active_order|sheet_no:'ORD' }}</span><span class="ride-sub">{{ active_order.get_delivery_point_display }}</span></div>
+            <div class="ride-title">{{ active_order.summary }}</div>
+            <ol class="stages">{% for label, on, now in active_order.stations %}<li class="{% if now %}now{% elif on %}on{% endif %}">{{ label }}</li>{% endfor %}</ol>
+          </a>
+        {% endif %}
+      </div>
+      <p class="small after-tb"><a href="{% url 'services:mine' %}">{% translate "All my requests" %}</a></p>
+    {% else %}
+      <h2>{% translate "Your latest request" %}</h2>
+      {% with sr=recent.0 %}
+        {% if sr %}
+          <a href="{% url 'services:detail' sr.pk %}" class="tb-link" data-module="req">
+            <dl class="tb">
+              <div class="tb-no"><dt>{% translate "Sheet" %}</dt><dd><b>{{ sr|sheet_no:'REQ' }}</b></dd></div>
+              <div class="tb-wide"><dt>{% translate "Location" %}</dt><dd>{% segs %}{{ sr.location }}{% endsegs %}</dd></div>
+              <div><dt>{% translate "Type" %}</dt><dd>{{ sr.get_category_display }}</dd></div>
+              <div><dt>{% translate "Checked by" %}</dt><dd>{{ sr.assigned_staff.name|default:"—" }}</dd></div>
+              <div class="tb-full"><dt>{% translate "Status" %}</dt><dd><span class="stamp {{ sr.status|stamp }}">{{ sr.get_status_display }}</span> <span class="muted small">{{ sr.created_at|date:"j M, g:i A" }}</span></dd></div>
+            </dl>
+          </a>
+          <p class="small after-tb"><a href="{% url 'services:mine' %}">{% translate "All my requests" %}</a></p>
+        {% else %}
+          <div class="empty">{% icon "requests" %}<p>{% translate "No requests yet. When you raise one, its status shows up here." %}</p></div>
+        {% endif %}
+      {% endwith %}
+    {% endif %}
+  </section>
+</div>
 {% endblock %}

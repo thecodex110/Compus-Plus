@@ -218,6 +218,12 @@ class PrintOrder(models.Model):
         return self.status in self.ACTIVE
 
     @property
+    def stations(self):
+        """(label, reached, current) for each stop on the order's line."""
+        idx = self.TRACKED.index(self.status) if self.status in self.TRACKED else -1
+        return [(s.label, i <= idx, i == idx and s != self.Status.DELIVERED) for i, s in enumerate(self.TRACKED)]
+
+    @property
     def has_print(self):
         return self.pages_to_print > 0
 

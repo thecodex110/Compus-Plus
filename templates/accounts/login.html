@@ -1,23 +1,67 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n ui %}
 {% block title %}{% translate "Log in" %}&nbsp;· Campus Plus{% endblock %}
-{% block content %}
-<section class="auth">
-  <div class="auth-sheet">
-    <div class="auth-head">
-      <h1>{% translate "Log in" %}</h1>
-      <p class="muted">{% translate "One login for students, teachers, BVG staff, shops and admins." %}</p>
+{% block body_class %}signin{% endblock %}
+{% block chrome %}
+{% get_current_language as LANG %}
+<div class="li" style="--h: {{ line.colour }}; --t: {{ line.tint }}">
+  <aside class="li-side">
+    <svg class="li-lines" viewBox="0 0 600 900" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
+      <path d="M -20 360 L 220 360 L 360 220 L 640 220"/>
+      <path d="M 420 -20 L 420 80 L 360 140 L 360 220 L 240 340 L 240 420"/>
+      <path d="M -20 60 L 140 60 L 300 220"/>
+      <circle cx="360" cy="220" r="24"/>
+      <circle cx="220" cy="360" r="12"/>
+      <circle cx="420" cy="80" r="12"/>
+    </svg>
+    <a class="li-brand" href="{% url 'home' %}"><span class="w-ring" aria-hidden="true"></span><span>Campus Plus</span></a>
+    <div class="li-pitch">
+      <span class="li-chip">{{ line.label }}</span>
+      <h1>{{ line.title }}</h1>
+      <p>{{ line.blurb }}</p>
+      <ul>{% for perk in line.perks %}<li>{{ perk }}</li>{% endfor %}</ul>
     </div>
-    <form method="post" novalidate class="form">
-      {% csrf_token %}
-      {% for e in form.non_field_errors %}<div class="flash flash-error"><span>{{ e }}</span></div>{% endfor %}
-      {% include '_field.html' with field=form.email %}
-      {% include '_field.html' with field=form.password %}
-      <button class="btn btn-block btn-lg">{% translate "Log in" %}</button>
-    </form>
-    <p class="auth-foot"><a href="{% url 'accounts:password_reset' %}">{% translate "Forgot password?" %}</a></p>
-  </div>
-  <p class="auth-foot center">{% translate "New here?" %} <a href="{% url 'accounts:signup' %}">{% translate "Create an account with your COEP email" %}</a></p>
-  <p class="small muted center">{% translate "Campus Plus is a student project for COEP Technological University." %}</p>
-</section>
+    <p class="li-fine">{% translate "Campus Plus is a student project for COEP Technological University." %}</p>
+  </aside>
+
+  <main class="li-main" id="main">
+    <div class="li-top">
+      <a class="li-back" href="{% url 'home' %}">{% icon "back" "i-sm" %} {% translate "Back to welcome" %}</a>
+      <form class="lang" method="post" action="{% url 'accounts:language' %}" aria-label="{% translate 'Language' %}">
+        {% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}">
+        <button name="language" value="en" aria-pressed="{% if LANG == 'en' %}true{% else %}false{% endif %}" lang="en">EN</button>
+        <button name="language" value="hi" aria-pressed="{% if LANG == 'hi' %}true{% else %}false{% endif %}" lang="hi">हिं</button>
+      </form>
+    </div>
+
+    <div class="li-body">
+      <p class="li-ask" id="role-label">{% translate "I am a…" %}</p>
+      <nav class="li-tabs" aria-labelledby="role-label">
+        {% for l in lines %}
+          <a href="?role={{ l.id }}{% if next %}&amp;next={{ next|urlencode }}{% endif %}" style="--c: {{ l.colour }}" {% if l.id == line.id %}aria-current="page"{% endif %}><i></i>{{ l.label }}</a>
+        {% endfor %}
+      </nav>
+
+      <div class="li-card">
+        {% if messages %}{% for m in messages %}<div class="flash flash-{{ m.tags }}"><span>{{ m }}</span></div>{% endfor %}{% endif %}
+        <h2>{% translate "Log in" %}</h2>
+        <p class="li-note">{% if line.signup %}{% translate "Use your COEP email." %}{% else %}{% translate "Use the login your admin gave you." %}{% endif %}</p>
+        <form method="post" novalidate class="form">
+          {% csrf_token %}
+          <input type="hidden" name="role" value="{{ line.id }}">
+          {% for e in form.non_field_errors %}<div class="flash flash-error">{% icon "alert" %}<span>{{ e }}</span></div>{% endfor %}
+          {% include '_field.html' with field=form.email %}
+          {% include '_field.html' with field=form.password %}
+          <p class="li-forgot"><a href="{% url 'accounts:password_reset' %}">{% translate "Forgot password?" %}</a></p>
+          <button class="btn btn-block btn-lg li-submit">{% blocktranslate with role=line.label %}Log in as {{ role }}{% endblocktranslate %}</button>
+        </form>
+        {% if line.signup %}
+          <p class="li-foot">{% translate "New here?" %} <a href="{% url 'accounts:signup' %}">{% translate "Create an account with your COEP email" %}</a></p>
+        {% else %}
+          <p class="li-foot li-foot-box">{% blocktranslate with role=line.label %}{{ role }} accounts are created by the campus admin. Ask them if you can't log in.{% endblocktranslate %}</p>
+        {% endif %}
+      </div>
+    </div>
+  </main>
+</div>
 {% endblock %}

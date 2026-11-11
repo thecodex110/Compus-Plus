@@ -97,6 +97,13 @@ class ServiceRequest(models.Model):
     def next_status(self):
         return self.NEXT_STATUS.get(self.status)
 
+    @property
+    def stations(self):
+        """(label, reached, current) for each stop on the request's line."""
+        line = (self.Status.PENDING, self.Status.ACCEPTED, self.Status.IN_PROGRESS, self.Status.DONE)
+        idx = line.index(self.status) if self.status in line else -1
+        return [(s.label, i <= idx, i == idx and s != self.Status.DONE) for i, s in enumerate(line)]
+
     def advance(self, staff):
         """Move to the next status on behalf of `staff`. Returns False if not allowed."""
         nxt = self.next_status
