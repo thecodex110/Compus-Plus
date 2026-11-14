@@ -121,18 +121,25 @@ On `/notifications/` a user can tap **Turn on alerts** to get browser pop-ups wh
 - Login is locked for 15 minutes after 10 wrong passwords for the same email; the `?next=` redirect after login only allows this site.
 - Friendly 403/404/500 pages. Floors are listed G, 1, 2… everywhere.
 
-## Deploy
+## Deploy (Render)
 
-The spec suggested Vercel, but Vercel runs serverless functions with no persistent disk, which doesn't fit Django + uploaded files. Use a normal app host such as **Render, Railway, Fly.io** or a small VPS, with managed PostgreSQL.
+Vercel does not fit this app (serverless functions have no persistent disk, and print files, photos and QR codes are uploaded files). `render.yaml` sets everything up on **Render**:
 
-1. Set environment variables: `DEBUG=0`, a long random `SECRET_KEY`, `ALLOWED_HOSTS=portal.example.com`, `CSRF_TRUSTED_ORIGINS=https://portal.example.com`, the `DB_*` values, `ALLOWED_EMAIL_DOMAINS`, and SMTP settings (`EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend`, `EMAIL_HOST`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`). OTPs and password resets need real email.
-2. Build: `pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate` (the compiled Hindi file `locale/hi/LC_MESSAGES/django.mo` is committed, so the server needs no gettext)
-3. Start: `gunicorn config.wsgi --bind 0.0.0.0:$PORT`
-4. Put `media/` and `private_media/` on a persistent disk (or move them to S3-compatible storage). `private_media/` must never be served publicly.
-5. Daily cron: `python manage.py purge_print_files`
-6. Create the first admin: `python manage.py createsuperuser` (then log in, open the dashboard and add staff, shops, classrooms and hospitals). Don't run `seed_demo` in production.
+- a **web service** (gunicorn) with a **persistent disk** at `/var/data`. It holds `media/` (public photos and shop QR codes) and `private_media/` (print files and payment screenshots, never served directly);
+- a managed **PostgreSQL** database;
+- a daily **clean-up job** (`campus-purge`). A Render cron job cannot mount the web service's disk, so the job only calls `/internal/purge-print-files/` on the web service with a secret token (`CRON_TOKEN`, generated once and shared by both services) and the web service does the deleting.
 
-With `DEBUG=0` the app turns on HTTPS redirect, secure cookies, HSTS and serves static files itself (WhiteNoise).
+The plans in `render.yaml` are paid ones; check Render's pricing page first. The disk means a single instance and a few seconds of downtime on every deploy.
+
+1. Push the repo to GitHub.
+2. Render dashboard → **New → Blueprint** → choose the repo. Render asks for the SMTP values (`EMAIL_HOST`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, `DEFAULT_FROM_EMAIL`): OTP and password-reset emails need a real mail account. `APP_URL` can stay empty for now.
+3. When the web service is live, copy its URL (`https://campus-plus-xxxx.onrender.com`) into **`APP_URL`** of the `campus-purge` job.
+4. Open the web service's **Shell** and run `python manage.py createsuperuser`. Log in on the **Admin** tab, then add staff, shops, classrooms and hospitals from the dashboard. Don't run `seed_demo` in production.
+5. Custom domain: add it in Render, then set `ALLOWED_HOSTS=portal.example.com` and `CSRF_TRUSTED_ORIGINS=https://portal.example.com` on the web service. The `*.onrender.com` address works without them.
+
+`render.yaml` also pins Python with `.python-version` (3.12). Static files are built during the deploy (`collectstatic`); the compiled Hindi file `locale/hi/LC_MESSAGES/django.mo` is committed, so the server needs no gettext. With `DEBUG=0` the app turns on the HTTPS redirect, secure cookies and HSTS.
+
+**Any other host.** Set `DEBUG=0`, a long random `SECRET_KEY`, `ALLOWED_HOSTS`, `CSRF_TRUSTED_ORIGINS`, the `DB_*` values and the SMTP values. Build with `pip install -r requirements.txt && python manage.py collectstatic --noinput`, start with `python manage.py migrate --noinput && gunicorn config.wsgi --bind 0.0.0.0:$PORT`. Set `DATA_DIR` to a persistent disk. Run `python manage.py purge_print_files` daily, or set `CRON_TOKEN` and have any scheduler `POST` to `/internal/purge-print-files/` with the header `Authorization: Bearer <CRON_TOKEN>`.
 
 ## Module 7 — Redesign, Hindi, and the remaining gaps
 

@@ -1,0 +1,88 @@
+# Render Blueprint for Campus Plus: Render dashboard → New → Blueprint → pick this repo.
+#   - web service with a persistent disk (uploads live there, so there is one instance and a
+#     few seconds of downtime on each deploy)
+#   - managed PostgreSQL
+#   - a daily clean-up job. Render cron jobs cannot mount the web service's disk, so the job
+#     only calls /internal/purge-print-files/ on the web service with a shared secret token.
+# Plans below are paid; check Render's pricing page before you create it.
+
+envVarGroups:
+  - name: campus-shared
+    envVars:
+      - key: CRON_TOKEN
+        generateValue: true
+
+databases:
+  - name: campus-db
+    databaseName: campusplus
+    user: campusplus
+    plan: basic-256mb
+    postgresMajorVersion: "17"
+
+services:
+  - type: web
+    name: campus-plus
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: python manage.py migrate --noinput && gunicorn config.wsgi --bind 0.0.0.0:$PORT --workers 2
+    healthCheckPath: /healthz/
+    disk:
+      name: campus-data
+      mountPath: /var/data
+      sizeGB: 5
+    envVars:
+      - fromGroup: campus-shared
+      - key: DEBUG
+        value: "0"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATA_DIR
+        value: /var/data
+      - key: DB_HOST
+        fromDatabase:
+          name: campus-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: campus-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: campus-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: campus-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: campus-db
+          property: password
+      - key: ALLOWED_EMAIL_DOMAINS
+        value: coeptech.ac.in,coep.ac.in
+      # OTP and password-reset emails need a real SMTP account. Render asks for these when
+      # you create the Blueprint.
+      - key: EMAIL_BACKEND
+        value: django.core.mail.backends.smtp.EmailBackend
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_HOST_USER
+        sync: false
+      - key: EMAIL_HOST_PASSWORD
+        sync: false
+      - key: DEFAULT_FROM_EMAIL
+        sync: false
+
+  - type: cron
+    name: campus-purge
+    runtime: python
+    plan: starter
+    schedule: "30 21 * * *" # 21:30 UTC = 03:00 IST
+    buildCommand: echo "nothing to build"
+    startCommand: python deploy/trigger_purge.py
+    envVars:
+      - fromGroup: campus-shared
+      # After the web service is live, set this to its https URL (https://campus-plus-xxxx.onrender.com).
+      - key: APP_URL
+        sync: false

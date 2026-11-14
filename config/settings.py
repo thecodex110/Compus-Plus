@@ -30,6 +30,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-insecure-change-me')
 DEBUG = os.environ.get('DEBUG', '1') == '1'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+# Render tells each service its own public hostname; trusting it lets a fresh deploy work
+# before a custom domain is set up.
+RENDER_HOST = os.environ.get('RENDER_EXTERNAL_HOSTNAME', '')
+if RENDER_HOST:
+    ALLOWED_HOSTS.append(RENDER_HOST)
 
 
 # Application definition
@@ -144,12 +149,17 @@ ASSET_VERSION_FILE = BASE_DIR / 'static' / 'app.css' if DEBUG else None
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# Uploads live under DATA_DIR. On a host with a persistent disk, point DATA_DIR at the disk (e.g. /var/data).
+DATA_DIR = Path(os.environ.get('DATA_DIR', BASE_DIR))
+MEDIA_ROOT = DATA_DIR / 'media'
 # Print files and payment screenshots: never publicly served.
-PRIVATE_MEDIA_ROOT = BASE_DIR / 'private_media'
+PRIVATE_MEDIA_ROOT = DATA_DIR / 'private_media'
 PRINT_MAX_UPLOAD_MB = 25
 # Print files are deleted on delivery, or after this many days whatever happens.
 PRINT_FILE_RETENTION_DAYS = int(os.environ.get('PRINT_FILE_RETENTION_DAYS', '7'))
+# Lets a scheduler call /internal/purge-print-files/ (needed when the cron job cannot reach the disk).
+# Empty means the endpoint is switched off.
+CRON_TOKEN = os.environ.get('CRON_TOKEN', '')
 
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = 'accounts:login'
@@ -191,8 +201,11 @@ if not DEBUG:
     if SECRET_KEY == 'dev-insecure-change-me':
         raise RuntimeError('Set SECRET_KEY in the environment for production.')
     CSRF_TRUSTED_ORIGINS = [o for o in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if o]
+    if RENDER_HOST:
+        CSRF_TRUSTED_ORIGINS.append(f'https://{RENDER_HOST}')
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', '1') == '1'
+    SECURE_REDIRECT_EXEMPT = [r'^healthz/$']  # the host's health check arrives over plain HTTP
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_HSTS_SECONDS = 60 * 60 * 24 * 30
